@@ -79,13 +79,13 @@ def ensure_tables_exist():
     admin_exists = cursor.fetchone()['count'] > 0
     
     if not admin_exists:
-        # Создаём администратора
-        admin_password = bcrypt.hashpw('admin123'.encode('utf-8'), bcrypt.gensalt())
+        # Создаём администратора с паролем 1234
+        admin_password = bcrypt.hashpw('1234'.encode('utf-8'), bcrypt.gensalt())
         cursor.execute(
             'INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)',
             ('admin', admin_password.decode('utf-8'), 'admin')
         )
-        print('✅ Администратор создан: login=admin, password=admin123')
+        print('✅ Администратор создан: login=admin, password=1234')
     
     # Проверяем, есть ли записи
     cursor.execute('SELECT COUNT(*) FROM records')
