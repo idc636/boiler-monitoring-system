@@ -102,7 +102,7 @@ def ensure_tables_and_admin():
     cursor.execute('DELETE FROM records')
     print('🗑️ Старые записи удалены')
     
-    # Загружаем ВСЕ данные из Excel
+    # Загружаем ВСЕ данные из Excel (вручную, по одной строке)
     demo_data = [
         # Котельная №1 (Белоярск №1 ул. Набережная 8)
         ("30.01.2026", 1, "Белоярск №1 ул. Набережная 8", "83499323373 , сот. 89028575790, Начальниу участка ЦТС Климов И.В.89519857336", 1, "КСВ-3,0/PG93 \"UNIGAS\" №0805505", "", "2007", "00:00", "1.3", "2", "", "1,2,4", "", "3", "1", "2", "", "2", "25", "1.2", "", "16008", "6031", "", "1", "50", "1", "", "", "-34", "86", "64", "86", "64.5", "5.5", "3.8", "0", "Витязев, Кожевников", "Канев Нагибин", ""),
@@ -146,46 +146,29 @@ def ensure_tables_and_admin():
     ]
     
     try:
-        cursor.executemany('''
-            INSERT INTO records (
-                date, boiler_number, boiler_location, boiler_contact,
-                equipment_number, boiler_model, burner_model, equipment_year, time_interval,
-                boilers_working, boilers_reserve, boilers_repair,
-                pumps_working, pumps_reserve, pumps_repair,
-                feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
-                fuel_tanks_total, fuel_tank_volume, fuel_tanks_working, fuel_tanks_reserve,
-                fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
-                water_tanks_total, water_tank_volume, water_tanks_working, water_tanks_reserve, water_tanks_repair,
-                temp_outdoor, temp_supply, temp_return,
-                temp_graph_supply, temp_graph_return,
-                pressure_supply, pressure_return,
-                water_consumption_daily,
-                staff_night, staff_day, notes
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        ''', demo_data)
+        for i, row in enumerate(demo_data):
+            cursor.execute('''
+                INSERT INTO records (
+                    date, boiler_number, boiler_location, boiler_contact,
+                    equipment_number, boiler_model, burner_model, equipment_year, time_interval,
+                    boilers_working, boilers_reserve, boilers_repair,
+                    pumps_working, pumps_reserve, pumps_repair,
+                    feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
+                    fuel_tanks_total, fuel_tank_volume, fuel_tanks_working, fuel_tanks_reserve,
+                    fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
+                    water_tanks_total, water_tank_volume, water_tanks_working, water_tanks_reserve, water_tanks_repair,
+                    temp_outdoor, temp_supply, temp_return,
+                    temp_graph_supply, temp_graph_return,
+                    pressure_supply, pressure_return,
+                    water_consumption_daily,
+                    staff_night, staff_day, notes
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ''', row)
         
         print(f'✅ Все данные загружены: {len(demo_data)} строк')
     except Exception as e:
         print(f'❌ Ошибка при загрузке данных: {e}')
-        # Загружаем только первую строку для теста
-        cursor.execute('''
-            INSERT INTO records (
-                date, boiler_number, boiler_location, boiler_contact,
-                equipment_number, boiler_model, burner_model, equipment_year, time_interval,
-                boilers_working, boilers_reserve, boilers_repair,
-                pumps_working, pumps_reserve, pumps_repair,
-                feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
-                fuel_tanks_total, fuel_tank_volume, fuel_tanks_working, fuel_tanks_reserve,
-                fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
-                water_tanks_total, water_tank_volume, water_tanks_working, water_tanks_reserve, water_tanks_repair,
-                temp_outdoor, temp_supply, temp_return,
-                temp_graph_supply, temp_graph_return,
-                pressure_supply, pressure_return,
-                water_consumption_daily,
-                staff_night, staff_day, notes
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        ''', demo_data[0])
-        print('✅ Первая строка загружена для теста')
+        print('❌ Проблемная строка:', row)
     
     conn.commit()
     conn.close()
