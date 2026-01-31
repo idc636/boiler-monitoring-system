@@ -1,185 +1,112 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Учёт работы котельных</title>
+<meta charset="UTF-8">
+<title>Учёт работы котельных</title>
 
-    <style>
-        * {
-            font-family: Calibri, Arial, sans-serif;
-            font-size: 11px;
-        }
-
-        body {
-            margin: 10px;
-            background: #f5f5f5;
-        }
-
-        .header {
-            background: white;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 18px;
-            margin: 5px 0;
-        }
-
-        .user-info {
-            text-align: right;
-            margin-bottom: 5px;
-        }
-
-        .logout-btn {
-            margin-left: 10px;
-        }
-
-        .table-container {
-            overflow-x: auto;
-            background: white;
-            padding: 5px;
-        }
-
-        table {
-            border-collapse: collapse;
-            min-width: 2600px;
-            width: 100%;
-        }
-
-        th, td {
-            border: 1px solid #cfcfcf;
-            padding: 3px 5px;
-            white-space: nowrap;
-        }
-
-        th {
-            background: #eaeaea;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: bold;
-        }
-
-        td {
-            text-align: center;
-        }
-
-        tr:hover td {
-            background: #f9f9f9;
-        }
-
-        .editable {
-            background: #fffdf5;
-        }
-
-        .editable[contenteditable="true"]:focus {
-            outline: 2px solid #2a62d8;
-            background: white;
-        }
-
-        th:first-child,
-        td:first-child {
-            position: sticky;
-            left: 0;
-            background: #f2f2f2;
-            z-index: 2;
-        }
-
-        th:first-child {
-            z-index: 3;
-        }
-    </style>
+<style>
+* { font-family: Calibri, Arial, sans-serif; font-size: 11px; }
+body { margin: 10px; background: #f5f5f5; }
+table { border-collapse: collapse; width: 100%; min-width: 2600px; background: white; }
+th, td { border: 1px solid #cfcfcf; padding: 3px 5px; text-align: center; white-space: nowrap; }
+th { background: #eaeaea; font-weight: bold; vertical-align: middle; }
+td:first-child, th:first-child {
+    position: sticky;
+    left: 0;
+    background: #f2f2f2;
+    z-index: 2;
+}
+th:first-child { z-index: 3; }
+.editable[contenteditable="true"]:focus {
+    outline: 2px solid #2a62d8;
+    background: #fff;
+}
+</style>
 </head>
 
 <body>
 
-<div class="header">
-    <div class="user-info">
-        Пользователь: <strong>{{ user.username }}</strong> |
-        Роль: <strong>{{ user.role }}</strong>
-
-        <form method="POST" action="/logout" style="display:inline;">
-            <button type="submit" class="logout-btn">Выход</button>
-        </form>
-    </div>
-
-    <h1>Учёт работы котельных</h1>
-</div>
-
-<div class="table-container">
 <table>
 
 <thead>
+
+<!-- ДАТА -->
 <tr>
-    <th rowspan="2">Дата</th>
-    <th rowspan="2">№ котельной</th>
-    <th rowspan="2">Местоположение</th>
-    <th rowspan="2">Контакт</th>
-    <th rowspan="2">№ оборудования</th>
-    <th rowspan="2">Модель котла</th>
-    <th rowspan="2">Модель горелки</th>
-    <th rowspan="2">Год выпуска</th>
-    <th rowspan="2">Интервал</th>
+    <th colspan="38">{{ records[0].date if records else '' }}</th>
+</tr>
+
+<!-- ГРУППЫ -->
+<tr>
+    <th rowspan="2"></th>
+    <th rowspan="2">Марка котла / Марка горелки</th>
+    <th rowspan="2">Год оборудования</th>
+    <th rowspan="2">Время</th>
 
     <th colspan="3">Котлы</th>
-    <th colspan="3">Насосы</th>
-    <th colspan="3">Питательные насосы</th>
+    <th colspan="3">Сетевые насосы</th>
+    <th colspan="3">Подпиточные насосы</th>
 
-    <th colspan="6">Топливо</th>
-    <th colspan="5">Вода</th>
+    <th colspan="6">Топливные ёмкости</th>
+    <th colspan="5">Ёмкости вода</th>
 
-    <th colspan="2">Температура</th>
-    <th colspan="2">График</th>
-    <th colspan="2">Давление</th>
+    <th colspan="3">t воды</th>
+    <th colspan="2">t воды по температурному графику</th>
 
-    <th rowspan="2">Расход воды</th>
-    <th rowspan="2">Ночная смена</th>
-    <th rowspan="2">Дневная смена</th>
+    <th rowspan="2">Давление на подаче</th>
+    <th rowspan="2">Давление на обратке</th>
+    <th rowspan="2">Расход подпиточной воды за сутки</th>
+
+    <th colspan="2">Дежурные котельной</th>
     <th rowspan="2">Примечания</th>
 </tr>
 
+<!-- ПОДГРУППЫ -->
 <tr>
-    <th>Работа</th>
-    <th>Резерв</th>
-    <th>Ремонт</th>
+    <th>Работа №</th>
+    <th>Резерв №</th>
+    <th>Ремонт №</th>
 
-    <th>Работа</th>
-    <th>Резерв</th>
-    <th>Ремонт</th>
+    <th>Работа №</th>
+    <th>Резерв №</th>
+    <th>Ремонт №</th>
 
-    <th>Работа</th>
-    <th>Резерв</th>
-    <th>Ремонт</th>
-
-    <th>Всего</th>
-    <th>Объём</th>
-    <th>Работа</th>
-    <th>Резерв</th>
-    <th>Баланс</th>
-    <th>Расход</th>
+    <th>Работа №</th>
+    <th>Резерв №</th>
+    <th>Ремонт №</th>
 
     <th>Всего</th>
-    <th>Объём</th>
-    <th>Работа</th>
-    <th>Резерв</th>
-    <th>Ремонт</th>
+    <th>Объём м³</th>
+    <th>В работе</th>
+    <th>В резерве</th>
+    <th>Остаток на утро</th>
+    <th>Расход за сутки</th>
+
+    <th>Всего</th>
+    <th>Объём м³</th>
+    <th>В работе</th>
+    <th>В резерве</th>
+    <th>В ремонте</th>
 
     <th>Улица</th>
     <th>Подача</th>
-
-    <th>Подача</th>
     <th>Обратка</th>
 
     <th>Подача</th>
     <th>Обратка</th>
+
+    <th>Ночь</th>
+    <th>День</th>
 </tr>
+
 </thead>
 
-{% set columns = [
-'date','boiler_number','boiler_location','boiler_contact','equipment_number',
-'boiler_model','burner_model','equipment_year','time_interval',
+<tbody>
+{% for r in records %}
+<tr>
+<td>{{ loop.index }}</td>
+
+{% for col in [
+'boiler_model','equipment_year','time_interval',
 'boilers_working','boilers_reserve','boilers_repair',
 'pumps_working','pumps_reserve','pumps_repair',
 'feed_pumps_working','feed_pumps_reserve','feed_pumps_repair',
@@ -187,48 +114,40 @@
 'fuel_tanks_reserve','fuel_morning_balance','fuel_daily_consumption',
 'water_tanks_total','water_tank_volume','water_tanks_working',
 'water_tanks_reserve','water_tanks_repair',
-'temp_outdoor','temp_supply',
+'temp_outdoor','temp_supply','temp_return',
 'temp_graph_supply','temp_graph_return',
-'pressure_supply','pressure_return',
-'water_consumption_daily','staff_night','staff_day','notes'
+'pressure_supply','pressure_return','water_consumption_daily',
+'staff_night','staff_day','notes'
 ] %}
-
-<tbody>
-{% for record in records %}
-<tr>
-{% for col in columns %}
 <td
-{% if user.role == 'admin' %}
-    class="editable"
-    contenteditable="true"
-    data-field="{{ col }}"
-    data-id="{{ record.id }}"
+{% if user.role=='admin' %}
+contenteditable="true"
+class="editable"
+data-id="{{ r.id }}"
+data-field="{{ col }}"
 {% endif %}
->
-    {{ record[col] }}
-</td>
+>{{ r[col] }}</td>
 {% endfor %}
 </tr>
 {% endfor %}
 </tbody>
 
 </table>
-</div>
 
-{% if user.role == 'admin' %}
+{% if user.role=='admin' %}
 <script>
-document.querySelectorAll('.editable').forEach(cell => {
-    cell.addEventListener('blur', function () {
-        fetch('/update', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                id: this.dataset.id,
-                field: this.dataset.field,
-                value: this.textContent.trim()
-            })
-        });
-    });
+document.querySelectorAll('.editable').forEach(c=>{
+ c.addEventListener('blur',()=>{
+  fetch('/update',{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({
+    id:c.dataset.id,
+    field:c.dataset.field,
+    value:c.textContent.trim()
+   })
+  });
+ });
 });
 </script>
 {% endif %}
