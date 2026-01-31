@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 # Подключение к PostgreSQL
-DATABASE_URL = os.environ.get('DATABASE_URL') or 'postgresql://idc:DJH2dyQpyt4jY8Y5fpUt6I3fknlD71NS@dpg-d5umc3khg0os73b16dp0-a.frankfurt-postgres.render.com:5432/boiler_monitoring'
+DATABASE_URL = os.environ.get('DATABASE_URL')
 
 def get_db_connection():
     """Подключение к PostgreSQL"""
