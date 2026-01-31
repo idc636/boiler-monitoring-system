@@ -5,19 +5,20 @@ import os
 import bcrypt
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-change-this'  # Замени на случайный ключ
+app.secret_key = 'your-secret-key-change-this'
 
 # Подключение к PostgreSQL
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
 def get_db_connection():
-    """Подключение к PostgreSQL"""
+    """Подключение к PostgreSQL + инициализация БД"""
+    init_db()  # Всегда инициализируем перед подключением
     conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
     return conn
 
 def init_db():
     """Инициализация БД и создание таблиц"""
-    conn = get_db_connection()
+    conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
     cursor = conn.cursor()
     
     # Таблица пользователей
@@ -153,7 +154,6 @@ def index():
     if not check_auth():
         return redirect(url_for('login'))
     
-    init_db()
     conn = get_db_connection()
     cursor = conn.cursor()
     
@@ -264,6 +264,6 @@ def update_cell():
     return jsonify({'status': 'ok'})
 
 if __name__ == '__main__':
-    init_db()
+    init_db()  # Инициализируем при старте
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
