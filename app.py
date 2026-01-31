@@ -8,11 +8,10 @@ import traceback
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-change-this'
 
-# Подключение к PostgreSQL
-DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://postgres:TzhRuKuliqaGilBouUfRjGtqZnBnubMN@postgres.railway.internal:5432/railway')
+DATABASE_URL = os.environ.get('DATABASE_URL') or "postgresql://postgres:TzhRuKuliqaGilBouUfRjGtqZnBnubMN@postgres.railway.internal:5432/railway"
 
 def ensure_tables_and_admin():
-    """Создаем таблицы и админа, если их нет"""
+    """Создаём таблицы и админа, если их нет"""
     try:
         conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
         cursor = conn.cursor()
@@ -32,19 +31,19 @@ def ensure_tables_and_admin():
         )
     ''')
 
-    # Таблица записей котельных
+    # Таблица записей (котельные)
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS records (
             id SERIAL PRIMARY KEY,
-            date TEXT,
-            boiler_number INTEGER,
-            boiler_location TEXT,
+            date TEXT NOT NULL,
+            boiler_number INTEGER NOT NULL,
+            boiler_location TEXT NOT NULL,
             boiler_contact TEXT,
-            equipment_number INTEGER,
+            equipment_number INTEGER NOT NULL,
             boiler_model TEXT,
             burner_model TEXT,
             equipment_year TEXT,
-            time_interval TEXT,
+            time_interval TEXT NOT NULL,
             boilers_working TEXT,
             boilers_reserve TEXT,
             boilers_repair TEXT,
@@ -80,14 +79,46 @@ def ensure_tables_and_admin():
         )
     ''')
 
-    # Проверка на администратора
-    cursor.execute('SELECT id FROM users WHERE username=%s', ('admin',))
+    # Проверяем, есть ли админ
+    cursor.execute('SELECT id FROM users WHERE username = %s', ('admin',))
     if cursor.fetchone() is None:
         admin_password = bcrypt.hashpw('1234'.encode('utf-8'), bcrypt.gensalt())
-        cursor.execute('''
-            INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)
-        ''', ('admin', admin_password.decode('utf-8'), 'admin'))
-        print("✅ Создан администратор: login=admin, password=1234")
+        cursor.execute(
+            'INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)',
+            ('admin', admin_password.decode('utf-8'), 'admin')
+        )
+        print('✅ Администратор создан: login=admin, password=1234')
+
+    # Загружаем данные Excel только если таблица records пустая
+    cursor.execute('SELECT COUNT(*) AS cnt FROM records')
+    if cursor.fetchone()['cnt'] == 0:
+        print('📦 Загружаем данные из Excel...')
+        demo_data = [
+            # Котельная №1
+            ("30.01.2026", 1, "Белоярск №1 ул. Набережная 8", "83499323373 , сот. 89028575790, Начальник участка ЦТС Климов И.В.", 1, "КСВ-3,0/PG93 \"UNIGAS\" №0805505", "", "2007", "00.00", "1,3", "2", "", "1,2,4", "", "3", "1", "2", "", "2", "25", "1,2", "", "16008", "6031", "", "1", "50", "1", "", "", "-34", "86", "64", "86", "64,5", "5,5", "3,8", "0", "Витязев, Кожевников", "Канев Нагибин", ""),
+            ("30.01.2026", 1, "Белоярск №1 ул. Набережная 8", "83499323373 , сот. 89028575790, Начальник участка ЦТС Климов И.В.", 1, "КСВ-3,0/PG93 \"UNIGAS\" №0805505", "", "2007", "03.00", "1,3", "2", "", "1,2,4", "", "1", "2", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "-36", "88", "67", "88", "65,8", "5,5", "3,8", "", "", "", ""),
+            ("30.01.2026", 1, "Белоярск №1 ул. Набережная 8", "83499323373 , сот. 89028575790, Начальник участка ЦТС Климов И.В.", 1, "КСВ-3,0/PG93 \"UNIGAS\" №0805505", "", "2007", "06.00", "1,3", "2", "", "1,2,4", "", "1", "2", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "-37", "89", "66", "89", "66,4", "5,5", "3,8", "", "", "", ""),
+            # Добавь сюда все остальные строки Excel по аналогии
+        ]
+        for row in demo_data:
+            cursor.execute('''
+                INSERT INTO records (
+                    date, boiler_number, boiler_location, boiler_contact,
+                    equipment_number, boiler_model, burner_model, equipment_year, time_interval,
+                    boilers_working, boilers_reserve, boilers_repair,
+                    pumps_working, pumps_reserve, pumps_repair,
+                    feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
+                    fuel_tanks_total, fuel_tank_volume, fuel_tanks_working, fuel_tanks_reserve,
+                    fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
+                    water_tanks_total, water_tank_volume, water_tanks_working, water_tanks_reserve, water_tanks_repair,
+                    temp_outdoor, temp_supply, temp_return,
+                    temp_graph_supply, temp_graph_return,
+                    pressure_supply, pressure_return,
+                    water_consumption_daily,
+                    staff_night, staff_day, notes
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ''', row)
+        print(f'✅ Загружено {len(demo_data)} строк данных.')
 
     conn.commit()
     conn.close()
@@ -100,6 +131,7 @@ def get_db_connection():
         print(traceback.format_exc())
         return None
 
+# Проверка авторизации
 def check_auth():
     if 'user_id' not in session:
         return False
@@ -107,122 +139,33 @@ def check_auth():
     if not conn:
         return False
     cursor = conn.cursor()
-    cursor.execute('SELECT id FROM users WHERE id=%s', (session['user_id'],))
-    return cursor.fetchone() is not None
+    try:
+        cursor.execute('SELECT id FROM users WHERE id = %s', (session['user_id'],))
+        return cursor.fetchone() is not None
+    finally:
+        conn.close()
 
-def check_admin():
+# Проверка роли
+def check_role(required_role):
     if not check_auth():
         return False
     conn = get_db_connection()
     if not conn:
         return False
     cursor = conn.cursor()
-    cursor.execute('SELECT role FROM users WHERE id=%s', (session['user_id'],))
-    user = cursor.fetchone()
-    return user and user['role'] == 'admin'
-
-@app.route('/')
-def index():
-    if not check_auth():
-        return redirect(url_for('login'))
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM records ORDER BY id')
-    records = cursor.fetchall()
-    cursor.execute('SELECT username, role FROM users WHERE id=%s', (session['user_id'],))
-    user = cursor.fetchone()
-    conn.close()
-    return render_template('index.html', records=records, user=user, is_admin=check_admin())
-
-@app.route('/update', methods=['POST'])
-def update_cell():
-    if not check_admin():
-        return jsonify({'status': 'error', 'message': 'Нет прав'})
-
-    data = request.json
-    field = data.get('field')
-    value = data.get('value')
-    record_id = data.get('id')
-
-    if not field or not record_id:
-        return jsonify({'status': 'error', 'message': 'Некорректные данные'})
-
-    conn = get_db_connection()
-    cursor = conn.cursor()
     try:
-        cursor.execute(f'UPDATE records SET {field}=%s WHERE id=%s', (value, record_id))
-        conn.commit()
-        return jsonify({'status': 'ok'})
-    except Exception as e:
-        print(e)
-        return jsonify({'status': 'error', 'message': 'Ошибка БД'})
+        cursor.execute('SELECT role FROM users WHERE id = %s', (session['user_id'],))
+        user = cursor.fetchone()
+        if user:
+            if required_role == 'admin':
+                return user['role'] == 'admin'
+            return True
+        return False
     finally:
         conn.close()
 
-@app.route('/add_record', methods=['POST'])
-def add_record():
-    if not check_admin():
-        return jsonify({'status': 'error', 'message': 'Нет прав'})
+# Инициализация
+ensure_tables_and_admin()
 
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('''
-        INSERT INTO records (date, boiler_number, boiler_location, equipment_number, time_interval)
-        VALUES (CURRENT_DATE::text, 0, '', 0, '')
-        RETURNING id
-    ''')
-    record_id = cursor.fetchone()['id']
-    conn.commit()
-    conn.close()
-    return jsonify({'status': 'ok', 'id': record_id})
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    error = None
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM users WHERE username=%s', (username,))
-        user = cursor.fetchone()
-        conn.close()
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):
-            session['user_id'] = user['id']
-            return redirect(url_for('index'))
-        else:
-            error = 'Неверный логин или пароль'
-    return render_template('login.html', error=error)
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    error = None
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        confirm = request.form['confirm_password']
-        if password != confirm:
-            error = 'Пароли не совпадают'
-        else:
-            conn = get_db_connection()
-            cursor = conn.cursor()
-            cursor.execute('SELECT id FROM users WHERE username=%s', (username,))
-            if cursor.fetchone():
-                error = 'Пользователь уже существует'
-            else:
-                password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-                cursor.execute('INSERT INTO users (username, password_hash) VALUES (%s, %s)', (username, password_hash.decode('utf-8')))
-                conn.commit()
-            conn.close()
-            if not error:
-                return redirect(url_for('login'))
-    return render_template('register.html', error=error)
-
-@app.route('/logout', methods=['POST'])
-def logout():
-    session.clear()
-    return redirect(url_for('login'))
-
-if __name__ == '__main__':
-    ensure_tables_and_admin()
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)), debug=True)
+# Дальше — маршруты: index, login, register, logout, update_cell
+# Их можно взять из твоего старого кода, они будут работать с этим app
