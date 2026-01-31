@@ -1,5 +1,1 @@
-__pycache__/
-*.py[cod]
-.DS_Store
-.env
-monitoring.db
+web: gunicorn app:app --timeout 120
