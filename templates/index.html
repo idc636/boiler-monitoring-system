@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Учёт работы котельных | АО «Ямалкомунэнерго»</title>
+    <meta charset="UTF-8">
+    <style>
+        * { font-family: Arial, sans-serif; font-size: 12px; }
+        body { margin: 10px; background: #f5f5f5; }
+        h1 { color: #0047AB; text-align: center; font-size: 20px; margin: 5px 0; }
+        h3 { text-align: center; color: #555; font-size: 14px; margin: 5px 0 15px; }
+        .table-container { overflow-x: auto; background: white; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 5px; }
+        table { border-collapse: collapse; width: 100%; min-width: 2500px; }
+        th, td { border: 1px solid #ddd; padding: 4px 6px; text-align: left; }
+        th { background-color: #0047AB; color: white; position: sticky; top: 0; font-weight: bold; font-size: 11px; }
+        tr:hover { background-color: #f9f9f9; }
+        .editable { cursor: pointer; min-width: 60px; }
+        .editable:hover { background-color: #e3f2fd; }
+        .boiler-header { background-color: #e8f4fd; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>📝 Учёт работы котельных</h1>
+    <h3>АО «Ямалкомунэнерго», г. Салехард</h3>
+    
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2">Дата</th>
+                    <th rowspan="2">Котельная</th>
+                    <th rowspan="2">Адрес</th>
+                    <th rowspan="2">Контакт</th>
+                    <th rowspan="2">№ котла</th>
+                    <th colspan="3">Оборудование</th>
+                    <th rowspan="2">Время</th>
+                    <th colspan="3">Котлы</th>
+                    <th colspan="3">Сетевые насосы</th>
+                    <th colspan="3">Подпиточные насосы</th>
+                    <th colspan="7">Топливные ёмкости</th>
+                    <th colspan="5">Ёмкости вода</th>
+                    <th colspan="3">t °C воды</th>
+                    <th colspan="2">t °C по графику</th>
+                    <th colspan="2">Давление кгс/см²</th>
+                    <th rowspan="2">Расход воды за сутки, куб</th>
+                    <th colspan="2">Дежурные</th>
+                    <th rowspan="2">Примечания</th>
+                </tr>
+                <tr>
+                    <th>Марка котла</th>
+                    <th>Марка горелки</th>
+                    <th>Год</th>
+                    <th>Работа №</th>
+                    <th>Резерв №</th>
+                    <th>Ремонт №</th>
+                    <th>Работа №</th>
+                    <th>Резерв №</th>
+                    <th>Ремонт №</th>
+                    <th>Работа №</th>
+                    <th>Резерв №</th>
+                    <th>Ремонт №</th>
+                    <th>Всего</th>
+                    <th>Объём м³</th>
+                    <th>В работе</th>
+                    <th>В резерве</th>
+                    <th>Остаток на утро, м³</th>
+                    <th>Расход за сутки, м³</th>
+                    <th>В ремонте</th>
+                    <th>Всего</th>
+                    <th>Объём м³</th>
+                    <th>В работе</th>
+                    <th>В резерве</th>
+                    <th>В ремонте</th>
+                    <th>Наружная</th>
+                    <th>Подача</th>
+                    <th>Обратка</th>
+                    <th>Подача</th>
+                    <th>Обратка</th>
+                    <th>Подача</th>
+                    <th>Обратка</th>
+                    <th>Ночь</th>
+                    <th>День</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td class="editable" data-id="{{ record.id }}" data-field="date">{{ record.date or '' }}</td>
+                    <td class="boiler-header">{{ "Котельная №" + record.boiler_number|string }}</td>
+                    <td>{{ record.boiler_location or '' }}</td>
+                    <td>{{ record.boiler_contact or '' }}</td>
+                    <td>{{ record.equipment_number or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="boiler_model">{{ record.boiler_model or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="burner_model">{{ record.burner_model or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="equipment_year">{{ record.equipment_year or '' }}</td>
+                    <td>{{ record.time_interval or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="boilers_working">{{ record.boilers_working or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="boilers_reserve">{{ record.boilers_reserve or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="boilers_repair">{{ record.boilers_repair or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="pumps_working">{{ record.pumps_working or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="pumps_reserve">{{ record.pumps_reserve or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="pumps_repair">{{ record.pumps_repair or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="feed_pumps_working">{{ record.feed_pumps_working or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="feed_pumps_reserve">{{ record.feed_pumps_reserve or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="feed_pumps_repair">{{ record.feed_pumps_repair or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="fuel_tanks_total">{{ record.fuel_tanks_total or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="fuel_tank_volume">{{ record.fuel_tank_volume or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="fuel_tanks_working">{{ record.fuel_tanks_working or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="fuel_tanks_reserve">{{ record.fuel_tanks_reserve or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="fuel_morning_balance">{{ record.fuel_morning_balance or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="fuel_daily_consumption">{{ record.fuel_daily_consumption or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="fuel_tanks_repair">{{ record.fuel_tanks_repair or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="water_tanks_total">{{ record.water_tanks_total or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="water_tank_volume">{{ record.water_tank_volume or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="water_tanks_working">{{ record.water_tanks_working or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="water_tanks_reserve">{{ record.water_tanks_reserve or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="water_tanks_repair">{{ record.water_tanks_repair or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="temp_outdoor">{{ record.temp_outdoor or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="temp_supply">{{ record.temp_supply or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="temp_return">{{ record.temp_return or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="temp_graph_supply">{{ record.temp_graph_supply or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="temp_graph_return">{{ record.temp_graph_return or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="pressure_supply">{{ record.pressure_supply or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="pressure_return">{{ record.pressure_return or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="water_consumption_daily">{{ record.water_consumption_daily or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="staff_night">{{ record.staff_night or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="staff_day">{{ record.staff_day or '' }}</td>
+                    <td class="editable" data-id="{{ record.id }}" data-field="notes">{{ record.notes or '' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.querySelectorAll('.editable').forEach(cell => {
+            cell.addEventListener('click', function() {
+                const currentValue = this.textContent;
+                const field = this.dataset.field;
+                const id = this.dataset.id;
+                
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = currentValue;
+                input.style.width = '100%';
+                input.style.boxSizing = 'border-box';
+                input.style.padding = '2px';
+                
+                this.textContent = '';
+                this.appendChild(input);
+                input.focus();
+                
+                const save = () => {
+                    const newValue = input.value;
+                    this.removeChild(input);
+                    this.textContent = newValue;
+                    
+                    fetch('/update', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({id: id, field: field, value: newValue})
+                    });
+                };
+                
+                input.addEventListener('blur', save);
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') save();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
