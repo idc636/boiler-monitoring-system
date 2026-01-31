@@ -149,6 +149,11 @@ def index():
     conn = get_db_connection()
     cursor = conn.cursor()
     
+    # Проверяем, сколько строк в базе
+    cursor.execute('SELECT COUNT(*) FROM records')
+    count = cursor.fetchone()['count']
+    print(f'📊 Всего записей в базе: {count}')
+    
     cursor.execute('''
         SELECT * FROM records 
         ORDER BY boiler_number, equipment_number, 
@@ -173,6 +178,7 @@ def index():
     user_info = cursor.fetchone()
     conn.close()
     
+    print(f'📊 Отправляем {len(records)} записей в шаблон')
     return render_template('index.html', records=records, user=user_info)
 
 @app.route('/login', methods=['GET', 'POST'])
