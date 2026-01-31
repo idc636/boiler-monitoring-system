@@ -1,83 +1,154 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Таблица</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        table { border-collapse: collapse; width: 100%; }
-        td, th {
-            border: 1px solid #999;
-            padding: 2px;
-            text-align: center;
-            font-size: 12px;
-        }
-        input[type="text"] {
-            width: 100%;
-            box-sizing: border-box;
-            font-size: 12px;
-        }
-        .separator {
-            background: #e6ffe6;
-            font-weight: bold;
-            text-align: left;
-        }
-        .topbar {
-            margin-bottom: 10px;
-        }
-        .add-row {
-            margin-top: 10px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Журнал работы котельных</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #000;
+    padding: 2px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+th {
+    background: #f0f0f0;
+    font-weight: bold;
+}
+
+.group {
+    background: #9bbb59;
+    font-weight: bold;
+    text-align: center;
+}
+
+input {
+    width: 100%;
+    border: none;
+    text-align: center;
+    font-size: 12px;
+}
+
+input:focus {
+    outline: 1px solid #666;
+}
+
+.save-btn {
+    padding: 3px 8px;
+}
+
+.add-row {
+    margin-top: 10px;
+}
+</style>
 </head>
+
 <body>
 
-<div class="topbar">
-    Пользователь: <b>{{ session.username }}</b> ({{ session.role }})
-    | <a href="{{ url_for('logout') }}">Выйти</a>
-</div>
+<p>
+Пользователь: <b>{{ user.username }}</b> ({{ user.role }}) |
+<a href="/logout">Выйти</a>
+</p>
 
-<h2>Таблица</h2>
+<h2 style="text-align:center;">30.01.2026</h2>
 
 <table>
-    {% for r in records %}
-        {% if r[1] and r[2] and r[3] and r[4] and r[5] and not r[6] %}
-            <!-- РАЗДЕЛИТЕЛЬ КОТЕЛЬНОЙ -->
-            <tr class="separator">
-                <td colspan="37">
-                    {{ r[1] }} {{ r[2] }} {{ r[3] }} {{ r[4] }} {{ r[5] }}
-                </td>
-            </tr>
-        {% else %}
-            <!-- ОБЫЧНАЯ СТРОКА -->
-            <tr>
-                <form method="post" action="{{ url_for('update') }}">
-                    <input type="hidden" name="id" value="{{ r[0] }}">
-                    {% for i in range(1, 38) %}
-                        <td>
-                            {% if is_admin %}
-                                <input type="text" name="cell[]" value="{{ r[i] or '' }}">
-                            {% else %}
-                                {{ r[i] or '' }}
-                            {% endif %}
-                        </td>
-                    {% endfor %}
-                    {% if is_admin %}
-                        <td>
-                            <button type="submit">Сохранить</button>
-                        </td>
-                    {% endif %}
-                </form>
-            </tr>
-        {% endif %}
+
+<thead>
+<tr>
+    <th rowspan="3">Дата</th>
+    <th rowspan="3">№ кот.</th>
+    <th rowspan="3">Котельная</th>
+    <th rowspan="3">Марка</th>
+    <th rowspan="3">Год</th>
+    <th rowspan="3">Время</th>
+
+    <th colspan="3">Котлы</th>
+    <th colspan="3">Сетевые насосы</th>
+    <th colspan="3">Подпиточные насосы</th>
+    <th colspan="4">Топливное хозяйство</th>
+    <th colspan="4">Ёмкости воды</th>
+    <th colspan="4">t° воды</th>
+    <th colspan="2">Давление</th>
+    <th rowspan="3">Примечание</th>
+    <th rowspan="3"></th>
+</tr>
+
+<tr>
+    <th>Работа</th>
+    <th>Резерв</th>
+    <th>Ремонт</th>
+
+    <th>Работа</th>
+    <th>Резерв</th>
+    <th>Ремонт</th>
+
+    <th>Работа</th>
+    <th>Резерв</th>
+    <th>Ремонт</th>
+
+    <th>Всего</th>
+    <th>В работе</th>
+    <th>В резерве</th>
+    <th>В ремонте</th>
+
+    <th>Всего</th>
+    <th>В работе</th>
+    <th>В резерве</th>
+    <th>В ремонте</th>
+
+    <th>Подача</th>
+    <th>Обратка</th>
+    <th>Подача</th>
+    <th>Обратка</th>
+
+    <th>На подаче</th>
+    <th>На обратке</th>
+</tr>
+
+<tr>
+    {% for i in range(24) %}
+        <th></th>
     {% endfor %}
+</tr>
+</thead>
+
+<tbody>
+
+<tr class="group">
+    <td colspan="29">Котельная №1 — Белореченская 8</td>
+</tr>
+
+{% for r in records %}
+<tr>
+    {% for i in range(1, 29) %}
+        <td><input name="c{{ i }}" value="{{ r[i] }}"></td>
+    {% endfor %}
+    <td>
+        <button class="save-btn">Сохранить</button>
+    </td>
+</tr>
+{% endfor %}
+
+</tbody>
 </table>
 
-{% if is_admin %}
-<form method="post" action="{{ url_for('add_row') }}" class="add-row">
-    <button type="submit">➕ Добавить строку</button>
+<div class="add-row">
+<form method="post" action="/add_row">
+    <button>➕ Добавить строку</button>
 </form>
-{% endif %}
+</div>
 
 </body>
 </html>
