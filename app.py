@@ -143,8 +143,12 @@ def check_role(required_role):
 
 @app.route('/')
 def index():
+    print('🔍 Вызван /index')
     if not check_auth():
+        print('🔒 Не авторизован - редирект на login')
         return redirect(url_for('login'))
+    
+    print('👤 Пользователь авторизован')
     
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -169,6 +173,7 @@ def index():
         END
     ''')
     records = cursor.fetchall()
+    print(f'📊 Найдено записей: {len(records)}')
     conn.close()
     
     # Получаем информацию о пользователе
@@ -176,6 +181,7 @@ def index():
     cursor = conn.cursor()
     cursor.execute('SELECT username, role FROM users WHERE id = %s', (session['user_id'],))
     user_info = cursor.fetchone()
+    print(f'👤 Информация о пользователе: {user_info}')
     conn.close()
     
     print(f'📊 Отправляем {len(records)} записей в шаблон')
