@@ -195,7 +195,7 @@ def login():
         user = cursor.fetchone()
         conn.close()
         
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):
+        if user and bcrypt.checkpw(password.encode('utf-8'), bytes.fromhex(user['password_hash'])):
             session['user_id'] = user['id']
             session['username'] = user['username']
             session['role'] = user['role']
