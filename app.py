@@ -75,10 +75,10 @@ def ensure_tables_and_admin():
     ''')
     
     # Проверяем, есть ли админ
-    cursor.execute('SELECT COUNT(*) FROM users WHERE username = %s', ('admin',))
-    admin_count = cursor.fetchone()['count']
+    cursor.execute('SELECT id, password_hash FROM users WHERE username = %s', ('admin',))
+    admin_user = cursor.fetchone()
     
-    if admin_count == 0:
+    if admin_user is None:
         # Создаём админа
         admin_password = bcrypt.hashpw('1234'.encode('utf-8'), bcrypt.gensalt())
         cursor.execute(
@@ -86,6 +86,17 @@ def ensure_tables_and_admin():
             ('admin', admin_password.decode('utf-8'), 'admin')
         )
         print('✅ Администратор создан: login=admin, password=1234')
+    else:
+        # Проверим, правильный ли у него пароль
+        expected_hash = bcrypt.hashpw('1234'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        if admin_user['password_hash'] != expected_hash:
+            # Обновим пароль, если неправильный
+            admin_password = bcrypt.hashpw('1234'.encode('utf-8'), bcrypt.gensalt())
+            cursor.execute(
+                'UPDATE users SET password_hash = %s WHERE username = %s',
+                (admin_password.decode('utf-8'), 'admin')
+            )
+            print('🔐 Пароль администратора обновлён')
     
     # Проверяем, есть ли записи
     cursor.execute('SELECT COUNT(*) FROM records')
@@ -130,7 +141,17 @@ def get_db_connection():
 
 def check_auth():
     """Проверка авторизации"""
-    return 'user_id' in session
+    if 'user_id' not in session:
+        return False
+    
+    # Проверяем, существует ли пользователь в базе
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT id FROM users WHERE id = %s', (session['user_id'],))
+    user_exists = cursor.fetchone() is not None
+    conn.close()
+    
+    return user_exists
 
 def check_role(required_role):
     """Проверка роли пользователя"""
@@ -216,6 +237,7 @@ def login():
             session['user_id'] = user['id']
             session['username'] = user['username']
             session['role'] = user['role']
+            print(f'🔑 Вход выполнен: {user["username"]} (ID: {user["id"]})')
             return redirect(url_for('index'))
         else:
             return render_template('login.html', error='Неверный логин или пароль')
