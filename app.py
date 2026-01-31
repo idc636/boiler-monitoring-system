@@ -1,196 +1,59 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session
 import psycopg2
-from psycopg2.extras import RealDictCursor
-import os
 import bcrypt
-import traceback
+import os
 
 app = Flask(__name__)
-app.secret_key = 'CHANGE_THIS_SECRET_KEY'
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret")
 
-DATABASE_URL = os.environ.get(
-    'DATABASE_URL',
-    'postgresql://postgres:password@localhost:5432/postgres'
-)
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
-# ===============================
-# КОТЕЛЬНЫЕ — СТРОГО ИЗ EXCEL
-# ===============================
-BOILERS = {
-    1: {
-        "name": "Котельная №1",
-        "address": "Белоярск №1 ул. Набережная 8"
-    },
-    2: {
-        "name": "Котельная №2",
-        "address": "г. Белоярск ул. Юбилейная 11"
-    },
-    3: {
-        "name": "Котельная №3",
-        "address": "Щучье №3"
-    },
-    4: {
-        "name": "Котельная №4",
-        "address": "Катравож №4 ул. Маслова 6/2"
-    }
-}
+def get_db():
+    return psycopg2.connect(DATABASE_URL)
 
-# ===============================
-# БД
-# ===============================
-def get_db_connection():
-    return psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
+# ---------------- USERS ----------------
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    error = None
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
 
-def ensure_tables_and_admin():
-    conn = get_db_connection()
-    cursor = conn.cursor()
+        pwd_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
-    # --- USERS ---
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id SERIAL PRIMARY KEY,
-            username TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL,
-            role TEXT DEFAULT 'operator'
-        )
-    """)
+        try:
+            conn = get_db()
+            cur = conn.cursor()
+            cur.execute(
+                "INSERT INTO users (username, password_hash, role) VALUES (%s,%s,'user')",
+                (username, pwd_hash)
+            )
+            conn.commit()
+            conn.close()
+            return redirect(url_for('login'))
+        except Exception:
+            error = "Пользователь уже существует"
 
-    # --- RECORDS ---
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS records (
-            id SERIAL PRIMARY KEY,
-            boiler_id INTEGER NOT NULL,
-            sort_order INTEGER DEFAULT 0,
-
-            col1 TEXT,
-            col2 TEXT,
-            col3 TEXT,
-            col4 TEXT,
-            col5 TEXT,
-            col6 TEXT,
-            col7 TEXT,
-            col8 TEXT,
-            col9 TEXT,
-            col10 TEXT,
-            col11 TEXT,
-            col12 TEXT,
-            col13 TEXT,
-            col14 TEXT,
-            col15 TEXT,
-            col16 TEXT,
-            col17 TEXT,
-            col18 TEXT,
-            col19 TEXT,
-            col20 TEXT,
-            col21 TEXT,
-            col22 TEXT,
-            col23 TEXT,
-            col24 TEXT,
-            col25 TEXT,
-            col26 TEXT,
-            col27 TEXT,
-            col28 TEXT,
-            col29 TEXT,
-            col30 TEXT,
-            col31 TEXT,
-            col32 TEXT,
-            col33 TEXT,
-            col34 TEXT,
-            col35 TEXT,
-            col36 TEXT,
-            col37 TEXT
-        )
-    """)
-
-    # --- ADMIN ---
-    cursor.execute("SELECT id FROM users WHERE username='admin'")
-    if not cursor.fetchone():
-        pwd = bcrypt.hashpw("1313".encode(), bcrypt.gensalt()).decode()
-        cursor.execute(
-            "INSERT INTO users (username, password_hash, role) VALUES (%s,%s,%s)",
-            ("admin", pwd, "admin")
-        )
-
-    conn.commit()
-    conn.close()
-
-
-# ===============================
-# AUTH
-# ===============================
-def check_auth():
-    return 'user_id' in session
-
-
-def check_admin():
-    if not check_auth():
-        return False
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT role FROM users WHERE id=%s", (session['user_id'],))
-    user = cur.fetchone()
-    conn.close()
-    return user and user['role'] == 'admin'
-
-
-# ===============================
-# ROUTES
-# ===============================
-@app.route('/')
-def index():
-    if not check_auth():
-        return redirect(url_for('login'))
-
-    conn = get_db_connection()
-    cur = conn.cursor()
-
-    cur.execute("SELECT * FROM records ORDER BY boiler_id, sort_order, id")
-    rows = cur.fetchall()
-
-    cur.execute(
-        "SELECT username, role FROM users WHERE id=%s",
-        (session['user_id'],)
-    )
-    user = cur.fetchone()
-    conn.close()
-
-    records_grouped = []
-
-    for boiler_id, boiler in BOILERS.items():
-        boiler_rows = [r for r in rows if r['boiler_id'] == boiler_id]
-
-        records_grouped.append({
-            "boiler_name": boiler["name"],
-            "address": boiler["address"],
-            "records": boiler_rows
-        })
-
-    return render_template(
-        'index.html',
-        records_grouped=records_grouped,
-        user=user
-    )
+    return render_template('register.html', error=error)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
     if request.method == 'POST':
-        conn = get_db_connection()
+        username = request.form['username']
+        password = request.form['password']
+
+        conn = get_db()
         cur = conn.cursor()
-        cur.execute(
-            "SELECT * FROM users WHERE username=%s",
-            (request.form['username'],)
-        )
+        cur.execute("SELECT id, password_hash, role FROM users WHERE username=%s", (username,))
         user = cur.fetchone()
         conn.close()
 
-        if user and bcrypt.checkpw(
-            request.form['password'].encode(),
-            user['password_hash'].encode()
-        ):
-            session['user_id'] = user['id']
+        if user and bcrypt.checkpw(password.encode(), user[1].encode()):
+            session['user_id'] = user[0]
+            session['role'] = user[2]
             return redirect(url_for('index'))
         else:
             error = "Неверный логин или пароль"
@@ -198,58 +61,69 @@ def login():
     return render_template('login.html', error=error)
 
 
-@app.route('/logout', methods=['POST'])
+@app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('login'))
 
+# ---------------- TABLE ----------------
+
+@app.route('/')
+def index():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM records ORDER BY id")
+    records = cur.fetchall()
+    conn.close()
+
+    return render_template(
+        'index.html',
+        records=records,
+        is_admin=session.get('role') == 'admin'
+    )
+
 
 @app.route('/update', methods=['POST'])
-def update_cell():
-    if not check_admin():
-        return jsonify({"status": "error"})
+def update():
+    if session.get('role') != 'admin':
+        return redirect(url_for('index'))
 
-    data = request.get_json()
-    conn = get_db_connection()
+    record_id = request.form['id']
+    values = request.form.getlist('cell[]')
+
+    conn = get_db()
     cur = conn.cursor()
 
-    cur.execute(
-        f"UPDATE records SET {data['field']}=%s WHERE id=%s",
-        (data['value'], data['id'])
-    )
+    for i, val in enumerate(values):
+        cur.execute(
+            f"UPDATE records SET c{i+1}=%s WHERE id=%s",
+            (val, record_id)
+        )
 
     conn.commit()
     conn.close()
-    return jsonify({"status": "ok"})
+    return redirect(url_for('index'))
 
 
-@app.route('/add', methods=['POST'])
+@app.route('/add_row', methods=['POST'])
 def add_row():
-    if not check_admin():
-        return jsonify({"status": "error"})
+    if session.get('role') != 'admin':
+        return redirect(url_for('index'))
 
-    conn = get_db_connection()
+    conn = get_db()
     cur = conn.cursor()
 
-    last_boiler = max(BOILERS.keys())
-
     cur.execute(
-        "SELECT COALESCE(MAX(sort_order),0)+1 AS n FROM records WHERE boiler_id=%s",
-        (last_boiler,)
-    )
-    order = cur.fetchone()['n']
-
-    cur.execute(
-        "INSERT INTO records (boiler_id, sort_order) VALUES (%s,%s)",
-        (last_boiler, order)
+        "INSERT INTO records DEFAULT VALUES"
     )
 
     conn.commit()
     conn.close()
-    return jsonify({"status": "ok"})
+    return redirect(url_for('index'))
 
 
-# ===============================
 if __name__ == '__main__':
-    ensure_tables_and_admin()
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+    app.run(debug=True)
