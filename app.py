@@ -119,7 +119,7 @@ def index():
     records = cursor.fetchall()
     conn.close()
     
-    return render_template('index.html', records=records)
+    return render_template('index.html', records=records, user={'username': 'guest', 'role': 'viewer'})
 
 @app.route('/update', methods=['POST'])
 def update_cell():
