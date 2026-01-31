@@ -74,18 +74,16 @@ def ensure_tables_exist():
         )
     ''')
     
-    # Проверяем, есть ли администратор
-    cursor.execute('SELECT COUNT(*) FROM users WHERE username = %s', ('admin',))
-    admin_exists = cursor.fetchone()['count'] > 0
+    # Удаляем старых пользователей (чтобы избежать ошибок)
+    cursor.execute('DELETE FROM users WHERE username = %s', ('admin',))
     
-    if not admin_exists:
-        # Создаём администратора с паролем 1234
-        admin_password = bcrypt.hashpw('1234'.encode('utf-8'), bcrypt.gensalt())
-        cursor.execute(
-            'INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)',
-            ('admin', admin_password.decode('utf-8'), 'admin')
-        )
-        print('✅ Администратор создан: login=admin, password=1234')
+    # Создаём администратора с паролем 1234
+    admin_password = bcrypt.hashpw('1234'.encode('utf-8'), bcrypt.gensalt())
+    cursor.execute(
+        'INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)',
+        ('admin', admin_password.decode('utf-8'), 'admin')
+    )
+    print('✅ Администратор создан: login=admin, password=1234')
     
     # Проверяем, есть ли записи
     cursor.execute('SELECT COUNT(*) FROM records')
@@ -195,7 +193,12 @@ def login():
         user = cursor.fetchone()
         conn.close()
         
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):
+        try:
+            valid = bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8'))
+        except (ValueError, AttributeError):
+            valid = False
+        
+        if user and valid:
             session['user_id'] = user['id']
             session['username'] = user['username']
             session['role'] = user['role']
