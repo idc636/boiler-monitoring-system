@@ -1,60 +1,148 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-<meta charset="UTF-8">
-<title>Таблица</title>
-<style>
-table { border-collapse: collapse; width: 100%; }
-td, th { border: 1px solid #000; padding: 4px; }
-.separator { background: #c6efce; font-weight: bold; text-align: center; }
-</style>
+    <meta charset="UTF-8">
+    <title>Журнал котельных</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 20px;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        table {
+            border-collapse: collapse;
+            background: white;
+            width: 100%;
+            min-width: 1800px;
+        }
+        th, td {
+            border: 1px solid #999;
+            padding: 4px 6px;
+            font-size: 12px;
+        }
+        th {
+            background: #e0e0e0;
+            text-align: center;
+        }
+        td.editable {
+            cursor: pointer;
+        }
+        td.editable:hover {
+            background: #eef;
+        }
+        .add-btn {
+            padding: 6px 12px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .logout-btn {
+            padding: 6px 12px;
+            background: #c62828;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .table-wrap {
+            overflow-x: auto;
+        }
+    </style>
 </head>
 <body>
 
-<h2>Журнал оборудования</h2>
-<a href="{{ url_for('logout') }}">Выход</a>
+<div class="top-bar">
+    <div>
+        Пользователь: <b>{{ user.username }}</b> ({{ user.role }})
+    </div>
+    <form method="post" action="/logout">
+        <button class="logout-btn">Выход</button>
+    </form>
+</div>
 
+<h1>Журнал работы котельных</h1>
+
+{% if user.role == 'admin' %}
+<button class="add-btn" onclick="addRow()">➕ Добавить строку</button>
+{% endif %}
+
+<div class="table-wrap">
 <table>
-{% for row in records %}
-<form method="post" action="{{ url_for('update') }}">
-<input type="hidden" name="id" value="{{ row[0] }}">
-
-{% if row[1] == 'SEPARATOR' %}
-<tr>
-    <td colspan="37" class="separator">
-        {{ row[2] }}
-    </td>
-</tr>
-{% else %}
-<tr>
-{% for cell in row[1:38] %}
-<td contenteditable="{{ 'true' if is_admin else 'false' }}">
-    <input type="hidden" name="cell[]" value="{{ cell }}">
-    {{ cell }}
-</td>
-{% endfor %}
-</tr>
-{% endif %}
-
-{% if is_admin %}
-<button type="submit">Сохранить</button>
-{% endif %}
-</form>
-{% endfor %}
+    <thead>
+        <tr>
+            {% for i in range(1, 38) %}
+                <th>C{{ i }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in records %}
+        <tr>
+            {% for i in range(1, 38) %}
+                <td
+                    class="editable"
+                    data-id="{{ r.id }}"
+                    data-field="c{{ i }}"
+                >
+                    {{ r["c" ~ i] }}
+                </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
-
-{% if is_admin %}
-<form method="post" action="{{ url_for('add_row') }}">
-    <button>➕ Добавить строку снизу</button>
-</form>
-{% endif %}
+</div>
 
 <script>
-document.querySelectorAll('td[contenteditable]').forEach(td => {
-  td.addEventListener('input', () => {
-    td.querySelector('input').value = td.innerText.trim();
-  });
+{% if user.role == 'admin' %}
+document.querySelectorAll('.editable').forEach(td => {
+    td.addEventListener('click', () => {
+        if (td.querySelector('input')) return;
+
+        const old = td.innerText;
+        const input = document.createElement('input');
+        input.value = old;
+        input.style.width = '100%';
+
+        td.innerHTML = '';
+        td.appendChild(input);
+        input.focus();
+
+        input.addEventListener('blur', () => {
+            const value = input.value;
+            td.innerText = value;
+
+            fetch('/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: td.dataset.id,
+                    field: td.dataset.field,
+                    value: value
+                })
+            });
+        });
+
+        input.addEventListener('keydown', e => {
+            if (e.key === 'Enter') input.blur();
+        });
+    });
 });
+
+function addRow() {
+    fetch('/add', { method: 'POST' })
+        .then(() => location.reload());
+}
+{% endif %}
 </script>
 
 </body>
