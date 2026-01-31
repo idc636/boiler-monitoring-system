@@ -10,8 +10,8 @@ app.secret_key = 'your-secret-key-change-this'
 # Подключение к PostgreSQL
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
-def ensure_tables_exist():
-    """Гарантирует, что таблицы существуют"""
+def ensure_tables_and_admin():
+    """Гарантирует, что таблицы и админ существуют"""
     conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
     cursor = conn.cursor()
     
@@ -74,49 +74,57 @@ def ensure_tables_exist():
         )
     ''')
     
-    # Удаляем старого админа и создаём нового
-    cursor.execute('DELETE FROM users WHERE username = %s', ('admin',))
-    admin_password = bcrypt.hashpw('1234'.encode('utf-8'), bcrypt.gensalt())
-    cursor.execute(
-        'INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)',
-        ('admin', admin_password.decode('utf-8'), 'admin')
-    )
-    print('✅ Администратор создан: login=admin, password=1234')
+    # Проверяем, есть ли админ
+    cursor.execute('SELECT COUNT(*) FROM users WHERE username = %s', ('admin',))
+    admin_count = cursor.fetchone()['count']
     
-    # Удаляем старые данные и вставляем новые
-    cursor.execute('DELETE FROM records')
-    demo_data = [
-        ("30.01.2026", 1, "Белоярск №1 ул. Набережная 8", "83499323373", 1, "КСВ-3,0/PG93 UNIGAS", "", "2007", "00:00", "1.3", "2", "", "1,2,4", "", "3", "1", "2", "", "2", "25", "1.2", "", "16008", "6031", "", "1", "50", "1", "", "", "-34", "86", "64", "86", "64.5", "5.5", "3.8", "0", "Витязев Кожевников", "Канев Нагибин", ""),
-        ("30.01.2026", 1, "Белоярск №1 ул. Набережная 8", "83499323373", 1, "КСВ-3,0/PG93 UNIGAS", "", "2007", "03:00", "1.3", "2", "", "1,2,4", "", "", "1", "2", "", "", "", "", "", "", "", "", "", "", "", "", "", "-36", "88", "67", "88", "65.8", "5.5", "3.8", "", "", "", ""),
-        ("30.01.2026", 2, "Белоярск №2 ул. Юбилейная 11", "83499323387", 1, "KBA-3,2/PG93 UNIGAS", "", "2010", "00:00", "2,3,4", "1", "", "2,3,4", "1", "", "2", "1", "", "2", "25", "1.2", "", "17589", "12023", "-", "1", "50", "1", "", "", "-35", "87", "65", "87", "65.2", "5.5", "4.5", "10", "Витязев Лаптандер", "Терентеев Подронхасов", ""),
-    ]
+    if admin_count == 0:
+        # Создаём админа
+        admin_password = bcrypt.hashpw('1234'.encode('utf-8'), bcrypt.gensalt())
+        cursor.execute(
+            'INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)',
+            ('admin', admin_password.decode('utf-8'), 'admin')
+        )
+        print('✅ Администратор создан: login=admin, password=1234')
     
-    cursor.executemany('''
-        INSERT INTO records (
-            date, boiler_number, boiler_location, boiler_contact,
-            equipment_number, boiler_model, burner_model, equipment_year, time_interval,
-            boilers_working, boilers_reserve, boilers_repair,
-            pumps_working, pumps_reserve, pumps_repair,
-            feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
-            fuel_tanks_total, fuel_tank_volume, fuel_tanks_working, fuel_tanks_reserve,
-            fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
-            water_tanks_total, water_tank_volume, water_tanks_working, water_tanks_reserve, water_tanks_repair,
-            temp_outdoor, temp_supply, temp_return,
-            temp_graph_supply, temp_graph_return,
-            pressure_supply, pressure_return,
-            water_consumption_daily,
-            staff_night, staff_day, notes
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-    ''', demo_data)
+    # Проверяем, есть ли записи
+    cursor.execute('SELECT COUNT(*) FROM records')
+    count = cursor.fetchone()['count']
     
-    print(f'✅ Демо-данные принудительно загружены: {len(demo_data)} строк')
+    if count == 0:
+        # Загружаем демо-данные
+        demo_data = [
+            ("30.01.2026", 1, "Белоярск №1 ул. Набережная 8", "83499323373", 1, "КСВ-3,0/PG93 UNIGAS", "", "2007", "00:00", "1.3", "2", "", "1,2,4", "", "3", "1", "2", "", "2", "25", "1.2", "", "16008", "6031", "", "1", "50", "1", "", "", "-34", "86", "64", "86", "64.5", "5.5", "3.8", "0", "Витязев Кожевников", "Канев Нагибин", ""),
+            ("30.01.2026", 1, "Белоярск №1 ул. Набережная 8", "83499323373", 1, "КСВ-3,0/PG93 UNIGAS", "", "2007", "03:00", "1.3", "2", "", "1,2,4", "", "", "1", "2", "", "", "", "", "", "", "", "", "", "", "", "", "", "-36", "88", "67", "88", "65.8", "5.5", "3.8", "", "", "", ""),
+            ("30.01.2026", 2, "Белоярск №2 ул. Юбилейная 11", "83499323387", 1, "KBA-3,2/PG93 UNIGAS", "", "2010", "00:00", "2,3,4", "1", "", "2,3,4", "1", "", "2", "1", "", "2", "25", "1.2", "", "17589", "12023", "-", "1", "50", "1", "", "", "-35", "87", "65", "87", "65.2", "5.5", "4.5", "10", "Витязев Лаптандер", "Терентеев Подронхасов", ""),
+        ]
+        
+        cursor.executemany('''
+            INSERT INTO records (
+                date, boiler_number, boiler_location, boiler_contact,
+                equipment_number, boiler_model, burner_model, equipment_year, time_interval,
+                boilers_working, boilers_reserve, boilers_repair,
+                pumps_working, pumps_reserve, pumps_repair,
+                feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
+                fuel_tanks_total, fuel_tank_volume, fuel_tanks_working, fuel_tanks_reserve,
+                fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
+                water_tanks_total, water_tank_volume, water_tanks_working, water_tanks_reserve, water_tanks_repair,
+                temp_outdoor, temp_supply, temp_return,
+                temp_graph_supply, temp_graph_return,
+                pressure_supply, pressure_return,
+                water_consumption_daily,
+                staff_night, staff_day, notes
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ''', demo_data)
+        
+        print(f'✅ Демо-данные загружены: {len(demo_data)} строк')
     
     conn.commit()
     conn.close()
 
 def get_db_connection():
     """Подключение к PostgreSQL"""
-    ensure_tables_exist()  # Всегда проверяем таблицы перед подключением
+    ensure_tables_and_admin()  # Проверяем таблицы и админа
     conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
     return conn
 
@@ -273,6 +281,6 @@ def update_cell():
     return jsonify({'status': 'ok'})
 
 if __name__ == '__main__':
-    ensure_tables_exist()  # Инициализируем при старте
+    ensure_tables_and_admin()  # Инициализируем при старте
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
