@@ -10,14 +10,8 @@ app.secret_key = 'your-secret-key-change-this'
 # Подключение к PostgreSQL
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
-def get_db_connection():
-    """Подключение к PostgreSQL + инициализация БД"""
-    init_db()  # Всегда инициализируем перед подключением
-    conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
-    return conn
-
-def init_db():
-    """Инициализация БД и создание таблиц"""
+def ensure_tables_exist():
+    """Гарантирует, что таблицы существуют"""
     conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
     cursor = conn.cursor()
     
@@ -80,16 +74,16 @@ def init_db():
         )
     ''')
     
-    # Проверяем, есть ли уже пользователи
-    cursor.execute('SELECT COUNT(*) FROM users')
-    user_count = cursor.fetchone()['count']
+    # Проверяем, есть ли администратор
+    cursor.execute('SELECT COUNT(*) FROM users WHERE username = %s', ('admin',))
+    admin_exists = cursor.fetchone()['count'] > 0
     
-    if user_count == 0:
-        # Создаём администратора по умолчанию
+    if not admin_exists:
+        # Создаём администратора
         admin_password = bcrypt.hashpw('admin123'.encode('utf-8'), bcrypt.gensalt())
         cursor.execute(
             'INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)',
-            ('admin', admin_password, 'admin')
+            ('admin', admin_password.decode('utf-8'), 'admin')
         )
         print('✅ Администратор создан: login=admin, password=admin123')
     
@@ -127,6 +121,12 @@ def init_db():
     
     conn.commit()
     conn.close()
+
+def get_db_connection():
+    """Подключение к PostgreSQL"""
+    ensure_tables_exist()  # Всегда проверяем таблицы перед подключением
+    conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
+    return conn
 
 def check_auth():
     """Проверка авторизации"""
@@ -195,7 +195,7 @@ def login():
         user = cursor.fetchone()
         conn.close()
         
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['password_hash']):
+        if user and bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):
             session['user_id'] = user['id']
             session['username'] = user['username']
             session['role'] = user['role']
@@ -264,6 +264,6 @@ def update_cell():
     return jsonify({'status': 'ok'})
 
 if __name__ == '__main__':
-    init_db()  # Инициализируем при старте
+    ensure_tables_exist()  # Инициализируем при старте
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
