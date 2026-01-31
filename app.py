@@ -20,7 +20,7 @@ def ensure_tables_exist():
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
             username VARCHAR(50) UNIQUE NOT NULL,
-            password_hash BYTEA NOT NULL,
+            password_hash VARCHAR(128) NOT NULL,
             role VARCHAR(20) DEFAULT 'operator',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
@@ -83,7 +83,7 @@ def ensure_tables_exist():
         admin_password = bcrypt.hashpw('1234'.encode('utf-8'), bcrypt.gensalt())
         cursor.execute(
             'INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)',
-            ('admin', admin_password, 'admin')
+            ('admin', admin_password.decode('utf-8'), 'admin')
         )
         print('✅ Администратор создан: login=admin, password=1234')
     
@@ -195,7 +195,7 @@ def login():
         user = cursor.fetchone()
         conn.close()
         
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['password_hash']):
+        if user and bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):
             session['user_id'] = user['id']
             session['username'] = user['username']
             session['role'] = user['role']
@@ -223,7 +223,7 @@ def register():
             cursor = conn.cursor()
             cursor.execute(
                 'INSERT INTO users (username, password_hash) VALUES (%s, %s)',
-                (username, password_hash)
+                (username, password_hash.decode('utf-8'))
             )
             conn.commit()
             conn.close()
