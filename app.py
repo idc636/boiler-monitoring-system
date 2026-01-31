@@ -223,7 +223,7 @@ def register():
             cursor = conn.cursor()
             cursor.execute(
                 'INSERT INTO users (username, password_hash) VALUES (%s, %s)',
-                (username, password_hash.decode('utf-8'))
+                (username, password_hash)  # Вот эта строка изменена
             )
             conn.commit()
             conn.close()
