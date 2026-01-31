@@ -2,50 +2,79 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Records</title>
+    <title>Таблица</title>
     <style>
+        body { font-family: Arial, sans-serif; }
         table { border-collapse: collapse; width: 100%; }
-        td, th { border: 1px solid #ccc; padding: 6px; }
-        input { width: 100%; box-sizing: border-box; }
+        td, th {
+            border: 1px solid #999;
+            padding: 2px;
+            text-align: center;
+            font-size: 12px;
+        }
+        input[type="text"] {
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 12px;
+        }
+        .separator {
+            background: #e6ffe6;
+            font-weight: bold;
+            text-align: left;
+        }
+        .topbar {
+            margin-bottom: 10px;
+        }
+        .add-row {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
-{% if user %}
-<p>
-    Пользователь: <b>{{ user.username }}</b> ({{ user.role }})
+<div class="topbar">
+    Пользователь: <b>{{ session.username }}</b> ({{ session.role }})
     | <a href="{{ url_for('logout') }}">Выйти</a>
-</p>
-{% endif %}
+</div>
 
 <h2>Таблица</h2>
 
 <table>
-    {% for row in records %}
-    <tr>
-        <form method="post" action="{{ url_for('update') }}">
-            <input type="hidden" name="id" value="{{ row[0] }}">
-            {% for cell in row[1:] %}
-                <td>
-                    {% if is_admin %}
-                        <input name="cell[]" value="{{ cell or '' }}">
-                    {% else %}
-                        {{ cell }}
-                    {% endif %}
+    {% for r in records %}
+        {% if r[1] and r[2] and r[3] and r[4] and r[5] and not r[6] %}
+            <!-- РАЗДЕЛИТЕЛЬ КОТЕЛЬНОЙ -->
+            <tr class="separator">
+                <td colspan="37">
+                    {{ r[1] }} {{ r[2] }} {{ r[3] }} {{ r[4] }} {{ r[5] }}
                 </td>
-            {% endfor %}
-            {% if is_admin %}
-            <td>
-                <button type="submit">Сохранить</button>
-            </td>
-            {% endif %}
-        </form>
-    </tr>
+            </tr>
+        {% else %}
+            <!-- ОБЫЧНАЯ СТРОКА -->
+            <tr>
+                <form method="post" action="{{ url_for('update') }}">
+                    <input type="hidden" name="id" value="{{ r[0] }}">
+                    {% for i in range(1, 38) %}
+                        <td>
+                            {% if is_admin %}
+                                <input type="text" name="cell[]" value="{{ r[i] or '' }}">
+                            {% else %}
+                                {{ r[i] or '' }}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                    {% if is_admin %}
+                        <td>
+                            <button type="submit">Сохранить</button>
+                        </td>
+                    {% endif %}
+                </form>
+            </tr>
+        {% endif %}
     {% endfor %}
 </table>
 
 {% if is_admin %}
-<form method="post" action="{{ url_for('add_row') }}">
+<form method="post" action="{{ url_for('add_row') }}" class="add-row">
     <button type="submit">➕ Добавить строку</button>
 </form>
 {% endif %}
