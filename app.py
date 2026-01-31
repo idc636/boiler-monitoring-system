@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+import os
 import psycopg2
 import bcrypt
-import os
+from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret")
@@ -13,22 +13,26 @@ def get_db():
     return psycopg2.connect(DATABASE_URL)
 
 
-# ================== AUTH ==================
+# ---------------- AUTH ----------------
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     error = None
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
-        password_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+        password_hash = bcrypt.hashpw(
+            password.encode(),
+            bcrypt.gensalt()
+        ).decode()
 
         try:
             conn = get_db()
             cur = conn.cursor()
             cur.execute(
-                "INSERT INTO users (username, password_hash, role) VALUES (%s,%s,'user')",
+                "INSERT INTO users (username, password_hash, role) VALUES (%s, %s, 'user')",
                 (username, password_hash)
             )
             conn.commit()
@@ -43,6 +47,7 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -72,7 +77,7 @@ def logout():
     return redirect(url_for('login'))
 
 
-# ================== TABLE ==================
+# ---------------- MAIN ----------------
 
 @app.route('/')
 def index():
@@ -82,19 +87,22 @@ def index():
     conn = get_db()
     cur = conn.cursor()
 
-    # получаем пользователя
     cur.execute(
         "SELECT username, role FROM users WHERE id=%s",
         (session['user_id'],)
     )
-    user_row = cur.fetchone()
+    row = cur.fetchone()
+
+    if not row:
+        session.clear()
+        conn.close()
+        return redirect(url_for('login'))
 
     user = {
-        "username": user_row[0],
-        "role": user_row[1]
+        "username": row[0],
+        "role": row[1]
     }
 
-    # получаем таблицу
     cur.execute("SELECT * FROM records ORDER BY id")
     records = cur.fetchall()
 
@@ -106,6 +114,20 @@ def index():
         user=user,
         is_admin=user["role"] == "admin"
     )
+
+
+@app.route('/add_row', methods=['POST'])
+def add_row():
+    if session.get('role') != 'admin':
+        return redirect(url_for('index'))
+
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO records DEFAULT VALUES")
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for('index'))
 
 
 @app.route('/update', methods=['POST'])
@@ -127,24 +149,9 @@ def update():
 
     conn.commit()
     conn.close()
-    return redirect(url_for('index'))
-
-
-@app.route('/add', methods=['POST'])
-def add():
-    if session.get('role') != 'admin':
-        return redirect(url_for('index'))
-
-    conn = get_db()
-    cur = conn.cursor()
-    cur.execute("INSERT INTO records DEFAULT VALUES")
-    conn.commit()
-    conn.close()
 
     return redirect(url_for('index'))
 
-
-# ================== RUN ==================
 
 if __name__ == '__main__':
     app.run(debug=True)
