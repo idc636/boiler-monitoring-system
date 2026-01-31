@@ -195,7 +195,7 @@ def login():
         user = cursor.fetchone()
         conn.close()
         
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['password_hash']):
+        if user and bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):
             session['user_id'] = user['id']
             session['username'] = user['username']
             session['role'] = user['role']
@@ -223,7 +223,7 @@ def register():
             cursor = conn.cursor()
             cursor.execute(
                 'INSERT INTO users (username, password_hash) VALUES (%s, %s)',
-                (username, password_hash)  # Вот эта строка изменена
+                (username, password_hash.decode('utf-8'))
             )
             conn.commit()
             conn.close()
