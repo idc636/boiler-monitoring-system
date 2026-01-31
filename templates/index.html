@@ -1,13 +1,110 @@
-{% if is_admin %}
-<button id="add-record-btn">➕ Добавить запись</button>
-{% endif %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Учёт работы котельных | АО «Ямалкомунэнерго»</title>
+    <meta charset="UTF-8">
+    <style>
+        * { font-family: Arial, sans-serif; font-size: 12px; }
+        body { margin: 10px; background: #f5f5f5; }
+        .header { background: white; padding: 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 10px; }
+        h1 { color: #0047AB; text-align: center; font-size: 20px; margin: 5px 0; }
+        h3 { text-align: center; color: #555; font-size: 14px; margin: 5px 0 15px; }
+        .user-info { text-align: right; color: #666; font-size: 12px; margin-bottom: 10px; }
+        .table-container { overflow-x: auto; background: white; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 5px; }
+        table { border-collapse: collapse; width: 100%; min-width: 2500px; }
+        th, td { border: 1px solid #ddd; padding: 4px 6px; text-align: left; }
+        th { background-color: #0047AB; color: white; position: sticky; top: 0; font-weight: bold; font-size: 11px; }
+        tr:hover { background-color: #f9f9f9; }
+        .editable { cursor: pointer; min-width: 60px; }
+        .editable:hover { background-color: #e3f2fd; }
+        .logout-btn { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; float: right; }
+        .logout-btn:hover { background: #c82333; }
+        .add-btn { background: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; margin-bottom: 10px; }
+        .add-btn:hover { background: #218838; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="user-info">
+            Пользователь: <strong>{{ user.username }}</strong> | Роль: <strong>{{ user.role }}</strong>
+            <form method="POST" action="/logout" style="display: inline;">
+                <button type="submit" class="logout-btn">Выход</button>
+            </form>
+        </div>
+        <h1>📝 Учёт работы котельных</h1>
+        <h3>АО «Ямалкомунэнерго», г. Салехард</h3>
+    </div>
+
+    {% if user.role == 'admin' %}
+    <button class="add-btn" onclick="addRecord()">➕ Добавить запись</button>
+    {% endif %}
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>№ котельной</th>
+                    <th>Местоположение</th>
+                    <th>Контакт</th>
+                    <th>№ оборудования</th>
+                    <th>Модель котла</th>
+                    <th>Модель горелки</th>
+                    <th>Год выпуска</th>
+                    <th>Временной интервал</th>
+                    <th>Котлы в работе</th>
+                    <th>Котлы в резерве</th>
+                    <th>Котлы в ремонте</th>
+                    <th>Насосы в работе</th>
+                    <th>Насосы в резерве</th>
+                    <th>Насосы в ремонте</th>
+                    <th>Питательные насосы в работе</th>
+                    <th>Питательные насосы в резерве</th>
+                    <th>Питательные насосы в ремонте</th>
+                    <th>Топливные баки всего</th>
+                    <th>Объём топливного бака</th>
+                    <th>Топливные баки в работе</th>
+                    <th>Топливные баки в резерве</th>
+                    <th>Утренний баланс топлива</th>
+                    <th>Ежедневное потребление топлива</th>
+                    <th>Топливные баки в ремонте</th>
+                    <th>Водяные баки всего</th>
+                    <th>Объём водяного бака</th>
+                    <th>Водяные баки в работе</th>
+                    <th>Водяные баки в резерве</th>
+                    <th>Водяные баки в ремонте</th>
+                    <th>Температура на улице</th>
+                    <th>Температура подачи</th>
+                    <th>Температура обратки</th>
+                    <th>График подачи</th>
+                    <th>График обратки</th>
+                    <th>Давление подачи</th>
+                    <th>Давление обратки</th>
+                    <th>Ежедневный расход воды</th>
+                    <th>Ночная смена</th>
+                    <th>Дневная смена</th>
+                    <th>Примечания</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    {% for key, value in record.items() %}
+                    {% if key != 'id' and key not in ['boiler_number', 'boiler_location', 'boiler_model', 'burner_model'] %}
+                    <td class="editable" data-field="{{ key }}" data-id="{{ record.id }}">{{ value }}</td>
+                    {% else %}
+                    <td>{{ value }}</td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 <script>
+{% if user.role == 'admin' %}
 document.querySelectorAll('.editable').forEach(cell => {
-    {% if not is_admin %}
-    // обычные пользователи не могут редактировать
-    return;
-    {% endif %}
     cell.addEventListener('click', function() {
         const field = this.getAttribute('data-field');
         const id = this.getAttribute('data-id');
@@ -19,35 +116,37 @@ document.querySelectorAll('.editable').forEach(cell => {
 
         input.addEventListener('blur', function() {
             const newValue = this.value;
+
             fetch('/update', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({field, value: newValue, id})
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ field: field, value: newValue, id: id })
             })
-            .then(res => res.json())
+            .then(response => response.json())
             .then(data => {
                 if (data.status === 'ok') cell.textContent = newValue;
                 else alert('Ошибка сохранения');
-            }).catch(()=>alert('Ошибка связи с сервером'));
+            })
+            .catch(error => { console.error(error); alert('Ошибка связи с сервером'); });
         });
 
-        input.addEventListener('keypress', e => { if(e.key==='Enter') this.blur(); });
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') this.blur();
+        });
 
-        this.innerHTML='';
+        this.innerHTML = '';
         this.appendChild(input);
         input.focus();
     });
 });
 
-// кнопка "Добавить запись"
-const addBtn = document.getElementById('add-record-btn');
-if(addBtn){
-    addBtn.addEventListener('click', () => {
-        fetch('/add_record', {method:'POST'})
-        .then(res=>res.json())
-        .then(data=>{
-            if(data.status==='ok') location.reload();
-        });
-    });
+function addRecord() {
+    fetch('/add', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => { if(data.status==='ok') location.reload(); else alert('Ошибка добавления'); });
 }
+{% endif %}
 </script>
+
+</body>
+</html>
