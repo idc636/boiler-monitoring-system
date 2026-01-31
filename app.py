@@ -81,14 +81,30 @@ def index():
 
     conn = get_db()
     cur = conn.cursor()
+
+    # получаем пользователя
+    cur.execute(
+        "SELECT username, role FROM users WHERE id=%s",
+        (session['user_id'],)
+    )
+    user_row = cur.fetchone()
+
+    user = {
+        "username": user_row[0],
+        "role": user_row[1]
+    }
+
+    # получаем таблицу
     cur.execute("SELECT * FROM records ORDER BY id")
     records = cur.fetchall()
+
     conn.close()
 
     return render_template(
         'index.html',
         records=records,
-        is_admin=session.get('role') == 'admin'
+        user=user,
+        is_admin=user["role"] == "admin"
     )
 
 
