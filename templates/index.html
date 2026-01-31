@@ -20,6 +20,8 @@
         .boiler-header { background-color: #e8f4fd; font-weight: bold; }
         .logout-btn { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; float: right; }
         .logout-btn:hover { background: #c82333; }
+        .add-row-btn { background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 3px; cursor: pointer; margin-bottom: 10px; }
+        .add-row-btn:hover { background: #218838; }
     </style>
 </head>
 <body>
@@ -33,7 +35,13 @@
         <h1>📝 Учёт работы котельных</h1>
         <h3>АО «Ямалкомунэнерго», г. Салехард</h3>
     </div>
-    
+
+    {% if user.role == 'admin' %}
+    <form method="POST" action="/add_row">
+        <button type="submit" class="add-row-btn">➕ Добавить строку</button>
+    </form>
+    {% endif %}
+
     <div class="table-container">
         <table>
             <thead>
@@ -84,47 +92,35 @@
             <tbody>
                 {% for record in records %}
                 <tr>
-                    <td class="editable" data-field="date" data-id="{{ record.id }}">{{ record.date }}</td>
-                    <td class="editable" data-field="boiler_number" data-id="{{ record.id }}">{{ record.boiler_number }}</td>
-                    <td class="editable" data-field="boiler_location" data-id="{{ record.id }}">{{ record.boiler_location }}</td>
-                    <td class="editable" data-field="boiler_contact" data-id="{{ record.id }}">{{ record.boiler_contact }}</td>
-                    <td class="editable" data-field="equipment_number" data-id="{{ record.id }}">{{ record.equipment_number }}</td>
-                    <td class="editable" data-field="boiler_model" data-id="{{ record.id }}">{{ record.boiler_model }}</td>
-                    <td class="editable" data-field="burner_model" data-id="{{ record.id }}">{{ record.burner_model }}</td>
-                    <td class="editable" data-field="equipment_year" data-id="{{ record.id }}">{{ record.equipment_year }}</td>
-                    <td class="editable" data-field="time_interval" data-id="{{ record.id }}">{{ record.time_interval }}</td>
-                    <td class="editable" data-field="boilers_working" data-id="{{ record.id }}">{{ record.boilers_working }}</td>
-                    <td class="editable" data-field="boilers_reserve" data-id="{{ record.id }}">{{ record.boilers_reserve }}</td>
-                    <td class="editable" data-field="boilers_repair" data-id="{{ record.id }}">{{ record.boilers_repair }}</td>
-                    <td class="editable" data-field="pumps_working" data-id="{{ record.id }}">{{ record.pumps_working }}</td>
-                    <td class="editable" data-field="pumps_reserve" data-id="{{ record.id }}">{{ record.pumps_reserve }}</td>
-                    <td class="editable" data-field="pumps_repair" data-id="{{ record.id }}">{{ record.pumps_repair }}</td>
-                    <td class="editable" data-field="feed_pumps_working" data-id="{{ record.id }}">{{ record.feed_pumps_working }}</td>
-                    <td class="editable" data-field="feed_pumps_reserve" data-id="{{ record.id }}">{{ record.feed_pumps_reserve }}</td>
-                    <td class="editable" data-field="feed_pumps_repair" data-id="{{ record.id }}">{{ record.feed_pumps_repair }}</td>
-                    <td class="editable" data-field="fuel_tanks_total" data-id="{{ record.id }}">{{ record.fuel_tanks_total }}</td>
-                    <td class="editable" data-field="fuel_tank_volume" data-id="{{ record.id }}">{{ record.fuel_tank_volume }}</td>
-                    <td class="editable" data-field="fuel_tanks_working" data-id="{{ record.id }}">{{ record.fuel_tanks_working }}</td>
-                    <td class="editable" data-field="fuel_tanks_reserve" data-id="{{ record.id }}">{{ record.fuel_tanks_reserve }}</td>
-                    <td class="editable" data-field="fuel_morning_balance" data-id="{{ record.id }}">{{ record.fuel_morning_balance }}</td>
-                    <td class="editable" data-field="fuel_daily_consumption" data-id="{{ record.id }}">{{ record.fuel_daily_consumption }}</td>
-                    <td class="editable" data-field="fuel_tanks_repair" data-id="{{ record.id }}">{{ record.fuel_tanks_repair }}</td>
-                    <td class="editable" data-field="water_tanks_total" data-id="{{ record.id }}">{{ record.water_tanks_total }}</td>
-                    <td class="editable" data-field="water_tank_volume" data-id="{{ record.id }}">{{ record.water_tank_volume }}</td>
-                    <td class="editable" data-field="water_tanks_working" data-id="{{ record.id }}">{{ record.water_tanks_working }}</td>
-                    <td class="editable" data-field="water_tanks_reserve" data-id="{{ record.id }}">{{ record.water_tanks_reserve }}</td>
-                    <td class="editable" data-field="water_tanks_repair" data-id="{{ record.id }}">{{ record.water_tanks_repair }}</td>
-                    <td class="editable" data-field="temp_outdoor" data-id="{{ record.id }}">{{ record.temp_outdoor }}</td>
-                    <td class="editable" data-field="temp_supply" data-id="{{ record.id }}">{{ record.temp_supply }}</td>
-                    <td class="editable" data-field="temp_return" data-id="{{ record.id }}">{{ record.temp_return }}</td>
-                    <td class="editable" data-field="temp_graph_supply" data-id="{{ record.id }}">{{ record.temp_graph_supply }}</td>
-                    <td class="editable" data-field="temp_graph_return" data-id="{{ record.id }}">{{ record.temp_graph_return }}</td>
-                    <td class="editable" data-field="pressure_supply" data-id="{{ record.id }}">{{ record.pressure_supply }}</td>
-                    <td class="editable" data-field="pressure_return" data-id="{{ record.id }}">{{ record.pressure_return }}</td>
-                    <td class="editable" data-field="water_consumption_daily" data-id="{{ record.id }}">{{ record.water_consumption_daily }}</td>
-                    <td class="editable" data-field="staff_night" data-id="{{ record.id }}">{{ record.staff_night }}</td>
-                    <td class="editable" data-field="staff_day" data-id="{{ record.id }}">{{ record.staff_day }}</td>
-                    <td class="editable" data-field="notes" data-id="{{ record.id }}">{{ record.notes }}</td>
+                    <td>{{ record.date }}</td>
+                    <td>{{ record.boiler_number }}</td>
+                    <td>{{ record.boiler_location }}</td>
+                    <td>{{ record.boiler_contact }}</td>
+                    <td>{{ record.equipment_number }}</td>
+                    <td>{{ record.boiler_model }}</td>
+                    <td>{{ record.burner_model }}</td>
+                    <td>{{ record.equipment_year }}</td>
+                    <td>{{ record.time_interval }}</td>
+                    
+                    {% set editable_fields = [
+                        'boilers_working','boilers_reserve','boilers_repair',
+                        'pumps_working','pumps_reserve','pumps_repair',
+                        'feed_pumps_working','feed_pumps_reserve','feed_pumps_repair',
+                        'fuel_tanks_total','fuel_tank_volume','fuel_tanks_working','fuel_tanks_reserve',
+                        'fuel_morning_balance','fuel_daily_consumption','fuel_tanks_repair',
+                        'water_tanks_total','water_tank_volume','water_tanks_working','water_tanks_reserve','water_tanks_repair',
+                        'temp_outdoor','temp_supply','temp_return','temp_graph_supply','temp_graph_return',
+                        'pressure_supply','pressure_return','water_consumption_daily',
+                        'staff_night','staff_day','notes'
+                    ] %}
+                    
+                    {% for field in editable_fields %}
+                        {% if user.role == 'admin' %}
+                            <td class="editable" data-field="{{ field }}" data-id="{{ record.id }}">{{ record[field] }}</td>
+                        {% else %}
+                            <td>{{ record[field] }}</td>
+                        {% endif %}
+                    {% endfor %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -144,38 +140,26 @@
                 
                 input.addEventListener('blur', function() {
                     const newValue = this.value;
-                    
                     fetch('/update', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            field: field,
-                            value: newValue,
-                            id: id
-                        })
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({field: field, value: newValue, id: id})
                     })
-                    .then(response => response.json())
+                    .then(res => res.json())
                     .then(data => {
-                        if (data.status === 'ok') {
+                        if(data.status === 'ok'){
                             cell.textContent = newValue;
                         } else {
-                            alert('Ошибка сохранения');
+                            alert('Ошибка сохранения: ' + data.msg);
                         }
                     })
-                    .catch(error => {
-                        console.error('Ошибка:', error);
-                        alert('Ошибка связи с сервером');
-                    });
+                    .catch(err => { console.error(err); alert('Ошибка связи с сервером'); });
                 });
                 
                 input.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        this.blur();
-                    }
+                    if(e.key === 'Enter'){ this.blur(); }
                 });
-                
+
                 this.innerHTML = '';
                 this.appendChild(input);
                 input.focus();
