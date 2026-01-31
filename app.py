@@ -1,32 +1,19 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+from flask import Flask, render_template, request, jsonify
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
-import bcrypt
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-change-this'
 
 # Подключение к PostgreSQL
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
-def ensure_tables_exist():
-    """Гарантирует, что таблицы существуют"""
+def init_db():
+    """Инициализация БД и создание таблицы"""
     conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
     cursor = conn.cursor()
     
-    # Таблица пользователей
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id SERIAL PRIMARY KEY,
-            username VARCHAR(50) UNIQUE NOT NULL,
-            password_hash VARCHAR(128) NOT NULL,
-            role VARCHAR(20) DEFAULT 'operator',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    
-    # Таблица записей (котельные)
+    # Создаём таблицу (если нет)
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS records (
             id SERIAL PRIMARY KEY,
@@ -74,23 +61,12 @@ def ensure_tables_exist():
         )
     ''')
     
-    # Удаляем старых пользователей (чтобы избежать ошибок)
-    cursor.execute('DELETE FROM users WHERE username = %s', ('admin',))
-    
-    # Создаём администратора с паролем 1234
-    admin_password = bcrypt.hashpw('1234'.encode('utf-8'), bcrypt.gensalt())
-    cursor.execute(
-        'INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)',
-        ('admin', admin_password.decode('utf-8'), 'admin')
-    )
-    print('✅ Администратор создан: login=admin, password=1234')
-    
-    # Проверяем, есть ли записи
+    # Проверяем, есть ли уже данные
     cursor.execute('SELECT COUNT(*) FROM records')
     count = cursor.fetchone()['count']
     
     if count == 0:
-        # Загружаем демо-данные
+        # Загружаем демо-данные из Excel
         demo_data = [
             ("30.01.2026", 1, "Белоярск №1 ул. Набережная 8", "83499323373", 1, "КСВ-3,0/PG93 UNIGAS", "", "2007", "00:00", "1.3", "2", "", "1,2,4", "", "3", "1", "2", "", "2", "25", "1.2", "", "16008", "6031", "", "1", "50", "1", "", "", "-34", "86", "64", "86", "64.5", "5.5", "3.8", "0", "Витязев Кожевников", "Канев Нагибин", ""),
             ("30.01.2026", 1, "Белоярск №1 ул. Набережная 8", "83499323373", 1, "КСВ-3,0/PG93 UNIGAS", "", "2007", "03:00", "1.3", "2", "", "1,2,4", "", "", "1", "2", "", "", "", "", "", "", "", "", "", "", "", "", "", "-36", "88", "67", "88", "65.8", "5.5", "3.8", "", "", "", ""),
@@ -115,44 +91,15 @@ def ensure_tables_exist():
             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ''', demo_data)
         
-        print(f'✅ Демо-данные загружены: {len(demo_data)} строк')
+        print(f"✅ Демо-данные загружены: {len(demo_data)} строк")
     
     conn.commit()
     conn.close()
 
-def get_db_connection():
-    """Подключение к PostgreSQL"""
-    ensure_tables_exist()  # Всегда проверяем таблицы перед подключением
-    conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
-    return conn
-
-def check_auth():
-    """Проверка авторизации"""
-    return 'user_id' in session
-
-def check_role(required_role):
-    """Проверка роли пользователя"""
-    if not check_auth():
-        return False
-    
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT role FROM users WHERE id = %s', (session['user_id'],))
-    user = cursor.fetchone()
-    conn.close()
-    
-    if user:
-        if required_role == 'admin':
-            return user['role'] == 'admin'
-        return True  # Любой авторизованный пользователь может просматривать
-    return False
-
 @app.route('/')
 def index():
-    if not check_auth():
-        return redirect(url_for('login'))
-    
-    conn = get_db_connection()
+    init_db()  # Инициализируем БД при каждом открытии
+    conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
     cursor = conn.cursor()
     
     cursor.execute('''
@@ -172,91 +119,16 @@ def index():
     records = cursor.fetchall()
     conn.close()
     
-    # Получаем информацию о пользователе
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT username, role FROM users WHERE id = %s', (session['user_id'],))
-    user_info = cursor.fetchone()
-    conn.close()
-    
-    return render_template('index.html', records=records, user=user_info)
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute('SELECT id, username, password_hash, role FROM users WHERE username = %s', (username,))
-        user = cursor.fetchone()
-        conn.close()
-        
-        try:
-            valid = bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8'))
-        except (ValueError, AttributeError):
-            valid = False
-        
-        if user and valid:
-            session['user_id'] = user['id']
-            session['username'] = user['username']
-            session['role'] = user['role']
-            return redirect(url_for('index'))
-        else:
-            return render_template('login.html', error='Неверный логин или пароль')
-    
-    return render_template('login.html')
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        confirm_password = request.form['confirm_password']
-        
-        if password != confirm_password:
-            return render_template('register.html', error='Пароли не совпадают')
-        
-        # Хешируем пароль
-        password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        
-        try:
-            conn = get_db_connection()
-            cursor = conn.cursor()
-            cursor.execute(
-                'INSERT INTO users (username, password_hash) VALUES (%s, %s)',
-                (username, password_hash.decode('utf-8'))
-            )
-            conn.commit()
-            conn.close()
-            
-            return redirect(url_for('login'))
-        except Exception as e:
-            return render_template('register.html', error='Пользователь уже существует')
-    
-    return render_template('register.html')
-
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect(url_for('login'))
+    return render_template('index.html', records=records)
 
 @app.route('/update', methods=['POST'])
 def update_cell():
-    if not check_auth():
-        return jsonify({'error': 'Unauthorized'}), 401
-    
     data = request.json
     field = data['field']
     value = data['value']
     record_id = data['id']
     
-    # Проверяем, может ли пользователь редактировать
-    if not check_role('operator'):
-        return jsonify({'error': 'Access denied'}), 403
-    
-    conn = get_db_connection()
+    conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
     cursor = conn.cursor()
     
     query = f'UPDATE records SET {field} = %s WHERE id = %s'
@@ -267,6 +139,6 @@ def update_cell():
     return jsonify({'status': 'ok'})
 
 if __name__ == '__main__':
-    ensure_tables_exist()  # Инициализируем при старте
+    init_db()  # Запускаем при старте
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
