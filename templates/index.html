@@ -1,170 +1,60 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Учёт работы котельных</title>
-
+<title>Таблица</title>
 <style>
-* {
-    font-family: Arial, sans-serif;
-    font-size: 11px;
-}
-body {
-    margin: 10px;
-    background: #f5f5f5;
-}
-table {
-    border-collapse: collapse;
-    width: 100%;
-    min-width: 3200px;
-    background: white;
-}
-th, td {
-    border: 1px solid #999;
-    padding: 3px 5px;
-    vertical-align: middle;
-}
-th {
-    background: #ddebf7;
-    text-align: center;
-    font-weight: bold;
-}
-.boiler-section td {
-    background: #9bbb59;
-    font-weight: bold;
-    text-align: left;
-}
-.editable {
-    cursor: pointer;
-}
-.editable:hover {
-    background: #fff2cc;
-}
-.header {
-    margin-bottom: 10px;
-}
-.add-btn {
-    background: #28a745;
-    color: white;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-.add-btn:hover {
-    background: #218838;
-}
+table { border-collapse: collapse; width: 100%; }
+td, th { border: 1px solid #000; padding: 4px; }
+.separator { background: #c6efce; font-weight: bold; text-align: center; }
 </style>
 </head>
-
 <body>
 
-<div class="header">
-    Пользователь: <b>{{ user.username }}</b> |
-    Роль: <b>{{ user.role }}</b>
-
-    <form method="POST" action="/logout" style="display:inline;">
-        <button>Выход</button>
-    </form>
-</div>
-
-{% if user.role == 'admin' %}
-<button class="add-btn" onclick="addRow()">➕ Добавить строку</button>
-{% endif %}
+<h2>Журнал оборудования</h2>
+<a href="{{ url_for('logout') }}">Выход</a>
 
 <table>
+{% for row in records %}
+<form method="post" action="{{ url_for('update') }}">
+<input type="hidden" name="id" value="{{ row[0] }}">
 
-<thead>
+{% if row[1] == 'SEPARATOR' %}
 <tr>
-    <!-- ⚠️ Здесь 37 колонок, названия БУКВАЛЬНО из Excel -->
-    <th>№</th>
-    <th>Марка котла / горелки</th>
-    <th>Год</th>
-    <th>Время</th>
-
-    {% for i in range(5, 38) %}
-        <th>Показатель {{ i }}</th>
-    {% endfor %}
-</tr>
-</thead>
-
-<tbody>
-
-{% for block in records_grouped %}
-<!-- ===== ЗЕЛЁНЫЙ РАЗДЕЛИТЕЛЬ ===== -->
-<tr class="boiler-section">
-    <td colspan="37">
-        {{ block.boiler_name }} — {{ block.address }}
+    <td colspan="37" class="separator">
+        {{ row[2] }}
     </td>
 </tr>
-
-<!-- ===== СТРОКИ ДАННЫХ ===== -->
-{% for r in block.records %}
+{% else %}
 <tr>
-    <td>{{ r.num }}</td>
-
-    {% for field in r.fields %}
-        {% if user.role == 'admin' %}
-        <td class="editable"
-            data-id="{{ r.id }}"
-            data-field="{{ field.name }}">
-            {{ field.value }}
-        </td>
-        {% else %}
-        <td>{{ field.value }}</td>
-        {% endif %}
-    {% endfor %}
+{% for cell in row[1:38] %}
+<td contenteditable="{{ 'true' if is_admin else 'false' }}">
+    <input type="hidden" name="cell[]" value="{{ cell }}">
+    {{ cell }}
+</td>
+{% endfor %}
 </tr>
-{% endfor %}
+{% endif %}
 
+{% if is_admin %}
+<button type="submit">Сохранить</button>
+{% endif %}
+</form>
 {% endfor %}
-
-</tbody>
 </table>
 
-<script>
-{% if user.role == 'admin' %}
-document.querySelectorAll('.editable').forEach(cell => {
-    cell.addEventListener('click', function () {
-        if (this.querySelector('input')) return;
-
-        const oldValue = this.innerText;
-        const id = this.dataset.id;
-        const field = this.dataset.field;
-
-        const input = document.createElement('input');
-        input.value = oldValue;
-        input.style.width = '100%';
-
-        input.onblur = function () {
-            fetch('/update', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    id: id,
-                    field: field,
-                    value: input.value
-                })
-            }).then(() => {
-                cell.innerText = input.value;
-            });
-        };
-
-        input.onkeydown = e => {
-            if (e.key === 'Enter') input.blur();
-        };
-
-        this.innerHTML = '';
-        this.appendChild(input);
-        input.focus();
-    });
-});
-
-function addRow() {
-    fetch('/add', {method: 'POST'})
-        .then(() => location.reload());
-}
+{% if is_admin %}
+<form method="post" action="{{ url_for('add_row') }}">
+    <button>➕ Добавить строку снизу</button>
+</form>
 {% endif %}
+
+<script>
+document.querySelectorAll('td[contenteditable]').forEach(td => {
+  td.addEventListener('input', () => {
+    td.querySelector('input').value = td.innerText.trim();
+  });
+});
 </script>
 
 </body>
