@@ -8,6 +8,7 @@ import traceback
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-change-this'
 
+# Подключение к PostgreSQL
 DATABASE_URL = os.environ.get('DATABASE_URL') or "postgresql://postgres:TzhRuKuliqaGilBouUfRjGtqZnBnubMN@postgres.railway.internal:5432/railway"
 
 def ensure_tables_and_admin():
@@ -82,46 +83,16 @@ def ensure_tables_and_admin():
     # Проверяем, есть ли админ
     cursor.execute('SELECT id FROM users WHERE username = %s', ('admin',))
     if cursor.fetchone() is None:
-        admin_password = bcrypt.hashpw('1234'.encode('utf-8'), bcrypt.gensalt())
+        admin_password = bcrypt.hashpw('1313'.encode('utf-8'), bcrypt.gensalt())
         cursor.execute(
             'INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)',
             ('admin', admin_password.decode('utf-8'), 'admin')
         )
-        print('✅ Администратор создан: login=admin, password=1234')
-
-    # Загружаем данные Excel только если таблица records пустая
-    cursor.execute('SELECT COUNT(*) AS cnt FROM records')
-    if cursor.fetchone()['cnt'] == 0:
-        print('📦 Загружаем данные из Excel...')
-        demo_data = [
-            # Котельная №1
-            ("30.01.2026", 1, "Белоярск №1 ул. Набережная 8", "83499323373 , сот. 89028575790, Начальник участка ЦТС Климов И.В.", 1, "КСВ-3,0/PG93 \"UNIGAS\" №0805505", "", "2007", "00.00", "1,3", "2", "", "1,2,4", "", "3", "1", "2", "", "2", "25", "1,2", "", "16008", "6031", "", "1", "50", "1", "", "", "-34", "86", "64", "86", "64,5", "5,5", "3,8", "0", "Витязев, Кожевников", "Канев Нагибин", ""),
-            ("30.01.2026", 1, "Белоярск №1 ул. Набережная 8", "83499323373 , сот. 89028575790, Начальник участка ЦТС Климов И.В.", 1, "КСВ-3,0/PG93 \"UNIGAS\" №0805505", "", "2007", "03.00", "1,3", "2", "", "1,2,4", "", "1", "2", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "-36", "88", "67", "88", "65,8", "5,5", "3,8", "", "", "", ""),
-            ("30.01.2026", 1, "Белоярск №1 ул. Набережная 8", "83499323373 , сот. 89028575790, Начальник участка ЦТС Климов И.В.", 1, "КСВ-3,0/PG93 \"UNIGAS\" №0805505", "", "2007", "06.00", "1,3", "2", "", "1,2,4", "", "1", "2", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "-37", "89", "66", "89", "66,4", "5,5", "3,8", "", "", "", ""),
-            # Добавь сюда все остальные строки Excel по аналогии
-        ]
-        for row in demo_data:
-            cursor.execute('''
-                INSERT INTO records (
-                    date, boiler_number, boiler_location, boiler_contact,
-                    equipment_number, boiler_model, burner_model, equipment_year, time_interval,
-                    boilers_working, boilers_reserve, boilers_repair,
-                    pumps_working, pumps_reserve, pumps_repair,
-                    feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
-                    fuel_tanks_total, fuel_tank_volume, fuel_tanks_working, fuel_tanks_reserve,
-                    fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
-                    water_tanks_total, water_tank_volume, water_tanks_working, water_tanks_reserve, water_tanks_repair,
-                    temp_outdoor, temp_supply, temp_return,
-                    temp_graph_supply, temp_graph_return,
-                    pressure_supply, pressure_return,
-                    water_consumption_daily,
-                    staff_night, staff_day, notes
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            ''', row)
-        print(f'✅ Загружено {len(demo_data)} строк данных.')
+        print('✅ Администратор создан: login=admin, password=1313')
 
     conn.commit()
     conn.close()
+
 
 def get_db_connection():
     try:
@@ -131,7 +102,7 @@ def get_db_connection():
         print(traceback.format_exc())
         return None
 
-# Проверка авторизации
+
 def check_auth():
     if 'user_id' not in session:
         return False
@@ -145,7 +116,7 @@ def check_auth():
     finally:
         conn.close()
 
-# Проверка роли
+
 def check_role(required_role):
     if not check_auth():
         return False
@@ -164,8 +135,118 @@ def check_role(required_role):
     finally:
         conn.close()
 
-# Инициализация
-ensure_tables_and_admin()
 
-# Дальше — маршруты: index, login, register, logout, update_cell
-# Их можно взять из твоего старого кода, они будут работать с этим app
+@app.route('/')
+def index():
+    if not check_auth():
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM records ORDER BY id')
+    records = cursor.fetchall()
+    cursor.execute('SELECT username, role FROM users WHERE id=%s', (session['user_id'],))
+    user = cursor.fetchone()
+    conn.close()
+
+    return render_template('index.html', records=records, user=user)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM users WHERE username=%s', (username,))
+        user = cursor.fetchone()
+        conn.close()
+
+        if user and bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):
+            session['user_id'] = user['id']
+            return redirect(url_for('index'))
+        else:
+            error = 'Неверный логин или пароль'
+
+    return render_template('login.html', error=error)
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    error = None
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+
+        if password != confirm_password:
+            error = 'Пароли не совпадают'
+        else:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            try:
+                password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+                cursor.execute('INSERT INTO users (username, password_hash) VALUES (%s, %s)', (username, password_hash))
+                conn.commit()
+                conn.close()
+                return redirect(url_for('login'))
+            except Exception:
+                conn.close()
+                error = 'Логин уже занят'
+
+    return render_template('register.html', error=error)
+
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    session.pop('user_id', None)
+    return redirect(url_for('login'))
+
+
+@app.route('/update', methods=['POST'])
+def update_cell():
+    if not check_role('admin'):
+        return jsonify({'status': 'error', 'message': 'Нет прав'})
+
+    data = request.get_json()
+    field = data['field']
+    value = data['value']
+    record_id = data['id']
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(f'UPDATE records SET {field}=%s WHERE id=%s', (value, record_id))
+        conn.commit()
+    except Exception as e:
+        print(e)
+        conn.close()
+        return jsonify({'status': 'error'})
+    conn.close()
+    return jsonify({'status': 'ok'})
+
+
+@app.route('/add', methods=['POST'])
+def add_record():
+    if not check_role('admin'):
+        return jsonify({'status': 'error', 'message': 'Нет прав'})
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    # Добавляем пустую строку с минимальными данными
+    cursor.execute('''
+        INSERT INTO records (date, boiler_number, boiler_location, equipment_number, time_interval)
+        VALUES ('', 1, '', 1, '')
+    ''')
+    conn.commit()
+    new_id = cursor.lastrowid if hasattr(cursor, 'lastrowid') else cursor.fetchone()['id'] if cursor.fetchone() else 1
+    conn.close()
+    return jsonify({'status': 'ok', 'new_id': new_id})
+
+
+if __name__ == '__main__':
+    ensure_tables_and_admin()
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
