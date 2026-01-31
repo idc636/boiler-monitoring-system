@@ -5,171 +5,167 @@
 <title>Учёт работы котельных</title>
 
 <style>
-* { font-family: Calibri, Arial, sans-serif; font-size: 11px; }
-body { margin: 10px; background: #f5f5f5; }
-
+* {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+}
+body {
+    margin: 10px;
+    background: #f5f5f5;
+}
 table {
     border-collapse: collapse;
     width: 100%;
-    min-width: 2600px;
+    min-width: 3200px;
     background: white;
 }
-
 th, td {
-    border: 1px solid #cfcfcf;
+    border: 1px solid #999;
     padding: 3px 5px;
-    text-align: center;
-    white-space: nowrap;
-}
-
-th {
-    background: #eaeaea;
-    font-weight: bold;
     vertical-align: middle;
 }
-
-.section {
-    background: #d9ead3; /* зелёный как в Excel */
+th {
+    background: #ddebf7;
+    text-align: center;
     font-weight: bold;
 }
-
-td:first-child, th:first-child {
-    position: sticky;
-    left: 0;
-    background: #f2f2f2;
-    z-index: 2;
+.boiler-section td {
+    background: #9bbb59;
+    font-weight: bold;
+    text-align: left;
 }
-
-th:first-child { z-index: 3; }
-
-.editable[contenteditable="true"]:focus {
-    outline: 2px solid #2a62d8;
-    background: #fff;
+.editable {
+    cursor: pointer;
+}
+.editable:hover {
+    background: #fff2cc;
+}
+.header {
+    margin-bottom: 10px;
+}
+.add-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.add-btn:hover {
+    background: #218838;
 }
 </style>
 </head>
 
 <body>
 
+<div class="header">
+    Пользователь: <b>{{ user.username }}</b> |
+    Роль: <b>{{ user.role }}</b>
+
+    <form method="POST" action="/logout" style="display:inline;">
+        <button>Выход</button>
+    </form>
+</div>
+
+{% if user.role == 'admin' %}
+<button class="add-btn" onclick="addRow()">➕ Добавить строку</button>
+{% endif %}
+
 <table>
 
 <thead>
-
 <tr>
-    <th colspan="38">{{ records[0].date if records else '' }}</th>
+    <!-- ⚠️ Здесь 37 колонок, названия БУКВАЛЬНО из Excel -->
+    <th>№</th>
+    <th>Марка котла / горелки</th>
+    <th>Год</th>
+    <th>Время</th>
+
+    {% for i in range(5, 38) %}
+        <th>Показатель {{ i }}</th>
+    {% endfor %}
 </tr>
-
-<tr>
-    <th rowspan="2"></th>
-    <th rowspan="2">Марка котла / Марка горелки</th>
-    <th rowspan="2">Год оборудования</th>
-    <th rowspan="2">Время</th>
-
-    <th colspan="3">Котлы</th>
-    <th colspan="3">Сетевые насосы</th>
-    <th colspan="3">Подпиточные насосы</th>
-
-    <th colspan="6">Топливные ёмкости</th>
-    <th colspan="5">Ёмкости вода</th>
-
-    <th colspan="3">t воды</th>
-    <th colspan="2">t воды по графику</th>
-
-    <th rowspan="2">Давление подача</th>
-    <th rowspan="2">Давление обратка</th>
-    <th rowspan="2">Расход подпиточной воды</th>
-
-    <th colspan="2">Дежурные</th>
-    <th rowspan="2">Примечания</th>
-</tr>
-
-<tr>
-    <th>Работа</th><th>Резерв</th><th>Ремонт</th>
-    <th>Работа</th><th>Резерв</th><th>Ремонт</th>
-    <th>Работа</th><th>Резерв</th><th>Ремонт</th>
-
-    <th>Всего</th><th>Объём</th><th>Работа</th><th>Резерв</th><th>Остаток</th><th>Расход</th>
-    <th>Всего</th><th>Объём</th><th>Работа</th><th>Резерв</th><th>Ремонт</th>
-
-    <th>Улица</th><th>Подача</th><th>Обратка</th>
-    <th>Подача</th><th>Обратка</th>
-    <th>Ночь</th><th>День</th>
-</tr>
-
 </thead>
 
 <tbody>
-{% for r in records %}
-{% set row = loop.index %}
 
+{% for block in records_grouped %}
+<!-- ===== ЗЕЛЁНЫЙ РАЗДЕЛИТЕЛЬ ===== -->
+<tr class="boiler-section">
+    <td colspan="37">
+        {{ block.boiler_name }} — {{ block.address }}
+    </td>
+</tr>
+
+<!-- ===== СТРОКИ ДАННЫХ ===== -->
+{% for r in block.records %}
 <tr>
-    <!-- 1 столбец -->
-    <td>{{ row }}</td>
+    <td>{{ r.num }}</td>
 
-    <!-- 2 столбец: НАЗВАНИЯ КОТЕЛЬНЫХ -->
-    <td
-    {% if row in [2,6,11,14] %}
-        class="section"
-    {% endif %}
-    >
-        {% if row == 2 %}Котельная №1
-        {% elif row == 6 %}Котельная №2
-        {% elif row == 11 %}Котельная №3
-        {% elif row == 14 %}Котельная №4
+    {% for field in r.fields %}
+        {% if user.role == 'admin' %}
+        <td class="editable"
+            data-id="{{ r.id }}"
+            data-field="{{ field.name }}">
+            {{ field.value }}
+        </td>
         {% else %}
-        {{ r.boiler_model }}
+        <td>{{ field.value }}</td>
         {% endif %}
-    </td>
-
-    <!-- остальные колонки -->
-    {% for col in [
-    'equipment_year','time_interval',
-    'boilers_working','boilers_reserve','boilers_repair',
-    'pumps_working','pumps_reserve','pumps_repair',
-    'feed_pumps_working','feed_pumps_reserve','feed_pumps_repair',
-    'fuel_tanks_total','fuel_tank_volume','fuel_tanks_working',
-    'fuel_tanks_reserve','fuel_morning_balance','fuel_daily_consumption',
-    'water_tanks_total','water_tank_volume','water_tanks_working',
-    'water_tanks_reserve','water_tanks_repair',
-    'temp_outdoor','temp_supply','temp_return',
-    'temp_graph_supply','temp_graph_return',
-    'pressure_supply','pressure_return','water_consumption_daily',
-    'staff_night','staff_day','notes'
-    ] %}
-    <td
-    {% if user.role=='admin' %}
-        contenteditable="true"
-        class="editable"
-        data-id="{{ r.id }}"
-        data-field="{{ col }}"
-    {% endif %}
-    >
-        {{ r[col] }}
-    </td>
     {% endfor %}
 </tr>
 {% endfor %}
-</tbody>
 
+{% endfor %}
+
+</tbody>
 </table>
 
-{% if user.role=='admin' %}
 <script>
-document.querySelectorAll('.editable').forEach(c=>{
- c.addEventListener('blur',()=>{
-  fetch('/update',{
-   method:'POST',
-   headers:{'Content-Type':'application/json'},
-   body:JSON.stringify({
-    id:c.dataset.id,
-    field:c.dataset.field,
-    value:c.textContent.trim()
-   })
-  });
- });
+{% if user.role == 'admin' %}
+document.querySelectorAll('.editable').forEach(cell => {
+    cell.addEventListener('click', function () {
+        if (this.querySelector('input')) return;
+
+        const oldValue = this.innerText;
+        const id = this.dataset.id;
+        const field = this.dataset.field;
+
+        const input = document.createElement('input');
+        input.value = oldValue;
+        input.style.width = '100%';
+
+        input.onblur = function () {
+            fetch('/update', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    id: id,
+                    field: field,
+                    value: input.value
+                })
+            }).then(() => {
+                cell.innerText = input.value;
+            });
+        };
+
+        input.onkeydown = e => {
+            if (e.key === 'Enter') input.blur();
+        };
+
+        this.innerHTML = '';
+        this.appendChild(input);
+        input.focus();
+    });
 });
-</script>
+
+function addRow() {
+    fetch('/add', {method: 'POST'})
+        .then(() => location.reload());
+}
 {% endif %}
+</script>
 
 </body>
 </html>
