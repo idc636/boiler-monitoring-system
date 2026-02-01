@@ -68,7 +68,7 @@
         {% for e in g.entries %}
         <tr>
             <td>{{ e.equipment_number }}</td>
-            <td>{{ e.boiler_model or '' }}</td>
+            <td class="editable" data-field="boiler_model" data-id="{{ e.id }}">{{ e.boiler_model or '' }}</td>
             <td>{{ e.equipment_year or '' }}</td>
             <td>{{ e.time_interval or '' }}</td>
             <td class="editable" data-field="boilers_working" data-id="{{ e.id }}">{{ e.boilers_working or '' }}</td>
