@@ -46,23 +46,39 @@
                 <th colspan="3">Котлы</th>
                 <th colspan="3">Сетевые насосы</th>
                 <th colspan="3">Подпиточные насосы</th>
+                <th colspan="3">Топливные баки</th>
+                <th colspan="3">Водяные баки</th>
+                <th colspan="3">Температуры</th>
+                <th colspan="2">Давление</th>
+                <th rowspan="2">Расход воды</th>
+                <th colspan="2">Смена</th>
+                <th rowspan="2">Примечания</th>
             </tr>
             <tr>
                 <th>Работа</th><th>Резерв</th><th>Ремонт</th>
                 <th>Работа</th><th>Резерв</th><th>Ремонт</th>
                 <th>Работа</th><th>Резерв</th><th>Ремонт</th>
+                <th>Всего</th><th>Объём, м³</th><th>В работе</th>
+                <th>В резерве</th><th>В ремонте</th>
+                <th>Утро</th><th>Расход</th>
+                <th>Всего</th><th>Объём, м³</th><th>В работе</th>
+                <th>В резерве</th><th>В ремонте</th>
+                <th>Уличная</th><th>Подача</th><th>Обратка</th>
+                <th>График подачи</th><th>График обратки</th>
+                <th>Подача</th><th>Обратка</th>
+                <th>Ночь</th><th>День</th>
             </tr>
         </thead>
         <tbody>
         {% for g in grouped %}
         <tr class="section">
-            <td colspan="12" style="text-align:center">
+            <td colspan="28" style="text-align:center">
                 📅 {{ g.date }} | 🔥 Котельная №{{ g.boiler_number }} | 📍 {{ g.boiler_location }}
             </td>
         </tr>
         {% if g.boiler_contact %}
         <tr class="contact">
-            <td colspan="12" style="text-align:center">📞 {{ g.boiler_contact }}</td>
+            <td colspan="28" style="text-align:center">📞 {{ g.boiler_contact }}</td>
         </tr>
         {% endif %}
         {% if g.boiler_number == 1 %}{% set limit = 3 %}
@@ -85,6 +101,29 @@
             <td class="editable" data-field="feed_pumps_working" data-id="{{ e.id }}">{{ e.feed_pumps_working or '' }}</td>
             <td class="editable" data-field="feed_pumps_reserve" data-id="{{ e.id }}">{{ e.feed_pumps_reserve or '' }}</td>
             <td class="editable" data-field="feed_pumps_repair" data-id="{{ e.id }}">{{ e.feed_pumps_repair or '' }}</td>
+            <td class="editable" data-field="fuel_tanks_total" data-id="{{ e.id }}">{{ e.fuel_tanks_total or '' }}</td>
+            <td class="editable" data-field="fuel_tank_volume" data-id="{{ e.id }}">{{ e.fuel_tank_volume or '' }}</td>
+            <td class="editable" data-field="fuel_tanks_working" data-id="{{ e.id }}">{{ e.fuel_tanks_working or '' }}</td>
+            <td class="editable" data-field="fuel_tanks_reserve" data-id="{{ e.id }}">{{ e.fuel_tanks_reserve or '' }}</td>
+            <td class="editable" data-field="fuel_tanks_repair" data-id="{{ e.id }}">{{ e.fuel_tanks_repair or '' }}</td>
+            <td class="editable" data-field="fuel_morning_balance" data-id="{{ e.id }}">{{ e.fuel_morning_balance or '' }}</td>
+            <td class="editable" data-field="fuel_daily_consumption" data-id="{{ e.id }}">{{ e.fuel_daily_consumption or '' }}</td>
+            <td class="editable" data-field="water_tanks_total" data-id="{{ e.id }}">{{ e.water_tanks_total or '' }}</td>
+            <td class="editable" data-field="water_tank_volume" data-id="{{ e.id }}">{{ e.water_tank_volume or '' }}</td>
+            <td class="editable" data-field="water_tanks_working" data-id="{{ e.id }}">{{ e.water_tanks_working or '' }}</td>
+            <td class="editable" data-field="water_tanks_reserve" data-id="{{ e.id }}">{{ e.water_tanks_reserve or '' }}</td>
+            <td class="editable" data-field="water_tanks_repair" data-id="{{ e.id }}">{{ e.water_tanks_repair or '' }}</td>
+            <td class="editable" data-field="temp_outdoor" data-id="{{ e.id }}">{{ e.temp_outdoor or '' }}</td>
+            <td class="editable" data-field="temp_supply" data-id="{{ e.id }}">{{ e.temp_supply or '' }}</td>
+            <td class="editable" data-field="temp_return" data-id="{{ e.id }}">{{ e.temp_return or '' }}</td>
+            <td class="editable" data-field="temp_graph_supply" data-id="{{ e.id }}">{{ e.temp_graph_supply or '' }}</td>
+            <td class="editable" data-field="temp_graph_return" data-id="{{ e.id }}">{{ e.temp_graph_return or '' }}</td>
+            <td class="editable" data-field="pressure_supply" data-id="{{ e.id }}">{{ e.pressure_supply or '' }}</td>
+            <td class="editable" data-field="pressure_return" data-id="{{ e.id }}">{{ e.pressure_return or '' }}</td>
+            <td class="editable" data-field="water_consumption_daily" data-id="{{ e.id }}">{{ e.water_consumption_daily or '' }}</td>
+            <td class="editable" data-field="staff_night" data-id="{{ e.id }}">{{ e.staff_night or '' }}</td>
+            <td class="editable" data-field="staff_day" data-id="{{ e.id }}">{{ e.staff_day or '' }}</td>
+            <td class="editable" data-field="notes" data-id="{{ e.id }}">{{ e.notes or '' }}</td>
         </tr>
         {% else %}
         <tr>
@@ -98,6 +137,29 @@
             <td class="editable" data-field="feed_pumps_working" data-id="{{ e.id }}">{{ e.feed_pumps_working or '' }}</td>
             <td class="editable" data-field="feed_pumps_reserve" data-id="{{ e.id }}">{{ e.feed_pumps_reserve or '' }}</td>
             <td class="editable" data-field="feed_pumps_repair" data-id="{{ e.id }}">{{ e.feed_pumps_repair or '' }}</td>
+            <td class="editable" data-field="fuel_tanks_total" data-id="{{ e.id }}">{{ e.fuel_tanks_total or '' }}</td>
+            <td class="editable" data-field="fuel_tank_volume" data-id="{{ e.id }}">{{ e.fuel_tank_volume or '' }}</td>
+            <td class="editable" data-field="fuel_tanks_working" data-id="{{ e.id }}">{{ e.fuel_tanks_working or '' }}</td>
+            <td class="editable" data-field="fuel_tanks_reserve" data-id="{{ e.id }}">{{ e.fuel_tanks_reserve or '' }}</td>
+            <td class="editable" data-field="fuel_tanks_repair" data-id="{{ e.id }}">{{ e.fuel_tanks_repair or '' }}</td>
+            <td class="editable" data-field="fuel_morning_balance" data-id="{{ e.id }}">{{ e.fuel_morning_balance or '' }}</td>
+            <td class="editable" data-field="fuel_daily_consumption" data-id="{{ e.id }}">{{ e.fuel_daily_consumption or '' }}</td>
+            <td class="editable" data-field="water_tanks_total" data-id="{{ e.id }}">{{ e.water_tanks_total or '' }}</td>
+            <td class="editable" data-field="water_tank_volume" data-id="{{ e.id }}">{{ e.water_tank_volume or '' }}</td>
+            <td class="editable" data-field="water_tanks_working" data-id="{{ e.id }}">{{ e.water_tanks_working or '' }}</td>
+            <td class="editable" data-field="water_tanks_reserve" data-id="{{ e.id }}">{{ e.water_tanks_reserve or '' }}</td>
+            <td class="editable" data-field="water_tanks_repair" data-id="{{ e.id }}">{{ e.water_tanks_repair or '' }}</td>
+            <td class="editable" data-field="temp_outdoor" data-id="{{ e.id }}">{{ e.temp_outdoor or '' }}</td>
+            <td class="editable" data-field="temp_supply" data-id="{{ e.id }}">{{ e.temp_supply or '' }}</td>
+            <td class="editable" data-field="temp_return" data-id="{{ e.id }}">{{ e.temp_return or '' }}</td>
+            <td class="editable" data-field="temp_graph_supply" data-id="{{ e.id }}">{{ e.temp_graph_supply or '' }}</td>
+            <td class="editable" data-field="temp_graph_return" data-id="{{ e.id }}">{{ e.temp_graph_return or '' }}</td>
+            <td class="editable" data-field="pressure_supply" data-id="{{ e.id }}">{{ e.pressure_supply or '' }}</td>
+            <td class="editable" data-field="pressure_return" data-id="{{ e.id }}">{{ e.pressure_return or '' }}</td>
+            <td class="editable" data-field="water_consumption_daily" data-id="{{ e.id }}">{{ e.water_consumption_daily or '' }}</td>
+            <td class="editable" data-field="staff_night" data-id="{{ e.id }}">{{ e.staff_night or '' }}</td>
+            <td class="editable" data-field="staff_day" data-id="{{ e.id }}">{{ e.staff_day or '' }}</td>
+            <td class="editable" data-field="notes" data-id="{{ e.id }}">{{ e.notes or '' }}</td>
         </tr>
         {% endif %}
         {% endfor %}
