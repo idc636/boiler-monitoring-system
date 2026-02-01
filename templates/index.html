@@ -72,19 +72,19 @@
         <tbody>
         {% for g in grouped %}
         <tr class="section">
-            <td colspan="28" style="text-align:center">
+            <td colspan="100%" style="text-align:center">
                 📅 {{ g.date }} | 🔥 Котельная №{{ g.boiler_number }} | 📍 {{ g.boiler_location }}
             </td>
         </tr>
         {% if g.boiler_contact %}
         <tr class="contact">
-            <td colspan="28" style="text-align:center">📞 {{ g.boiler_contact }}</td>
+            <td colspan="100%" style="text-align:center">📞 {{ g.boiler_contact }}</td>
         </tr>
         {% endif %}
-        {% if g.boiler_number == 1 %}{% set limit = 3 %}
-        {% elif g.boiler_number == 2 %}{% set limit = 4 %}
-        {% elif g.boiler_number == 3 %}{% set limit = 2 %}
-        {% else %}{% set limit = 3 %}{% endif %}
+        {% if g.boiler_number == 1 %}{% set limit = 6 %}
+        {% elif g.boiler_number == 2 %}{% set limit = 8 %}
+        {% elif g.boiler_number == 3 %}{% set limit = 4 %}
+        {% else %}{% set limit = 6 %}{% endif %}
         {% for e in g.entries[:limit] %}
         {% if loop.index is odd %}
         <tr>
