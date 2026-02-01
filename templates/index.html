@@ -42,8 +42,8 @@
 <thead>
 <tr>
     <th rowspan="3">№</th>
-    <th rowspan="3">Марка котла</th>
-    <th rowspan="3">Год</th>
+    <th rowspan="3">Марка котла / Марка горелки</th>
+    <th rowspan="3">Год оборудования</th>
     <th rowspan="3">Время</th>
 
     <th colspan="3">Котлы</th>
@@ -53,8 +53,8 @@
     <th colspan="7">Топливные ёмкости</th>
     <th colspan="5">Ёмкости воды</th>
 
-    <th colspan="3">Температура воды</th>
-    <th colspan="2">Температура воды по графику</th>
+    <th colspan="3">t°C воды</th>
+    <th colspan="2">t°C воды по температурному графику</th>
 
     <th rowspan="3">Давление на подаче,<br>кгс/см²</th>
     <th rowspan="3">Давление на обратке,<br>кгс/см²</th>
@@ -128,25 +128,31 @@
 
 {% for e in g.entries[:limit] %}
 <tr>
-    {% if loop.index is odd %}
-    <td rowspan="2">{{ e.equipment_number }}</td>
-    <td rowspan="2" class="editable" data-field="boiler_model" data-id="{{ e.id }}">{{ e.boiler_model or '' }}</td>
-    <td rowspan="2">{{ e.equipment_year or '' }}</td>
+    {% if loop.first %}
+    <td rowspan="{{ limit }}">{{ e.equipment_number }}</td>
+    <td rowspan="{{ limit }}" class="editable" data-field="boiler_model" data-id="{{ e.id }}">{{ e.boiler_model or '' }}</td>
+    <td rowspan="{{ limit }}" class="editable" data-field="equipment_year" data-id="{{ e.id }}">{{ e.equipment_year or '' }}</td>
     {% endif %}
 
     <td>{{ e.time_interval or '' }}</td>
 
     <td class="editable" data-field="boilers_working" data-id="{{ e.id }}">{{ e.boilers_working or '' }}</td>
     <td class="editable" data-field="boilers_reserve" data-id="{{ e.id }}">{{ e.boilers_reserve or '' }}</td>
-    <td class="editable" data-field="boilers_repair" data-id="{{ e.id }}">{{ e.boilers_repair or '' }}</td>
+    {% if loop.first %}
+    <td rowspan="{{ limit }}" class="editable" data-field="boilers_repair" data-id="{{ e.id }}">{{ e.boilers_repair or '' }}</td>
+    {% endif %}
 
     <td class="editable" data-field="pumps_working" data-id="{{ e.id }}">{{ e.pumps_working or '' }}</td>
     <td class="editable" data-field="pumps_reserve" data-id="{{ e.id }}">{{ e.pumps_reserve or '' }}</td>
-    <td class="editable" data-field="pumps_repair" data-id="{{ e.id }}">{{ e.pumps_repair or '' }}</td>
+    {% if loop.first %}
+    <td rowspan="{{ limit }}" class="editable" data-field="pumps_repair" data-id="{{ e.id }}">{{ e.pumps_repair or '' }}</td>
+    {% endif %}
 
     <td class="editable" data-field="feed_pumps_working" data-id="{{ e.id }}">{{ e.feed_pumps_working or '' }}</td>
     <td class="editable" data-field="feed_pumps_reserve" data-id="{{ e.id }}">{{ e.feed_pumps_reserve or '' }}</td>
-    <td class="editable" data-field="feed_pumps_repair" data-id="{{ e.id }}">{{ e.feed_pumps_repair or '' }}</td>
+    {% if loop.first %}
+    <td rowspan="{{ limit }}" class="editable" data-field="feed_pumps_repair" data-id="{{ e.id }}">{{ e.feed_pumps_repair or '' }}</td>
+    {% endif %}
 
     <td class="editable" data-field="fuel_tanks_total" data-id="{{ e.id }}">{{ e.fuel_tanks_total or '' }}</td>
     <td class="editable" data-field="fuel_tank_volume" data-id="{{ e.id }}">{{ e.fuel_tank_volume or '' }}</td>
@@ -154,13 +160,17 @@
     <td class="editable" data-field="fuel_tanks_reserve" data-id="{{ e.id }}">{{ e.fuel_tanks_reserve or '' }}</td>
     <td class="editable" data-field="fuel_morning_balance" data-id="{{ e.id }}">{{ e.fuel_morning_balance or '' }}</td>
     <td class="editable" data-field="fuel_daily_consumption" data-id="{{ e.id }}">{{ e.fuel_daily_consumption or '' }}</td>
-    <td class="editable" data-field="fuel_tanks_repair" data-id="{{ e.id }}">{{ e.fuel_tanks_repair or '' }}</td>
+    {% if loop.first %}
+    <td rowspan="{{ limit }}" class="editable" data-field="fuel_tanks_repair" data-id="{{ e.id }}">{{ e.fuel_tanks_repair or '' }}</td>
+    {% endif %}
 
     <td class="editable" data-field="water_tanks_total" data-id="{{ e.id }}">{{ e.water_tanks_total or '' }}</td>
     <td class="editable" data-field="water_tank_volume" data-id="{{ e.id }}">{{ e.water_tank_volume or '' }}</td>
     <td class="editable" data-field="water_tanks_working" data-id="{{ e.id }}">{{ e.water_tanks_working or '' }}</td>
     <td class="editable" data-field="water_tanks_reserve" data-id="{{ e.id }}">{{ e.water_tanks_reserve or '' }}</td>
-    <td class="editable" data-field="water_tanks_repair" data-id="{{ e.id }}">{{ e.water_tanks_repair or '' }}</td>
+    {% if loop.first %}
+    <td rowspan="{{ limit }}" class="editable" data-field="water_tanks_repair" data-id="{{ e.id }}">{{ e.water_tanks_repair or '' }}</td>
+    {% endif %}
 
     <td class="editable" data-field="temp_outdoor" data-id="{{ e.id }}">{{ e.temp_outdoor or '' }}</td>
     <td class="editable" data-field="temp_supply" data-id="{{ e.id }}">{{ e.temp_supply or '' }}</td>
