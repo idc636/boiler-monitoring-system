@@ -105,12 +105,12 @@
             <tbody>
                 {% for group in grouped %}
                 <tr class="section-header">
-                    <td colspan="29" style="text-align: center; font-weight: bold; background-color: #90EE90;">
+                    <td colspan="28" style="text-align: center; font-weight: bold; background-color: #90EE90;">
                         {{ group.date }} | Котельная №{{ group.boiler_number }} | {{ group.boiler_location }}
                     </td>
                 </tr>
                 <tr class="boiler-contact">
-                    <td colspan="29" style="text-align: center; background-color: #F0F8FF;">
+                    <td colspan="28" style="text-align: center; background-color: #F0F8FF;">
                         {{ group.boiler_contact }}
                     </td>
                 </tr>
@@ -139,7 +139,7 @@
                     <td class="editable" data-field="water_tanks_total" data-id="{{ entry.id }}">{{ entry.water_tanks_total or 'None' }}</td>
                     <td class="editable" data-field="water_tank_volume" data-id="{{ entry.id }}">{{ entry.water_tank_volume or 'None' }}</td>
                     <td class="editable" data-field="water_tanks_working" data-id="{{ entry.id }}">{{ entry.water_tanks_working or 'None' }}</td>
-                    <td class="editable" data-field="water_tanks_reserve" data-id="{{ entry.id }}">{{ entry.water_tanks_reserve or 'None' }}</td>
+                    <td="editable" data-field="water_tanks_reserve" data-id="{{ entry.id }}">{{ entry.water_tanks_reserve or 'None' }}</td>
                     <td class="editable" data-field="water_tanks_repair" data-id="{{ entry.id }}">{{ entry.water_tanks_repair or 'None' }}</td>
                     <td class="editable" data-field="temp_outdoor" data-id="{{ entry.id }}">{{ entry.temp_outdoor or 'None' }}</td>
                     <td class="editable" data-field="temp_supply" data-id="{{ entry.id }}">{{ entry.temp_supply or 'None' }}</td>
