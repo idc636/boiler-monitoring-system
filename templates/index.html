@@ -121,38 +121,29 @@
 </tr>
 {% endif %}
 
-{% if g.boiler_number == 1 %}{% set limit = 6 %}
-{% elif g.boiler_number == 2 %}{% set limit = 8 %}
-{% elif g.boiler_number == 3 %}{% set limit = 4 %}
-{% else %}{% set limit = 6 %}{% endif %}
+{% if g.boiler_number == 1 %}{% set limit = 3 %}
+{% elif g.boiler_number == 2 %}{% set limit = 4 %}
+{% elif g.boiler_number == 3 %}{% set limit = 2 %}
+{% else %}{% set limit = 3 %}{% endif %}
 
 {% for e in g.entries[:limit] %}
 <tr>
-    {% if loop.first %}
-    <td rowspan="{{ limit }}">{{ e.equipment_number }}</td>
-    <td rowspan="{{ limit }}" class="editable" data-field="boiler_model" data-id="{{ e.id }}">{{ e.boiler_model or '' }}</td>
-    <td rowspan="{{ limit }}" class="editable" data-field="equipment_year" data-id="{{ e.id }}">{{ e.equipment_year or '' }}</td>
-    {% endif %}
-
+    <td>{{ e.equipment_number }}</td>
+    <td class="editable" data-field="boiler_model" data-id="{{ e.id }}">{{ e.boiler_model or '' }}</td>
+    <td class="editable" data-field="equipment_year" data-id="{{ e.id }}">{{ e.equipment_year or '' }}</td>
     <td>{{ e.time_interval or '' }}</td>
 
     <td class="editable" data-field="boilers_working" data-id="{{ e.id }}">{{ e.boilers_working or '' }}</td>
     <td class="editable" data-field="boilers_reserve" data-id="{{ e.id }}">{{ e.boilers_reserve or '' }}</td>
-    {% if loop.first %}
-    <td rowspan="{{ limit }}" class="editable" data-field="boilers_repair" data-id="{{ e.id }}">{{ e.boilers_repair or '' }}</td>
-    {% endif %}
+    <td class="editable" data-field="boilers_repair" data-id="{{ e.id }}">{{ e.boilers_repair or '' }}</td>
 
     <td class="editable" data-field="pumps_working" data-id="{{ e.id }}">{{ e.pumps_working or '' }}</td>
     <td class="editable" data-field="pumps_reserve" data-id="{{ e.id }}">{{ e.pumps_reserve or '' }}</td>
-    {% if loop.first %}
-    <td rowspan="{{ limit }}" class="editable" data-field="pumps_repair" data-id="{{ e.id }}">{{ e.pumps_repair or '' }}</td>
-    {% endif %}
+    <td class="editable" data-field="pumps_repair" data-id="{{ e.id }}">{{ e.pumps_repair or '' }}</td>
 
     <td class="editable" data-field="feed_pumps_working" data-id="{{ e.id }}">{{ e.feed_pumps_working or '' }}</td>
     <td class="editable" data-field="feed_pumps_reserve" data-id="{{ e.id }}">{{ e.feed_pumps_reserve or '' }}</td>
-    {% if loop.first %}
-    <td rowspan="{{ limit }}" class="editable" data-field="feed_pumps_repair" data-id="{{ e.id }}">{{ e.feed_pumps_repair or '' }}</td>
-    {% endif %}
+    <td class="editable" data-field="feed_pumps_repair" data-id="{{ e.id }}">{{ e.feed_pumps_repair or '' }}</td>
 
     <td class="editable" data-field="fuel_tanks_total" data-id="{{ e.id }}">{{ e.fuel_tanks_total or '' }}</td>
     <td class="editable" data-field="fuel_tank_volume" data-id="{{ e.id }}">{{ e.fuel_tank_volume or '' }}</td>
@@ -160,17 +151,13 @@
     <td class="editable" data-field="fuel_tanks_reserve" data-id="{{ e.id }}">{{ e.fuel_tanks_reserve or '' }}</td>
     <td class="editable" data-field="fuel_morning_balance" data-id="{{ e.id }}">{{ e.fuel_morning_balance or '' }}</td>
     <td class="editable" data-field="fuel_daily_consumption" data-id="{{ e.id }}">{{ e.fuel_daily_consumption or '' }}</td>
-    {% if loop.first %}
-    <td rowspan="{{ limit }}" class="editable" data-field="fuel_tanks_repair" data-id="{{ e.id }}">{{ e.fuel_tanks_repair or '' }}</td>
-    {% endif %}
+    <td class="editable" data-field="fuel_tanks_repair" data-id="{{ e.id }}">{{ e.fuel_tanks_repair or '' }}</td>
 
     <td class="editable" data-field="water_tanks_total" data-id="{{ e.id }}">{{ e.water_tanks_total or '' }}</td>
     <td class="editable" data-field="water_tank_volume" data-id="{{ e.id }}">{{ e.water_tank_volume or '' }}</td>
     <td class="editable" data-field="water_tanks_working" data-id="{{ e.id }}">{{ e.water_tanks_working or '' }}</td>
     <td class="editable" data-field="water_tanks_reserve" data-id="{{ e.id }}">{{ e.water_tanks_reserve or '' }}</td>
-    {% if loop.first %}
-    <td rowspan="{{ limit }}" class="editable" data-field="water_tanks_repair" data-id="{{ e.id }}">{{ e.water_tanks_repair or '' }}</td>
-    {% endif %}
+    <td class="editable" data-field="water_tanks_repair" data-id="{{ e.id }}">{{ e.water_tanks_repair or '' }}</td>
 
     <td class="editable" data-field="temp_outdoor" data-id="{{ e.id }}">{{ e.temp_outdoor or '' }}</td>
     <td class="editable" data-field="temp_supply" data-id="{{ e.id }}">{{ e.temp_supply or '' }}</td>
