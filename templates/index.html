@@ -28,6 +28,7 @@
         .boiler-contact { background-color: #F0F8FF; }
         .record-number { font-weight: bold; }
         .section-title { font-weight: bold; background-color: #90EE90; }
+        .no-data { color: #999; }
     </style>
 </head>
 <body>
@@ -119,38 +120,38 @@
                     <td>{{ entry.boiler_model }}</td>
                     <td>{{ entry.equipment_year }}</td>
                     <td>{{ entry.time_interval }}</td>
-                    <td class="editable" data-field="boilers_working" data-id="{{ entry.id }}">{{ entry.boilers_working }}</td>
-                    <td class="editable" data-field="boilers_reserve" data-id="{{ entry.id }}">{{ entry.boilers_reserve }}</td>
-                    <td class="editable" data-field="boilers_repair" data-id="{{ entry.id }}">{{ entry.boilers_repair }}</td>
-                    <td class="editable" data-field="pumps_working" data-id="{{ entry.id }}">{{ entry.pumps_working }}</td>
-                    <td class="editable" data-field="pumps_reserve" data-id="{{ entry.id }}">{{ entry.pumps_reserve }}</td>
-                    <td class="editable" data-field="pumps_repair" data-id="{{ entry.id }}">{{ entry.pumps_repair }}</td>
-                    <td class="editable" data-field="feed_pumps_working" data-id="{{ entry.id }}">{{ entry.feed_pumps_working }}</td>
-                    <td class="editable" data-field="feed_pumps_reserve" data-id="{{ entry.id }}">{{ entry.feed_pumps_reserve }}</td>
-                    <td class="editable" data-field="feed_pumps_repair" data-id="{{ entry.id }}">{{ entry.feed_pumps_repair }}</td>
-                    <td class="editable" data-field="fuel_tanks_total" data-id="{{ entry.id }}">{{ entry.fuel_tanks_total }}</td>
-                    <td class="editable" data-field="fuel_tank_volume" data-id="{{ entry.id }}">{{ entry.fuel_tank_volume }}</td>
-                    <td class="editable" data-field="fuel_tanks_working" data-id="{{ entry.id }}">{{ entry.fuel_tanks_working }}</td>
-                    <td class="editable" data-field="fuel_tanks_reserve" data-id="{{ entry.id }}">{{ entry.fuel_tanks_reserve }}</td>
-                    <td class="editable" data-field="fuel_tanks_repair" data-id="{{ entry.id }}">{{ entry.fuel_tanks_repair }}</td>
-                    <td class="editable" data-field="fuel_morning_balance" data-id="{{ entry.id }}">{{ entry.fuel_morning_balance }}</td>
-                    <td class="editable" data-field="fuel_daily_consumption" data-id="{{ entry.id }}">{{ entry.fuel_daily_consumption }}</td>
-                    <td class="editable" data-field="water_tanks_total" data-id="{{ entry.id }}">{{ entry.water_tanks_total }}</td>
-                    <td class="editable" data-field="water_tank_volume" data-id="{{ entry.id }}">{{ entry.water_tank_volume }}</td>
-                    <td class="editable" data-field="water_tanks_working" data-id="{{ entry.id }}">{{ entry.water_tanks_working }}</td>
-                    <td class="editable" data-field="water_tanks_reserve" data-id="{{ entry.id }}">{{ entry.water_tanks_reserve }}</td>
-                    <td class="editable" data-field="water_tanks_repair" data-id="{{ entry.id }}">{{ entry.water_tanks_repair }}</td>
-                    <td class="editable" data-field="temp_outdoor" data-id="{{ entry.id }}">{{ entry.temp_outdoor }}</td>
-                    <td class="editable" data-field="temp_supply" data-id="{{ entry.id }}">{{ entry.temp_supply }}</td>
-                    <td class="editable" data-field="temp_return" data-id="{{ entry.id }}">{{ entry.temp_return }}</td>
-                    <td class="editable" data-field="temp_graph_supply" data-id="{{ entry.id }}">{{ entry.temp_graph_supply }}</td>
-                    <td class="editable" data-field="temp_graph_return" data-id="{{ entry.id }}">{{ entry.temp_graph_return }}</td>
-                    <td class="editable" data-field="pressure_supply" data-id="{{ entry.id }}">{{ entry.pressure_supply }}</td>
-                    <td class="editable" data-field="pressure_return" data-id="{{ entry.id }}">{{ entry.pressure_return }}</td>
-                    <td class="editable" data-field="water_consumption_daily" data-id="{{ entry.id }}">{{ entry.water_consumption_daily }}</td>
-                    <td class="editable" data-field="staff_night" data-id="{{ entry.id }}">{{ entry.staff_night }}</td>
-                    <td class="editable" data-field="staff_day" data-id="{{ entry.id }}">{{ entry.staff_day }}</td>
-                    <td class="editable" data-field="notes" data-id="{{ entry.id }}">{{ entry.notes }}</td>
+                    <td class="editable" data-field="boilers_working" data-id="{{ entry.id }}">{{ entry.boilers_working or 'None' }}</td>
+                    <td class="editable" data-field="boilers_reserve" data-id="{{ entry.id }}">{{ entry.boilers_reserve or 'None' }}</td>
+                    <td class="editable" data-field="boilers_repair" data-id="{{ entry.id }}">{{ entry.boilers_repair or 'None' }}</td>
+                    <td class="editable" data-field="pumps_working" data-id="{{ entry.id }}">{{ entry.pumps_working or 'None' }}</td>
+                    <td class="editable" data-field="pumps_reserve" data-id="{{ entry.id }}">{{ entry.pumps_reserve or 'None' }}</td>
+                    <td class="editable" data-field="pumps_repair" data-id="{{ entry.id }}">{{ entry.pumps_repair or 'None' }}</td>
+                    <td class="editable" data-field="feed_pumps_working" data-id="{{ entry.id }}">{{ entry.feed_pumps_working or 'None' }}</td>
+                    <td class="editable" data-field="feed_pumps_reserve" data-id="{{ entry.id }}">{{ entry.feed_pumps_reserve or 'None' }}</td>
+                    <td class="editable" data-field="feed_pumps_repair" data-id="{{ entry.id }}">{{ entry.feed_pumps_repair or 'None' }}</td>
+                    <td class="editable" data-field="fuel_tanks_total" data-id="{{ entry.id }}">{{ entry.fuel_tanks_total or 'None' }}</td>
+                    <td class="editable" data-field="fuel_tank_volume" data-id="{{ entry.id }}">{{ entry.fuel_tank_volume or 'None' }}</td>
+                    <td class="editable" data-field="fuel_tanks_working" data-id="{{ entry.id }}">{{ entry.fuel_tanks_working or 'None' }}</td>
+                    <td class="editable" data-field="fuel_tanks_reserve" data-id="{{ entry.id }}">{{ entry.fuel_tanks_reserve or 'None' }}</td>
+                    <td class="editable" data-field="fuel_tanks_repair" data-id="{{ entry.id }}">{{ entry.fuel_tanks_repair or 'None' }}</td>
+                    <td class="editable" data-field="fuel_morning_balance" data-id="{{ entry.id }}">{{ entry.fuel_morning_balance or 'None' }}</td>
+                    <td class="editable" data-field="fuel_daily_consumption" data-id="{{ entry.id }}">{{ entry.fuel_daily_consumption or 'None' }}</td>
+                    <td class="editable" data-field="water_tanks_total" data-id="{{ entry.id }}">{{ entry.water_tanks_total or 'None' }}</td>
+                    <td class="editable" data-field="water_tank_volume" data-id="{{ entry.id }}">{{ entry.water_tank_volume or 'None' }}</td>
+                    <td class="editable" data-field="water_tanks_working" data-id="{{ entry.id }}">{{ entry.water_tanks_working or 'None' }}</td>
+                    <td class="editable" data-field="water_tanks_reserve" data-id="{{ entry.id }}">{{ entry.water_tanks_reserve or 'None' }}</td>
+                    <td class="editable" data-field="water_tanks_repair" data-id="{{ entry.id }}">{{ entry.water_tanks_repair or 'None' }}</td>
+                    <td class="editable" data-field="temp_outdoor" data-id="{{ entry.id }}">{{ entry.temp_outdoor or 'None' }}</td>
+                    <td class="editable" data-field="temp_supply" data-id="{{ entry.id }}">{{ entry.temp_supply or 'None' }}</td>
+                    <td class="editable" data-field="temp_return" data-id="{{ entry.id }}">{{ entry.temp_return or 'None' }}</td>
+                    <td class="editable" data-field="temp_graph_supply" data-id="{{ entry.id }}">{{ entry.temp_graph_supply or 'None' }}</td>
+                    <td class="editable" data-field="temp_graph_return" data-id="{{ entry.id }}">{{ entry.temp_graph_return or 'None' }}</td>
+                    <td class="editable" data-field="pressure_supply" data-id="{{ entry.id }}">{{ entry.pressure_supply or 'None' }}</td>
+                    <td class="editable" data-field="pressure_return" data-id="{{ entry.id }}">{{ entry.pressure_return or 'None' }}</td>
+                    <td class="editable" data-field="water_consumption_daily" data-id="{{ entry.id }}">{{ entry.water_consumption_daily or 'None' }}</td>
+                    <td class="editable" data-field="staff_night" data-id="{{ entry.id }}">{{ entry.staff_night or 'None' }}</td>
+                    <td class="editable" data-field="staff_day" data-id="{{ entry.id }}">{{ entry.staff_day or 'None' }}</td>
+                    <td class="editable" data-field="notes" data-id="{{ entry.id }}">{{ entry.notes or 'None' }}</td>
                 </tr>
                 {% endfor %}
                 {% endfor %}
