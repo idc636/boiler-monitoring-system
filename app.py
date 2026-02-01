@@ -143,13 +143,36 @@ def index():
 
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM records ORDER BY id')
+    
+    # Запрос всех записей
+    cursor.execute('SELECT * FROM records ORDER BY date, boiler_number, time_interval')
     records = cursor.fetchall()
+    conn.close()
+
+    # Группируем данные по котельным
+    grouped = {}
+    for record in records:
+        key = f"{record['date']}|{record['boiler_number']}"
+        if key not in grouped:
+            grouped[key] = {
+                'date': record['date'],
+                'boiler_number': record['boiler_number'],
+                'boiler_location': record['boiler_location'],
+                'boiler_contact': record['boiler_contact'],
+                'entries': []
+            }
+        grouped[key]['entries'].append(record)
+    
+    # Переводим в список для шаблона
+    grouped_list = list(grouped.values())
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
     cursor.execute('SELECT username, role FROM users WHERE id=%s', (session['user_id'],))
     user = cursor.fetchone()
     conn.close()
 
-    return render_template('index.html', records=records, user=user)
+    return render_template('index.html', grouped=grouped_list, user=user)
 
 
 @app.route('/login', methods=['GET', 'POST'])
