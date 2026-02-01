@@ -122,12 +122,9 @@
 </tr>
 {% endif %}
 
-{% if g.boiler_number == 1 %}{% set limit = 3 %}
-{% elif g.boiler_number == 2 %}{% set limit = 4 %}
-{% elif g.boiler_number == 3 %}{% set limit = 2 %}
-{% else %}{% set limit = 3 %}{% endif %}
+{% set entry_count = g.entries|length %}
 
-{% for e in g.entries[:limit] %}
+{% for e in g.entries %}
 <tr>
     <td>{{ e.equipment_number }}</td>
     <td class="editable" data-field="boiler_model" data-id="{{ e.id }}">{{ e.boiler_model or '' }}</td>
@@ -148,44 +145,44 @@
 
     {# ТОПЛИВНЫЕ ЁМКОСТИ - объединённые ячейки #}
     {% if loop.first %}
-    <td class="editable merged-cell" data-field="fuel_tanks_total" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="fuel_tanks_total" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.fuel_tanks_total or '' }}
     </td>
-    <td class="editable merged-cell" data-field="fuel_tank_volume" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="fuel_tank_volume" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.fuel_tank_volume or '' }}
     </td>
-    <td class="editable merged-cell" data-field="fuel_tanks_working" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="fuel_tanks_working" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.fuel_tanks_working or '' }}
     </td>
-    <td class="editable merged-cell" data-field="fuel_tanks_reserve" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="fuel_tanks_reserve" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.fuel_tanks_reserve or '' }}
     </td>
-    <td class="editable merged-cell" data-field="fuel_morning_balance" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="fuel_morning_balance" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.fuel_morning_balance or '' }}
     </td>
-    <td class="editable merged-cell" data-field="fuel_daily_consumption" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="fuel_daily_consumption" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.fuel_daily_consumption or '' }}
     </td>
-    <td class="editable merged-cell" data-field="fuel_tanks_repair" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="fuel_tanks_repair" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.fuel_tanks_repair or '' }}
     </td>
     {% endif %}
 
     {# ЁМКОСТИ ВОДЫ - объединённые ячейки #}
     {% if loop.first %}
-    <td class="editable merged-cell" data-field="water_tanks_total" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="water_tanks_total" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.water_tanks_total or '' }}
     </td>
-    <td class="editable merged-cell" data-field="water_tank_volume" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="water_tank_volume" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.water_tank_volume or '' }}
     </td>
-    <td class="editable merged-cell" data-field="water_tanks_working" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="water_tanks_working" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.water_tanks_working or '' }}
     </td>
-    <td class="editable merged-cell" data-field="water_tanks_reserve" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="water_tanks_reserve" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.water_tanks_reserve or '' }}
     </td>
-    <td class="editable merged-cell" data-field="water_tanks_repair" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="water_tanks_repair" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.water_tanks_repair or '' }}
     </td>
     {% endif %}
@@ -202,17 +199,17 @@
 
     {# РАСХОД ПОДПИТОЧНОЙ ВОДЫ - объединённая ячейка #}
     {% if loop.first %}
-    <td class="editable merged-cell" data-field="water_consumption_daily" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="water_consumption_daily" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.water_consumption_daily or '' }}
     </td>
     {% endif %}
 
     {# ДЕЖУРНЫЕ КОТЕЛЬНОЙ - объединённые ячейки #}
     {% if loop.first %}
-    <td class="editable merged-cell" data-field="staff_night" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="staff_night" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.staff_night or '' }}
     </td>
-    <td class="editable merged-cell" data-field="staff_day" data-id="{{ e.id }}" rowspan="{{ limit }}">
+    <td class="editable merged-cell" data-field="staff_day" data-id="{{ e.id }}" rowspan="{{ entry_count }}">
         {{ e.staff_day or '' }}
     </td>
     {% endif %}
