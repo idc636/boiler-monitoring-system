@@ -4,116 +4,106 @@
     <title>Учёт котельных</title>
     <meta charset="UTF-8">
     <style>
-        * { font-family: Arial, sans-serif; font-size: 14px; }
-        body { margin: 20px; background: #f5f5f5; }
-        .header { background: white; padding: 15px; border-radius: 5px; margin-bottom: 15px; }
-        h1 { color: #0047AB; margin: 0 0 10px 0; }
-        .user-info { text-align: right; margin-bottom: 10px; }
-        .logout-btn { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
-        .add-btn { background: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; margin-bottom: 10px; }
-        table { border-collapse: collapse; width: 100%; background: white; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #0047AB; color: white; }
-        tr:hover { background-color: #f9f9f9; }
-        .editable { cursor: pointer; }
-        .editable:hover { background-color: #e3f2fd; }
+        *{font-family:Arial,sans-serif;font-size:12px}
+        body{margin:10px;background:#f5f5f5}
+        .header{background:white;padding:10px;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,0.1);margin-bottom:10px}
+        h1{color:#0047AB;text-align:center;font-size:20px;margin:5px 0}
+        .user-info{text-align:right;margin-bottom:10px}
+        .logout-btn{background:#dc3545;color:white;border:none;padding:5px 10px;border-radius:3px;cursor:pointer;float:right}
+        .add-btn{background:#28a745;color:white;border:none;padding:5px 10px;border-radius:3px;cursor:pointer;margin-bottom:10px}
+        table{border-collapse:collapse;width:100%;min-width:1800px;background:white}
+        th,td{border:1px solid #ddd;padding:4px 6px;text-align:center}
+        th{background:#0047AB;color:white;font-weight:bold}
+        .section{background:#90EE90;font-weight:bold}
+        .contact{background:#F0F8FF}
+        .editable{cursor:pointer}
+        .editable:hover{background:#e3f2fd}
     </style>
 </head>
 <body>
     <div class="header">
         <div class="user-info">
-            Пользователь: <strong>{{ user.username }}</strong> | Роль: <strong>{{ user.role }}</strong>
-            <form method="POST" action="/logout" style="display: inline;">
+            👤 {{ user.username }} ({{ user.role }})
+            <form method="POST" action="/logout" style="display:inline">
                 <button type="submit" class="logout-btn">Выход</button>
             </form>
         </div>
-        <h1>📝 Учёт работы котельных</h1>
+        <h1>АО «Ямалкомунэнерго» — Учёт котельных</h1>
     </div>
 
     {% if user.role == 'admin' %}
     <button class="add-btn" onclick="addRecord()">➕ Добавить запись</button>
     {% endif %}
 
+    <div style="overflow-x:auto;background:white;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,0.1);padding:5px">
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Дата</th>
-                <th>№ котельной</th>
-                <th>Местоположение</th>
-                <th>№ записи</th>
-                <th>Марка котла</th>
-                <th>Год</th>
-                <th>Время</th>
-                <th>Котлы (работа)</th>
-                <th>Котлы (резерв)</th>
-                <th>Котлы (ремонт)</th>
+                <th rowspan="2">№</th>
+                <th rowspan="2">Марка котла</th>
+                <th rowspan="2">Год</th>
+                <th rowspan="2">Время</th>
+                <th colspan="3">Котлы</th>
+                <th colspan="3">Сетевые насосы</th>
+                <th colspan="3">Подпиточные насосы</th>
+            </tr>
+            <tr>
+                <th>Работа</th><th>Резерв</th><th>Ремонт</th>
+                <th>Работа</th><th>Резерв</th><th>Ремонт</th>
+                <th>Работа</th><th>Резерв</th><th>Ремонт</th>
             </tr>
         </thead>
         <tbody>
-            {% for record in records %}
-            <tr>
-                <td>{{ record.id }}</td>
-                <td class="editable" data-field="date" data-id="{{ record.id }}">{{ record.date }}</td>
-                <td class="editable" data-field="boiler_number" data-id="{{ record.id }}">{{ record.boiler_number }}</td>
-                <td class="editable" data-field="boiler_location" data-id="{{ record.id }}">{{ record.boiler_location }}</td>
-                <td class="editable" data-field="equipment_number" data-id="{{ record.id }}">{{ record.equipment_number }}</td>
-                <td class="editable" data-field="boiler_model" data-id="{{ record.id }}">{{ record.boiler_model }}</td>
-                <td class="editable" data-field="equipment_year" data-id="{{ record.id }}">{{ record.equipment_year }}</td>
-                <td class="editable" data-field="time_interval" data-id="{{ record.id }}">{{ record.time_interval }}</td>
-                <td class="editable" data-field="boilers_working" data-id="{{ record.id }}">{{ record.boilers_working }}</td>
-                <td class="editable" data-field="boilers_reserve" data-id="{{ record.id }}">{{ record.boilers_reserve }}</td>
-                <td class="editable" data-field="boilers_repair" data-id="{{ record.id }}">{{ record.boilers_repair }}</td>
-            </tr>
-            {% endfor %}
+        {% for g in grouped %}
+        <tr class="section">
+            <td colspan="12" style="text-align:center">
+                📅 {{ g.date }} | 🔥 Котельная №{{ g.boiler_number }} | 📍 {{ g.boiler_location }}
+            </td>
+        </tr>
+        {% if g.boiler_contact %}
+        <tr class="contact">
+            <td colspan="12" style="text-align:center">📞 {{ g.boiler_contact }}</td>
+        </tr>
+        {% endif %}
+        {% for e in g.entries %}
+        <tr>
+            <td>{{ e.equipment_number }}</td>
+            <td>{{ e.boiler_model or '' }}</td>
+            <td>{{ e.equipment_year or '' }}</td>
+            <td>{{ e.time_interval or '' }}</td>
+            <td class="editable" data-field="boilers_working" data-id="{{ e.id }}">{{ e.boilers_working or '' }}</td>
+            <td class="editable" data-field="boilers_reserve" data-id="{{ e.id }}">{{ e.boilers_reserve or '' }}</td>
+            <td class="editable" data-field="boilers_repair" data-id="{{ e.id }}">{{ e.boilers_repair or '' }}</td>
+            <td class="editable" data-field="pumps_working" data-id="{{ e.id }}">{{ e.pumps_working or '' }}</td>
+            <td class="editable" data-field="pumps_reserve" data-id="{{ e.id }}">{{ e.pumps_reserve or '' }}</td>
+            <td class="editable" data-field="pumps_repair" data-id="{{ e.id }}">{{ e.pumps_repair or '' }}</td>
+            <td class="editable" data-field="feed_pumps_working" data-id="{{ e.id }}">{{ e.feed_pumps_working or '' }}</td>
+            <td class="editable" data-field="feed_pumps_reserve" data-id="{{ e.id }}">{{ e.feed_pumps_reserve or '' }}</td>
+            <td class="editable" data-field="feed_pumps_repair" data-id="{{ e.id }}">{{ e.feed_pumps_repair or '' }}</td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
         </tbody>
     </table>
+    </div>
 
     <script>
     {% if user.role == 'admin' %}
-    document.querySelectorAll('.editable').forEach(cell => {
-        cell.addEventListener('click', function() {
-            const field = this.getAttribute('data-field');
-            const id = this.getAttribute('data-id');
-            const currentValue = this.textContent;
-
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = currentValue;
-
-            input.addEventListener('blur', function() {
-                const newValue = this.value;
-                fetch('/update', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ field: field, value: newValue, id: id })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'ok') cell.textContent = newValue;
-                    else alert('Ошибка сохранения');
-                })
-                .catch(error => alert('Ошибка связи с сервером'));
-            });
-
-            input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') this.blur();
-            });
-
-            this.innerHTML = '';
-            this.appendChild(input);
-            input.focus();
+    document.querySelectorAll('.editable').forEach(c => {
+        c.addEventListener('click', function() {
+            const f = this.dataset.field, id = this.dataset.id, v = this.textContent;
+            const i = document.createElement('input'); i.value = v;
+            i.onblur = () => {
+                fetch('/update', {method:'POST', headers:{'Content-Type':'application/json'}, 
+                    body:JSON.stringify({field:f, value:i.value, id:id})})
+                .then(r => r.json()).then(d => { if(d.status=='ok') this.textContent = i.value; });
+            };
+            i.onkeypress = e => { if(e.key=='Enter') i.blur(); };
+            this.innerHTML = ''; this.appendChild(i); i.focus();
         });
     });
-
     function addRecord() {
-        fetch('/add', { method: 'POST' })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'ok') location.reload();
-            else alert('Ошибка добавления');
-        })
-        .catch(error => alert('Ошибка связи с сервером'));
+        fetch('/add', {method:'POST'}).then(r => r.json()).then(d => { if(d.status=='ok') location.reload(); });
     }
     {% endif %}
     </script>
