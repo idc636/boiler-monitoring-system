@@ -11,7 +11,7 @@
         h3 { text-align: center; color: #555; font-size: 14px; margin: 5px 0 15px; }
         .user-info { text-align: right; color: #666; font-size: 12px; margin-bottom: 10px; }
         .table-container { overflow-x: auto; background: white; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 5px; }
-        table { border-collapse: collapse; width: 100%; min-width: 3000px; }
+        table { border-collapse: collapse; width: 100%; min-width: 2800px; }
         th, td { border: 1px solid #ddd; padding: 4px 6px; text-align: center; }
         th { background-color: #0047AB; color: white; position: sticky; top: 0; font-weight: bold; font-size: 11px; }
         th.section { background-color: #90EE90; font-weight: bold; }
@@ -26,6 +26,8 @@
         .add-btn:hover { background: #218838; }
         .boiler-name { font-weight: bold; background-color: #90EE90; }
         .boiler-contact { background-color: #F0F8FF; }
+        .equipment-row { background-color: #FFFFFF; }
+        .record-number { font-weight: bold; }
     </style>
 </head>
 <body>
@@ -48,10 +50,9 @@
         <table>
             <thead>
                 <tr>
-                    <th rowspan="3">Дата</th>
-                    <th rowspan="3">№ котельной</th>
-                    <th rowspan="3">Местоположение</th>
-                    <th rowspan="3">Контакт</th>
+                    <th rowspan="3">№</th>
+                    <th rowspan="3">Марка котла/Марка горелки</th>
+                    <th rowspan="3">Год оборудования</th>
                     <th rowspan="3">Время</th>
                     <th colspan="3">Котлы</th>
                     <th colspan="3">Сетевые насосы</th>
@@ -103,19 +104,20 @@
             <tbody>
                 {% for group in grouped %}
                 <tr class="section-header">
-                    <td colspan="4" style="text-align: center; font-weight: bold;">
-                        {{ group.date }} | Котельная №{{ group.boiler_number }} | {{ group.boiler_location }}
+                    <td colspan="29" style="text-align: center; font-weight: bold; background-color: #90EE90;">
+                        Котельная №{{ group.boiler_number }} | {{ group.boiler_location }}
                     </td>
-                    <td colspan="27"></td>
                 </tr>
                 <tr class="boiler-contact">
-                    <td colspan="4" style="text-align: center; background-color: #F0F8FF;">
+                    <td colspan="29" style="text-align: center; background-color: #F0F8FF;">
                         {{ group.boiler_contact }}
                     </td>
-                    <td colspan="27"></td>
                 </tr>
                 {% for entry in group.entries %}
-                <tr class="time-row">
+                <tr class="equipment-row">
+                    <td class="record-number">{{ entry.equipment_number }}</td>
+                    <td>{{ entry.boiler_model }}</td>
+                    <td>{{ entry.equipment_year }}</td>
                     <td>{{ entry.time_interval }}</td>
                     <td class="editable" data-field="boilers_working" data-id="{{ entry.id }}">{{ entry.boilers_working }}</td>
                     <td class="editable" data-field="boilers_reserve" data-id="{{ entry.id }}">{{ entry.boilers_reserve }}</td>
