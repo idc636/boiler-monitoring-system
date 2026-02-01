@@ -65,11 +65,16 @@
             <td colspan="12" style="text-align:center">📞 {{ g.boiler_contact }}</td>
         </tr>
         {% endif %}
-        {% for e in g.entries %}
+        {% if g.boiler_number == 1 %}{% set limit = 3 %}
+        {% elif g.boiler_number == 2 %}{% set limit = 4 %}
+        {% elif g.boiler_number == 3 %}{% set limit = 2 %}
+        {% else %}{% set limit = 3 %}{% endif %}
+        {% for e in g.entries|slice(0, limit) %}
+        {% if loop.index is odd %}
         <tr>
-            <td>{{ e.equipment_number }}</td>
-            <td class="editable" data-field="boiler_model" data-id="{{ e.id }}">{{ e.boiler_model or '' }}</td>
-            <td>{{ e.equipment_year or '' }}</td>
+            <td rowspan="2">{{ e.equipment_number }}</td>
+            <td rowspan="2" class="editable" data-field="boiler_model" data-id="{{ e.id }}">{{ e.boiler_model or '' }}</td>
+            <td rowspan="2">{{ e.equipment_year or '' }}</td>
             <td>{{ e.time_interval or '' }}</td>
             <td class="editable" data-field="boilers_working" data-id="{{ e.id }}">{{ e.boilers_working or '' }}</td>
             <td class="editable" data-field="boilers_reserve" data-id="{{ e.id }}">{{ e.boilers_reserve or '' }}</td>
@@ -81,6 +86,20 @@
             <td class="editable" data-field="feed_pumps_reserve" data-id="{{ e.id }}">{{ e.feed_pumps_reserve or '' }}</td>
             <td class="editable" data-field="feed_pumps_repair" data-id="{{ e.id }}">{{ e.feed_pumps_repair or '' }}</td>
         </tr>
+        {% else %}
+        <tr>
+            <td>{{ e.time_interval or '' }}</td>
+            <td class="editable" data-field="boilers_working" data-id="{{ e.id }}">{{ e.boilers_working or '' }}</td>
+            <td class="editable" data-field="boilers_reserve" data-id="{{ e.id }}">{{ e.boilers_reserve or '' }}</td>
+            <td class="editable" data-field="boilers_repair" data-id="{{ e.id }}">{{ e.boilers_repair or '' }}</td>
+            <td class="editable" data-field="pumps_working" data-id="{{ e.id }}">{{ e.pumps_working or '' }}</td>
+            <td class="editable" data-field="pumps_reserve" data-id="{{ e.id }}">{{ e.pumps_reserve or '' }}</td>
+            <td class="editable" data-field="pumps_repair" data-id="{{ e.id }}">{{ e.pumps_repair or '' }}</td>
+            <td class="editable" data-field="feed_pumps_working" data-id="{{ e.id }}">{{ e.feed_pumps_working or '' }}</td>
+            <td class="editable" data-field="feed_pumps_reserve" data-id="{{ e.id }}">{{ e.feed_pumps_reserve or '' }}</td>
+            <td class="editable" data-field="feed_pumps_repair" data-id="{{ e.id }}">{{ e.feed_pumps_repair or '' }}</td>
+        </tr>
+        {% endif %}
         {% endfor %}
         {% endfor %}
         </tbody>
