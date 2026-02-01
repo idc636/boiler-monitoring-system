@@ -3,48 +3,40 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
 import bcrypt
-import traceback
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-change-this'
+app.secret_key = 'your-secret-key'
 
-# Подключение к PostgreSQL
-DATABASE_URL = os.environ.get('DATABASE_URL') or "postgresql://postgres:TzhRuKuliqaGilBouUfRjGtqZnBnubMN@postgres.railway.internal:5432/railway"
+# Подключение к БД
+DATABASE_URL = os.environ.get('DATABASE_URL') or "postgresql://postgres:TzhRuKuliqaGilBouUfRjGtqZnBnubMN@switchback.proxy.rlwy.net:57256/railway"
 
-def ensure_tables_and_admin():
-    """Создаём таблицы и админа, если их нет"""
-    try:
-        conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
-        cursor = conn.cursor()
-    except Exception:
-        print("❌ Ошибка подключения к БД:")
-        print(traceback.format_exc())
-        return
-
+def ensure_tables():
+    """Создаём таблицы при запуске"""
+    conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
+    cursor = conn.cursor()
+    
     # Таблица пользователей
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
             username VARCHAR(50) UNIQUE NOT NULL,
             password_hash VARCHAR(128) NOT NULL,
-            role VARCHAR(20) DEFAULT 'operator',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            role VARCHAR(20) DEFAULT 'operator'
         )
     ''')
-
-    # Таблица записей (котельные)
+    
+    # Таблица записей
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS records (
             id SERIAL PRIMARY KEY,
             date TEXT NOT NULL,
             boiler_number INTEGER NOT NULL,
-            boiler_location TEXT NOT NULL,
+            boiler_location TEXT,
             boiler_contact TEXT,
-            equipment_number INTEGER NOT NULL,
+            equipment_number INTEGER,
             boiler_model TEXT,
-            burner_model TEXT,
             equipment_year TEXT,
-            time_interval TEXT NOT NULL,
+            time_interval TEXT,
             boilers_working TEXT,
             boilers_reserve TEXT,
             boilers_repair TEXT,
@@ -79,107 +71,52 @@ def ensure_tables_and_admin():
             notes TEXT
         )
     ''')
-
-    # Проверяем, есть ли админ
+    
+    # Создаём админа, если нет
     cursor.execute('SELECT id FROM users WHERE username = %s', ('admin',))
     if cursor.fetchone() is None:
-        admin_password = bcrypt.hashpw('1313'.encode('utf-8'), bcrypt.gensalt())
-        cursor.execute(
-            'INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)',
-            ('admin', admin_password.decode('utf-8'), 'admin')
-        )
-        print('✅ Администратор создан: login=admin, password=1313')
-
+        pwd = bcrypt.hashpw('1313'.encode('utf-8'), bcrypt.gensalt())
+        cursor.execute('INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)', 
+                      ('admin', pwd.decode('utf-8'), 'admin'))
+        print('✅ Админ создан: admin / 1313')
+    
     conn.commit()
     conn.close()
 
 
 def get_db_connection():
-    try:
-        return psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
-    except Exception:
-        print("❌ Ошибка подключения к БД:")
-        print(traceback.format_exc())
-        return None
+    return psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
 
 
 def check_auth():
-    if 'user_id' not in session:
-        return False
-    conn = get_db_connection()
-    if not conn:
-        return False
-    cursor = conn.cursor()
-    try:
-        cursor.execute('SELECT id FROM users WHERE id = %s', (session['user_id'],))
-        return cursor.fetchone() is not None
-    finally:
-        conn.close()
+    return 'user_id' in session
 
 
-def check_role(required_role):
+def check_admin():
     if not check_auth():
         return False
     conn = get_db_connection()
-    if not conn:
-        return False
     cursor = conn.cursor()
-    try:
-        cursor.execute('SELECT role FROM users WHERE id = %s', (session['user_id'],))
-        user = cursor.fetchone()
-        if user:
-            if required_role == 'admin':
-                return user['role'] == 'admin'
-            return True
-        return False
-    finally:
-        conn.close()
+    cursor.execute('SELECT role FROM users WHERE id = %s', (session['user_id'],))
+    user = cursor.fetchone()
+    conn.close()
+    return user and user['role'] == 'admin'
 
 
 @app.route('/')
 def index():
     if not check_auth():
         return redirect(url_for('login'))
-
+    
     conn = get_db_connection()
     cursor = conn.cursor()
-    
-    # Запрос всех записей
-    cursor.execute('''
-        SELECT * FROM records 
-        ORDER BY 
-            date, 
-            boiler_number, 
-            equipment_number, 
-            time_interval
-    ''')
+    cursor.execute('SELECT * FROM records ORDER BY id')
     records = cursor.fetchall()
-    conn.close()
-
-    # Группируем данные по дате и котельной
-    grouped = {}
-    for record in records:
-        key = f"{record['date']}|{record['boiler_number']}"
-        if key not in grouped:
-            grouped[key] = {
-                'date': record['date'],
-                'boiler_number': record['boiler_number'],
-                'boiler_location': record['boiler_location'],
-                'boiler_contact': record['boiler_contact'],
-                'entries': []
-            }
-        grouped[key]['entries'].append(record)
-    
-    # Переводим в список для шаблона
-    grouped_list = list(grouped.values())
-
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT username, role FROM users WHERE id=%s', (session['user_id'],))
+    cursor.execute('SELECT username, role FROM users WHERE id = %s', (session['user_id'],))
     user = cursor.fetchone()
     conn.close()
-
-    return render_template('index.html', grouped=grouped_list, user=user)
+    
+    return render_template('index.html', records=records, user=user)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -188,19 +125,19 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
+        
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM users WHERE username=%s', (username,))
+        cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
         user = cursor.fetchone()
         conn.close()
-
+        
         if user and bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):
             session['user_id'] = user['id']
             return redirect(url_for('index'))
         else:
             error = 'Неверный логин или пароль'
-
+    
     return render_template('login.html', error=error)
 
 
@@ -210,23 +147,19 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        confirm_password = request.form['confirm_password']
-
-        if password != confirm_password:
-            error = 'Пароли не совпадают'
-        else:
-            conn = get_db_connection()
-            cursor = conn.cursor()
-            try:
-                password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-                cursor.execute('INSERT INTO users (username, password_hash) VALUES (%s, %s)', (username, password_hash))
-                conn.commit()
-                conn.close()
-                return redirect(url_for('login'))
-            except Exception:
-                conn.close()
-                error = 'Логин уже занят'
-
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        try:
+            pwd_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+            cursor.execute('INSERT INTO users (username, password_hash) VALUES (%s, %s)', (username, pwd_hash))
+            conn.commit()
+            conn.close()
+            return redirect(url_for('login'))
+        except:
+            conn.close()
+            error = 'Логин уже занят'
+    
     return render_template('register.html', error=error)
 
 
@@ -237,55 +170,44 @@ def logout():
 
 
 @app.route('/update', methods=['POST'])
-def update_cell():
-    if not check_role('admin'):
+def update():
+    if not check_admin():
         return jsonify({'status': 'error', 'message': 'Нет прав'})
-
+    
     data = request.get_json()
     field = data['field']
     value = data['value']
     record_id = data['id']
-
+    
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute(f'UPDATE records SET {field}=%s WHERE id=%s', (value, record_id))
+        cursor.execute(f'UPDATE records SET {field} = %s WHERE id = %s', (value, record_id))
         conn.commit()
-    except Exception as e:
-        print(e)
         conn.close()
-        return jsonify({'status': 'error'})
-    conn.close()
-    return jsonify({'status': 'ok'})
+        return jsonify({'status': 'ok'})
+    except Exception as e:
+        conn.close()
+        return jsonify({'status': 'error', 'message': str(e)})
 
 
 @app.route('/add', methods=['POST'])
-def add_record():
-    if not check_role('admin'):
+def add():
+    if not check_admin():
         return jsonify({'status': 'error', 'message': 'Нет прав'})
-
+    
     conn = get_db_connection()
     cursor = conn.cursor()
-    
-    # Определяем номер новой записи для текущей котельной
-    cursor.execute('SELECT MAX(equipment_number) as max_num FROM records WHERE boiler_number=1')
-    max_num = cursor.fetchone()['max_num'] or 0
-    
-    # Добавляем новую запись
     cursor.execute('''
-        INSERT INTO records (
-            date, boiler_number, boiler_location, boiler_contact,
-            equipment_number, boiler_model, equipment_year, time_interval
-        ) VALUES (%s, %s, %s,, %s, %s)
-    ''', ('30.01.2026', 1, 'Белоярск №1 ул. Набережная 8', '83499323373', 
-          max_num + 1, 'Новая модель котла', '2024', '00:00'))
-    
+        INSERT INTO records (date, boiler_number, boiler_location, equipment_number, time_interval)
+        VALUES (%s, %s, %s, %s, %s)
+    ''', ('', 1, '', 1, ''))
     conn.commit()
-    new_id = cursor.lastrowid if hasattr(cursor, 'lastrowid') else cursor.fetchone()['id'] if cursor.fetchone() else 1
+    new_id = cursor.lastrowid if hasattr(cursor, 'lastrowid') else cursor.fetchone()['id']
     conn.close()
     return jsonify({'status': 'ok', 'new_id': new_id})
 
 
 if __name__ == '__main__':
-    ensure_tables_and_admin()
+    ensure_tables()
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
