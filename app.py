@@ -145,11 +145,18 @@ def index():
     cursor = conn.cursor()
     
     # Запрос всех записей
-    cursor.execute('SELECT * FROM records ORDER BY date, boiler_number, equipment_number, time_interval')
+    cursor.execute('''
+        SELECT * FROM records 
+        ORDER BY 
+            date, 
+            boiler_number, 
+            equipment_number, 
+            time_interval
+    ''')
     records = cursor.fetchall()
     conn.close()
 
-    # Группируем данные по котельным
+    # Группируем данные по дате и котельной
     grouped = {}
     for record in records:
         key = f"{record['date']}|{record['boiler_number']}"
@@ -162,10 +169,6 @@ def index():
                 'entries': []
             }
         grouped[key]['entries'].append(record)
-    
-    # Сортируем записи внутри каждой котельной по времени
-    for group in grouped.values():
-        group['entries'].sort(key=lambda x: x['time_interval'])
     
     # Переводим в список для шаблона
     grouped_list = list(grouped.values())
@@ -273,7 +276,7 @@ def add_record():
         INSERT INTO records (
             date, boiler_number, boiler_location, boiler_contact,
             equipment_number, boiler_model, equipment_year, time_interval
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        ) VALUES (%s, %s, %s,, %s, %s)
     ''', ('30.01.2026', 1, 'Белоярск №1 ул. Набережная 8', '83499323373', 
           max_num + 1, 'Новая модель котла', '2024', '00:00'))
     
