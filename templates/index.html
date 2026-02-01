@@ -17,6 +17,7 @@
         tr:hover { background-color: #f9f9f9; }
         .editable { cursor: pointer; min-width: 60px; }
         .editable:hover { background-color: #e3f2fd; }
+        td[rowspan] { background: #f0f8ff; font-weight: bold; vertical-align: middle; text-align: center; }
         .logout-btn { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; float: right; }
         .logout-btn:hover { background: #c82333; }
         .add-btn { background: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; margin-bottom: 10px; }
@@ -43,60 +44,68 @@
         <table>
             <thead>
                 <tr>
-                    <th>Дата</th>
-                    <th>№ котельной</th>
-                    <th>Местоположение</th>
-                    <th>Контакт</th>
-                    <th>№ оборудования</th>
-                    <th>Модель котла</th>
-                    <th>Модель горелки</th>
-                    <th>Год выпуска</th>
-                    <th>Временной интервал</th>
-                    <th>Котлы в работе</th>
-                    <th>Котлы в резерве</th>
-                    <th>Котлы в ремонте</th>
-                    <th>Насосы в работе</th>
-                    <th>Насосы в резерве</th>
-                    <th>Насосы в ремонте</th>
-                    <th>Питательные насосы в работе</th>
-                    <th>Питательные насосы в резерве</th>
-                    <th>Питательные насосы в ремонте</th>
-                    <th>Топливные баки всего</th>
-                    <th>Объём топливного бака</th>
-                    <th>Топливные баки в работе</th>
-                    <th>Топливные баки в резерве</th>
-                    <th>Утренний баланс топлива</th>
-                    <th>Ежедневное потребление топлива</th>
-                    <th>Топливные баки в ремонте</th>
-                    <th>Водяные баки всего</th>
-                    <th>Объём водяного бака</th>
-                    <th>Водяные баки в работе</th>
-                    <th>Водяные баки в резерве</th>
-                    <th>Водяные баки в ремонте</th>
-                    <th>Температура на улице</th>
-                    <th>Температура подачи</th>
-                    <th>Температура обратки</th>
-                    <th>График подачи</th>
-                    <th>График обратки</th>
-                    <th>Давление подачи</th>
-                    <th>Давление обратки</th>
-                    <th>Ежедневный расход воды</th>
-                    <th>Ночная смена</th>
-                    <th>Дневная смена</th>
-                    <th>Примечания</th>
+                    <th rowspan="2">Дата</th>
+                    <th rowspan="2">№ котельной</th>
+                    <th rowspan="2">Местоположение</th>
+                    <th rowspan="2">Контакт</th>
+                    <th rowspan="2">Время</th>
+                    <th colspan="3">Котлы</th>
+                    <th colspan="3">Сетевые насосы</th>
+                    <th colspan="3">Подпиточные насосы</th>
+                </tr>
+                <tr>
+                    <th>Работа</th>
+                    <th>Резерв</th>
+                    <th>Ремонт</th>
+                    <th>Работа</th>
+                    <th>Резерв</th>
+                    <th>Ремонт</th>
+                    <th>Работа</th>
+                    <th>Резерв</th>
+                    <th>Ремонт</th>
                 </tr>
             </thead>
             <tbody>
-                {% for record in records %}
+                {% for group in grouped %}
+                {% set first_entry = group.entries[0] %}
                 <tr>
-                    {% for key, value in record.items() %}
-                    {% if key != 'id' and key not in ['boiler_number', 'boiler_location', 'boiler_model', 'burner_model'] %}
-                    <td class="editable" data-field="{{ key }}" data-id="{{ record.id }}">{{ value }}</td>
-                    {% else %}
-                    <td>{{ value }}</td>
-                    {% endif %}
-                    {% endfor %}
+                    <td rowspan="{{ group.entries|length }}">
+                        {{ group.date }}
+                    </td>
+                    <td rowspan="{{ group.entries|length }}">
+                        Котельная №{{ group.boiler_number }}
+                    </td>
+                    <td rowspan="{{ group.entries|length }}">
+                        {{ group.boiler_location }}
+                    </td>
+                    <td rowspan="{{ group.entries|length }}">
+                        {{ group.boiler_contact }}
+                    </td>
+                    <td>{{ first_entry.time_interval }}</td>
+                    <td class="editable" data-field="boilers_working" data-id="{{ first_entry.id }}">{{ first_entry.boilers_working }}</td>
+                    <td class="editable" data-field="boilers_reserve" data-id="{{ first_entry.id }}">{{ first_entry.boilers_reserve }}</td>
+                    <td class="editable" data-field="boilers_repair" data-id="{{ first_entry.id }}">{{ first_entry.boilers_repair }}</td>
+                    <td class="editable" data-field="pumps_working" data-id="{{ first_entry.id }}">{{ first_entry.pumps_working }}</td>
+                    <td class="editable" data-field="pumps_reserve" data-id="{{ first_entry.id }}">{{ first_entry.pumps_reserve }}</td>
+                    <td class="editable" data-field="pumps_repair" data-id="{{ first_entry.id }}">{{ first_entry.pumps_repair }}</td>
+                    <td class="editable" data-field="feed_pumps_working" data-id="{{ first_entry.id }}">{{ first_entry.feed_pumps_working }}</td>
+                    <td class="editable" data-field="feed_pumps_reserve" data-id="{{ first_entry.id }}">{{ first_entry.feed_pumps_reserve }}</td>
+                    <td class="editable" data-field="feed_pumps_repair" data-id="{{ first_entry.id }}">{{ first_entry.feed_pumps_repair }}</td>
                 </tr>
+                {% for entry in group.entries[1:] %}
+                <tr>
+                    <td>{{ entry.time_interval }}</td>
+                    <td class="editable" data-field="boilers_working" data-id="{{ entry.id }}">{{ entry.boilers_working }}</td>
+                    <td class="editable" data-field="boilers_reserve" data-id="{{ entry.id }}">{{ entry.boilers_reserve }}</td>
+                    <td class="editable" data-field="boilers_repair" data-id="{{ entry.id }}">{{ entry.boilers_repair }}</td>
+                    <td class="editable" data-field="pumps_working" data-id="{{ entry.id }}">{{ entry.pumps_working }}</td>
+                    <td class="editable" data-field="pumps_reserve" data-id="{{ entry.id }}">{{ entry.pumps_reserve }}</td>
+                    <td class="editable" data-field="pumps_repair" data-id="{{ entry.id }}">{{ entry.pumps_repair }}</td>
+                    <td class="editable" data-field="feed_pumps_working" data-id="{{ entry.id }}">{{ entry.feed_pumps_working }}</td>
+                    <td class="editable" data-field="feed_pumps_reserve" data-id="{{ entry.id }}">{{ entry.feed_pumps_reserve }}</td>
+                    <td class="editable" data-field="feed_pumps_repair" data-id="{{ entry.id }}">{{ entry.feed_pumps_repair }}</td>
+                </tr>
+                {% endfor %}
                 {% endfor %}
             </tbody>
         </table>
