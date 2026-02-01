@@ -56,7 +56,6 @@
         .boiler-group {
             background-color: #a9d08e;
             font-weight: bold;
-            color: #000;
         }
         .boiler-subgroup {
             background-color: #d9ead3;
@@ -88,13 +87,13 @@
 
     <div class="table-container">
         <table>
-            <!-- Шапка: уровень 1 -->
+            <!-- Заголовки уровня 1 -->
             <thead>
                 <tr>
                     <th rowspan="4">Дата</th>
                     <th colspan="3">Котельная</th>
                     <th rowspan="4">Контакт</th>
-                    <th colspan="2">Оборудование</th>
+                    <th colspan="3">Оборудование</th>
                     <th rowspan="4">Марка котла / Марка горелки</th>
                     <th rowspan="4">Год оборудования</th>
                     <th rowspan="4">Время</th>
@@ -110,13 +109,13 @@
                     <th colspan="2">Дежурные котельной</th>
                     <th rowspan="4">Примечания</th>
                 </tr>
-                <!-- Уровень 2 -->
+                <!-- Заголовки уровня 2 -->
                 <tr>
                     <th rowspan="3">№</th>
                     <th rowspan="3">Местоположение</th>
                     <th rowspan="3">Начальник участка ЦТС</th>
                     <th rowspan="3">№</th>
-                    <th rowspan="3">Модель</th>
+                    <th colspan="2">Модель</th>
                     <th rowspan="3">Работа №</th>
                     <th rowspan="3">Резерв №</th>
                     <th rowspan="3">Ремонт №</th>
@@ -148,64 +147,68 @@
                     <th rowspan="3">ночь</th>
                     <th rowspan="3">день</th>
                 </tr>
-                <!-- Уровень 3 -->
+                <!-- Заголовки уровня 3 -->
                 <tr>
                     <th>Котла</th>
                     <th>Горелки</th>
                 </tr>
-                <!-- Уровень 4 — пустая строка для выравнивания -->
+                <!-- Заголовки уровня 4 -->
                 <tr></tr>
             </thead>
             <tbody>
-                <!-- Группа: Котельная №1 -->
-                <tr class="boiler-group">
-                    <td colspan="41"><strong>Котельная №1</strong> — Белоярск №1 ул. Набережная 8</td>
-                </tr>
-                <!-- Записи для Котельной №1 -->
-                <tr>
-                    <td>30.01.2026</td>
-                    <td>1</td>
-                    <td>Белоярск №1 ул. Набережная 8</td>
-                    <td>83499323373 , сот. 89028575790, Начальниу участка ЦТС Климов И.В.89519857336</td>
-                    <td>1</td>
-                    <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
-                    <td>2007</td>
-                    <td>00.00</td>
-                    <td class="editable" data-field="boilers_working" data-id="1">1.3</td>
-                    <td class="editable" data-field="boilers_reserve" data-id="1">2</td>
-                    <td class="editable" data-field="boilers_repair" data-id="1"></td>
-                    <td class="editable" data-field="pumps_working" data-id="1">1,2,4</td>
-                    <td class="editable" data-field="pumps_reserve" data-id="1"></td>
-                    <td class="editable" data-field="pumps_repair" data-id="1">3</td>
-                    <td class="editable" data-field="feed_pumps_working" data-id="1">1</td>
-                    <td class="editable" data-field="feed_pumps_reserve" data-id="1">2</td>
-                    <td class="editable" data-field="feed_pumps_repair" data-id="1"></td>
-                    <td class="editable" data-field="fuel_tanks_total" data-id="1">2</td>
-                    <td class="editable" data-field="fuel_tank_volume" data-id="1">25</td>
-                    <td class="editable" data-field="fuel_tanks_working" data-id="1">1.2</td>
-                    <td class="editable" data-field="fuel_tanks_reserve" data-id="1"></td>
-                    <td class="editable" data-field="fuel_morning_balance" data-id="1">16008</td>
-                    <td class="editable" data-field="fuel_daily_consumption" data-id="1">6031</td>
-                    <td class="editable" data-field="fuel_tanks_repair" data-id="1"></td>
-                    <td class="editable" data-field="water_tanks_total" data-id="1">1</td>
-                    <td class="editable" data-field="water_tank_volume" data-id="1">50</td>
-                    <td class="editable" data-field="wateranks_working" data-id="1">1</td>
-                    <td class="editable" data-field="water_tanks_reserve" data-id="1"></td>
-                    <td class="editable" data-field="water_tanks_repair" data-id="1"></td>
-                    <td class="editable" data-field="temp_outdoor" data-id="1">-34</td>
-                    <td class="editable" data-field="temp_supply" data-id="1">86</td>
-                    <td class="editable" data-field="temp_return" data-id="1">64</td>
-                    <td class="editable" data-field="temp_graph_supply" data-id="1">86</td>
-                    <td class="editable" data-field="temp_graph_return" data-id="1">64</td>
-                    <td class="editable" data-field="pressure_supply" data-id="1">86</td>
-                    <td class="editable" data-field="pressure_return" data-id="1">64</td>
-                    <td class="editable" data-field="water_consumption_daily" data-id="1">0</td>
-                    <td class="editable" data-field="staff_night" data-id="1">Витязев, Кожевников</td>
-                    <td class="editable" data-field="staff_day" data-id="1">Канев Нагибин</td>
-                    <td></td>
-                </tr>
-                <!-- Другие записи — аналогично -->
-                <!-- ... (остальные строки из Excel) ... -->
+                {% set current_boiler = none %}
+                {% for record in records %}
+                    {% if current_boiler != record.boiler_number %}
+                        {% set current_boiler = record.boiler_number %}
+                        <!-- Группа котельной -->
+                        <tr class="boiler-group">
+                            <td colspan="41"><strong>Котельная №{{ record.boiler_number }}</strong> — {{ record.boiler_location }}</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <td>{{ record.date }}</td>
+                        <td>{{ record.boiler_number }}</td>
+                        <td>{{ record.boiler_location }}</td>
+                        <td>{{ record.boiler_contact }}</td>
+                        <td>{{ record.equipment_number }}</td>
+                        <td>{{ record.boiler_model }}</td>
+                        <td>{{ record.burner_model }}</td>
+                        <td>{{ record.equipment_year }}</td>
+                        <td class="editable" data-field="time_interval" data-id="{{ record.id }}">{{ record.time_interval }}</td>
+                        <td class="editable" data-field="boilers_working" data-id="{{ record.id }}">{{ record.boilers_working }}</td>
+                        <td class="editable" data-field="boilers_reserve" data-id="{{ record.id }}">{{ record.boilers_reserve }}</td>
+                        <td class="editable" data-field="boilers_repair" data-id="{{ record.id }}">{{ record.boilers_repair }}</td>
+                        <td class="editable" data-field="pumps_working" data-id="{{ record.id }}">{{ record.pumps_working }}</td>
+                        <td class="editable" data-field="pumps_reserve" data-id="{{ record.id }}">{{ record.pumps_reserve }}</td>
+                        <td class="editable" data-field="pumps_repair" data-id="{{ record.id }}">{{ record.pumps_repair }}</td>
+                        <td class="editable" data-field="feed_pumps_working" data-id="{{ record.id }}">{{ record.feed_pumps_working }}</td>
+                        <td class="editable" data-field="feed_pumps_reserve" data-id="{{ record.id }}">{{ record.feed_pumps_reserve }}</td>
+                        <td class="editable" data-field="feed_pumps_repair" data-id="{{ record.id }}">{{ record.feed_pumps_repair }}</td>
+                        <td class="editable" data-field="fuel_tanks_total" data-id="{{ record.id }}">{{ record.fuel_tanks_total }}</td>
+                        <td class="editable" data-field="fuel_tank_volume" data-id="{{ record.id }}">{{ record.fuel_tank_volume }}</td>
+                        <td class="editable" data-field="fuel_tanks_working" data-id="{{ record.id }}">{{ record.fuel_tanks_working }}</td>
+                        <td class="editable" data-field="fuel_tanks_reserve" data-id="{{ record.id }}">{{ record.fuel_tanks_reserve }}</td>
+                        <td class="editable" data-field="fuel_morning_balance" data-id="{{ record.id }}">{{ record.fuel_morning_balance }}</td>
+                        <td class="editable" data-field="fuel_daily_consumption" data-id="{{ record.id }}">{{ record.fuel_daily_consumption }}</td>
+                        <td class="editable" data-field="fuel_tanks_repair" data-id="{{ record.id }}">{{ record.fuel_tanks_repair }}</td>
+                        <td class="editable" data-field="water_tanks_total" data-id="{{ record.id }}">{{ record.water_tanks_total }}</td>
+                        <td class="editable" data-field="water_tank_volume" data-id="{{ record.id }}">{{ record.water_tank_volume }}</td>
+                        <td class="editable" data-field="water_tanks_working" data-id="{{ record.id }}">{{ record.water_tanks_working }}</td>
+                        <td class="editable" data-field="water_tanks_reserve" data-id="{{ record.id }}">{{ record.water_tanks_reserve }}</td>
+                        <td class="editable" data-field="water_tanks_repair" data-id="{{ record.id }}">{{ record.water_tanks_repair }}</td>
+                        <td class="editable" data-field="temp_outdoor" data-id="{{ record.id }}">{{ record.temp_outdoor }}</td>
+                        <td class="editable" data-field="temp_supply" data-id="{{ record.id }}">{{ record.temp_supply }}</td>
+                        <td class="editable" data-field="temp_return" data-id="{{ record.id }}">{{ record.temp_return }}</td>
+                        <td class="editable" data-field="temp_graph_supply" data-id="{{ record.id }}">{{ record.temp_graph_supply }}</td>
+                        <td class="editable" data-field="temp_graph_return" data-id="{{ record.id }}">{{ record.temp_graph_return }}</td>
+                        <td class="editable" data-field="pressure_supply" data-id="{{ record.id }}">{{ record.pressure_supply }}</td>
+                        <td class="editable" data-field="pressure_return" data-id="{{ record.id }}">{{ record.pressure_return }}</td>
+                        <td class="editable" data-field="water_consumption_daily" data-id="{{ record.id }}">{{ record.water_consumption_daily }}</td>
+                        <td class="editable" data-field="staff_night" data-id="{{ record.id }}">{{ record.staff_night }}</td>
+                        <td class="editable" data-field="staff_day" data-id="{{ record.id }}">{{ record.staff_day }}</td>
+                        <td class="editable" data-field="notes" data-id="{{ record.id }}">{{ record.notes }}</td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
@@ -221,7 +224,7 @@
                 input.type = 'text';
                 input.value = currentValue;
 
-                inputblur', function() {
+                input.addEventListener('blur', function() {
                     const newValue = this.value;
 
                     fetch('/update', {
