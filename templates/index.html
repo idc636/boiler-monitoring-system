@@ -1,50 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Учёт котельных</title>
     <meta charset="UTF-8">
+    <title>Учёт котельных</title>
     <style>
-        *{font-family:Arial,sans-serif;font-size:12px}
-        body{margin:10px;background:#f5f5f5}
-        .header{background:white;padding:10px;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,0.1);margin-bottom:10px}
-        h1{color:#0047AB;text-align:center;font-size:20px;margin:5px 0}
-        .user-info{text-align:right;margin-bottom:10px}
-        .logout-btn{background:#dc3545;color:white;border:none;padding:5px 10px;border-radius:3px;cursor:pointer;float:right}
-        .add-btn{background:#28a745;color:white;border:none;padding:5px 10px;border-radius:3px;cursor:pointer;margin-bottom:10px}
-        table{border-collapse:collapse;width:100%;min-width:2600px;background:white}
-        th,td{border:1px solid #ddd;padding:4px 6px;text-align:center}
-        th{background:#0047AB;color:white;font-weight:bold}
-        .section{background:#90EE90;font-weight:bold}
-        .contact{background:#F0F8FF}
-        .editable{cursor:pointer}
-        .editable:hover{background:#e3f2fd}
+        * { font-family: Arial; font-size: 12px; }
+        body { background:#f5f5f5; margin:10px; }
+        table { border-collapse: collapse; width: 100%; min-width:2600px; background:white; }
+        th, td { border:1px solid #ccc; padding:4px; text-align:center; }
+        th { background:#0047AB; color:white; }
+        .section { background:#90EE90; font-weight:bold; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <div class="user-info">
-        👤 {{ user.username }} ({{ user.role }})
-        <form method="POST" action="/logout" style="display:inline">
-            <button type="submit" class="logout-btn">Выход</button>
-        </form>
-    </div>
-    <h1>АО «Ямалкомунэнерго» — Учёт котельных</h1>
-</div>
+<h2 style="text-align:center">АО «Ямалкомунэнерго» — Суточный журнал</h2>
 
-{% if user.role == 'admin' %}
-<button class="add-btn" onclick="addRecord()">➕ Добавить запись</button>
-{% endif %}
-
-<div style="overflow-x:auto;background:white;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,0.1);padding:5px">
-
+<div style="overflow-x:auto">
 <table>
+
 <thead>
 <tr>
-    <th rowspan="3">№</th>
-    <th rowspan="3">Марка котла / Марка горелки</th>
-    <th rowspan="3">Год оборудования</th>
-    <th rowspan="3">Время</th>
+    <th>Год</th>
+    <th>Время</th>
 
     <th colspan="3">Котлы</th>
     <th colspan="3">Сетевые насосы</th>
@@ -54,160 +32,107 @@
     <th colspan="5">Ёмкости воды</th>
 
     <th colspan="3">t°C воды</th>
-    <th colspan="2">t°C воды по температурному графику</th>
-
-    <th rowspan="3">Давление на подаче,<br>кгс/см²</th>
-    <th rowspan="3">Давление на обратке,<br>кгс/см²</th>
-
-    <th rowspan="3">Расход подпиточной воды<br>за сутки, м³</th>
-
-    <th colspan="2">Дежурные котельной</th>
-
-    <th rowspan="3">Примечания</th>
+    <th>Расход подпитки</th>
+    <th colspan="2">Дежурные</th>
+    <th>Примечание</th>
 </tr>
 
 <tr>
-    <th rowspan="2">Работа №</th>
-    <th rowspan="2">Резерв №</th>
-    <th rowspan="2">Ремонт</th>
+    <th></th><th></th>
 
-    <th rowspan="2">Работа №</th>
-    <th rowspan="2">Резерв №</th>
-    <th rowspan="2">Ремонт</th>
+    <th>Работа</th><th>Резерв</th><th>Ремонт</th>
+    <th>Работа</th><th>Резерв</th><th>Ремонт</th>
+    <th>Работа</th><th>Резерв</th><th>Ремонт</th>
 
-    <th rowspan="2">Работа №</th>
-    <th rowspan="2">Резерв №</th>
-    <th rowspan="2">Ремонт</th>
+    <th>Всего</th><th>Объём</th><th>Работа</th><th>Резерв</th>
+    <th>Остаток</th><th>Расход</th><th>Ремонт</th>
 
-    <th rowspan="2">Всего</th>
-    <th rowspan="2">Объём, м³</th>
-    <th rowspan="2">В работе</th>
-    <th rowspan="2">В резерве</th>
-    <th rowspan="2">Остаток топлива<br>на утро, м³</th>
-    <th rowspan="2">Расход топлива<br>за сутки, м³</th>
-    <th rowspan="2">В ремонте</th>
+    <th>Всего</th><th>Объём</th><th>Работа</th><th>Резерв</th><th>Ремонт</th>
 
-    <th rowspan="2">Всего</th>
-    <th rowspan="2">Объём, м³</th>
-    <th rowspan="2">В работе</th>
-    <th rowspan="2">В резерве</th>
-    <th rowspan="2">В ремонте</th>
+    <th>Наруж</th><th>Подача</th><th>Обратка</th>
 
-    <th rowspan="2">Наружная</th>
-    <th rowspan="2">Подача</th>
-    <th rowspan="2">Обратка</th>
-
-    <th rowspan="2">Подача</th>
-    <th rowspan="2">Обратка</th>
-
-    <th rowspan="2">Ночь</th>
-    <th rowspan="2">День</th>
+    <th></th>
+    <th>Ночь</th><th>День</th>
+    <th></th>
 </tr>
-
-<tr></tr>
 </thead>
 
 <tbody>
-{% for g in grouped %}
+
+{% for b in boilers %}
 <tr class="section">
     <td colspan="100%">
-        📅 {{ g.date }} | 🔥 Котельная №{{ g.boiler_number }} | 📍 {{ g.boiler_location }}
+        📅 {{ b.date }} | 🔥 Котельная №{{ b.number }} | 📍 {{ b.location }}
     </td>
 </tr>
 
-{% if g.boiler_contact %}
-<tr class="contact">
-    <td colspan="100%">📞 {{ g.boiler_contact }}</td>
-</tr>
-{% endif %}
-
-{% if g.boiler_number == 1 %}{% set limit = 3 %}
-{% elif g.boiler_number == 2 %}{% set limit = 4 %}
-{% elif g.boiler_number == 3 %}{% set limit = 2 %}
-{% else %}{% set limit = 3 %}{% endif %}
-
-{% for e in g.entries[:limit] %}
+{% for i in range(b.rows) %}
 <tr>
-    <td>{{ e.equipment_number }}</td>
-    <td class="editable" data-field="boiler_model" data-id="{{ e.id }}">{{ e.boiler_model or '' }}</td>
-    <td class="editable" data-field="equipment_year" data-id="{{ e.id }}">{{ e.equipment_year or '' }}</td>
-    <td>{{ e.time_interval or '' }}</td>
 
-    <td class="editable" data-field="boilers_working" data-id="{{ e.id }}">{{ e.boilers_working or '' }}</td>
-    <td class="editable" data-field="boilers_reserve" data-id="{{ e.id }}">{{ e.boilers_reserve or '' }}</td>
-    <td class="editable" data-field="boilers_repair" data-id="{{ e.id }}">{{ e.boilers_repair or '' }}</td>
+    {# === ГОД ОБОРУДОВАНИЯ === #}
+    {% for y in b.years %}
+        {% if i == y.start %}
+            <td rowspan="{{ y.span }}">{{ y.year }}</td>
+        {% endif %}
+    {% endfor %}
 
-    <td class="editable" data-field="pumps_working" data-id="{{ e.id }}">{{ e.pumps_working or '' }}</td>
-    <td class="editable" data-field="pumps_reserve" data-id="{{ e.id }}">{{ e.pumps_reserve or '' }}</td>
-    <td class="editable" data-field="pumps_repair" data-id="{{ e.id }}">{{ e.pumps_repair or '' }}</td>
+    <td>{{ b.times[i] }}</td>
 
-    <td class="editable" data-field="feed_pumps_working" data-id="{{ e.id }}">{{ e.feed_pumps_working or '' }}</td>
-    <td class="editable" data-field="feed_pumps_reserve" data-id="{{ e.id }}">{{ e.feed_pumps_reserve or '' }}</td>
-    <td class="editable" data-field="feed_pumps_repair" data-id="{{ e.id }}">{{ e.feed_pumps_repair or '' }}</td>
+    {# === КОТЛЫ === #}
+    <td>{{ b.boilers.work[i] }}</td>
+    <td>{{ b.boilers.reserve[i] }}</td>
+    {% if i == 0 %}<td rowspan="{{ b.rows }}">{{ b.boilers.repair }}</td>{% endif %}
 
-    <td class="editable" data-field="fuel_tanks_total" data-id="{{ e.id }}">{{ e.fuel_tanks_total or '' }}</td>
-    <td class="editable" data-field="fuel_tank_volume" data-id="{{ e.id }}">{{ e.fuel_tank_volume or '' }}</td>
-    <td class="editable" data-field="fuel_tanks_working" data-id="{{ e.id }}">{{ e.fuel_tanks_working or '' }}</td>
-    <td class="editable" data-field="fuel_tanks_reserve" data-id="{{ e.id }}">{{ e.fuel_tanks_reserve or '' }}</td>
-    <td class="editable" data-field="fuel_morning_balance" data-id="{{ e.id }}">{{ e.fuel_morning_balance or '' }}</td>
-    <td class="editable" data-field="fuel_daily_consumption" data-id="{{ e.id }}">{{ e.fuel_daily_consumption or '' }}</td>
-    <td class="editable" data-field="fuel_tanks_repair" data-id="{{ e.id }}">{{ e.fuel_tanks_repair or '' }}</td>
+    {# === СЕТЕВЫЕ НАСОСЫ === #}
+    <td>{{ b.network_pumps.work[i] }}</td>
+    <td>{{ b.network_pumps.reserve[i] }}</td>
+    {% if i == 0 %}<td rowspan="{{ b.rows }}">{{ b.network_pumps.repair }}</td>{% endif %}
 
-    <td class="editable" data-field="water_tanks_total" data-id="{{ e.id }}">{{ e.water_tanks_total or '' }}</td>
-    <td class="editable" data-field="water_tank_volume" data-id="{{ e.id }}">{{ e.water_tank_volume or '' }}</td>
-    <td class="editable" data-field="water_tanks_working" data-id="{{ e.id }}">{{ e.water_tanks_working or '' }}</td>
-    <td class="editable" data-field="water_tanks_reserve" data-id="{{ e.id }}">{{ e.water_tanks_reserve or '' }}</td>
-    <td class="editable" data-field="water_tanks_repair" data-id="{{ e.id }}">{{ e.water_tanks_repair or '' }}</td>
+    {# === ПОДПИТОЧНЫЕ НАСОСЫ === #}
+    <td>{{ b.feed_pumps.work[i] }}</td>
+    <td>{{ b.feed_pumps.reserve[i] }}</td>
+    {% if i == 0 %}<td rowspan="{{ b.rows }}">{{ b.feed_pumps.repair }}</td>{% endif %}
 
-    <td class="editable" data-field="temp_outdoor" data-id="{{ e.id }}">{{ e.temp_outdoor or '' }}</td>
-    <td class="editable" data-field="temp_supply" data-id="{{ e.id }}">{{ e.temp_supply or '' }}</td>
-    <td class="editable" data-field="temp_return" data-id="{{ e.id }}">{{ e.temp_return or '' }}</td>
+    {# === ТОПЛИВО === #}
+    {% if i == 0 %}
+        <td rowspan="{{ b.rows }}">{{ b.fuel.total }}</td>
+        <td rowspan="{{ b.rows }}">{{ b.fuel.volume }}</td>
+        <td rowspan="{{ b.rows }}">{{ b.fuel.work }}</td>
+        <td rowspan="{{ b.rows }}">{{ b.fuel.reserve }}</td>
+        <td rowspan="{{ b.rows }}">{{ b.fuel.balance }}</td>
+        <td rowspan="{{ b.rows }}">{{ b.fuel.daily }}</td>
+        <td rowspan="{{ b.rows }}">{{ b.fuel.repair }}</td>
+    {% endif %}
 
-    <td class="editable" data-field="temp_graph_supply" data-id="{{ e.id }}">{{ e.temp_graph_supply or '' }}</td>
-    <td class="editable" data-field="temp_graph_return" data-id="{{ e.id }}">{{ e.temp_graph_return or '' }}</td>
+    {# === ВОДА === #}
+    {% if i == 0 %}
+        <td rowspan="{{ b.rows }}">{{ b.water.total }}</td>
+        <td rowspan="{{ b.rows }}">{{ b.water.volume }}</td>
+        <td rowspan="{{ b.rows }}">{{ b.water.work }}</td>
+        <td rowspan="{{ b.rows }}">{{ b.water.reserve }}</td>
+        <td rowspan="{{ b.rows }}">{{ b.water.repair }}</td>
+    {% endif %}
 
-    <td class="editable" data-field="pressure_supply" data-id="{{ e.id }}">{{ e.pressure_supply or '' }}</td>
-    <td class="editable" data-field="pressure_return" data-id="{{ e.id }}">{{ e.pressure_return or '' }}</td>
+    {# === ТЕМПЕРАТУРЫ === #}
+    <td>{{ b.temps[i][0] }}</td>
+    <td>{{ b.temps[i][1] }}</td>
+    <td>{{ b.temps[i][2] }}</td>
 
-    <td class="editable" data-field="water_consumption_daily" data-id="{{ e.id }}">{{ e.water_consumption_daily or '' }}</td>
+    {# === ПРОЧЕЕ === #}
+    {% if i == 0 %}
+        <td rowspan="{{ b.rows }}">{{ b.water_consumption }}</td>
+        <td rowspan="{{ b.rows }}">{{ b.staff.night }}</td>
+        <td rowspan="{{ b.rows }}">{{ b.staff.day }}</td>
+        <td rowspan="{{ b.rows }}">{{ b.notes }}</td>
+    {% endif %}
 
-    <td class="editable" data-field="staff_night" data-id="{{ e.id }}">{{ e.staff_night or '' }}</td>
-    <td class="editable" data-field="staff_day" data-id="{{ e.id }}">{{ e.staff_day or '' }}</td>
-
-    <td class="editable" data-field="notes" data-id="{{ e.id }}">{{ e.notes or '' }}</td>
 </tr>
 {% endfor %}
 {% endfor %}
+
 </tbody>
 </table>
 </div>
-
-<script>
-{% if user.role == 'admin' %}
-document.querySelectorAll('.editable').forEach(c => {
-    c.addEventListener('click', function() {
-        const f = this.dataset.field, id = this.dataset.id, v = this.textContent;
-        const i = document.createElement('input'); i.value = v;
-        i.onblur = () => {
-            fetch('/update', {
-                method:'POST',
-                headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({field:f, value:i.value, id:id})
-            }).then(r=>r.json()).then(d=>{
-                if(d.status=='ok') this.textContent=i.value;
-            });
-        };
-        i.onkeypress = e => { if(e.key=='Enter') i.blur(); };
-        this.innerHTML=''; this.appendChild(i); i.focus();
-    });
-});
-function addRecord(){
-    fetch('/add',{method:'POST'}).then(r=>r.json()).then(d=>{
-        if(d.status=='ok') location.reload();
-    });
-}
-{% endif %}
-</script>
 
 </body>
 </html>
