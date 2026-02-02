@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, session
+from flask import Flask, render_template, request, jsonify, redirect, session, url_for
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os, bcrypt
@@ -77,11 +77,28 @@ def init_db():
     );
     """)
 
+    # Создаём админов
+    admin_password = bcrypt.hashpw('1313'.encode(), bcrypt.gensalt()).decode()
     cur.execute("""
     INSERT INTO users (username, password_hash, role)
-    SELECT 'admin', %s, 'admin'
-    WHERE NOT EXISTS (SELECT 1 FROM users WHERE username='admin')
-    """, (bcrypt.hashpw('1313'.encode(), bcrypt.gensalt()).decode(),))
+    SELECT 'admin1', %s, 'admin'
+    WHERE NOT EXISTS (SELECT 1 FROM users WHERE username='admin1')
+    """, (admin_password,))
+    
+    cur.execute("""
+    INSERT INTO users (username, password_hash, role)
+    SELECT 'admin2', %s, 'admin'
+    WHERE NOT EXISTS (SELECT 1 FROM users WHERE username='admin2')
+    """, (admin_password,))
+
+    # Создаём обычных пользователей
+    user_password = bcrypt.hashpw('1313'.encode(), bcrypt.gensalt()).decode()
+    for i in range(1, 9):
+        cur.execute("""
+        INSERT INTO users (username, password_hash, role)
+        SELECT %s, %s, 'operator'
+        WHERE NOT EXISTS (SELECT 1 FROM users WHERE username=%s)
+        """, (f'user{i}', user_password, f'user{i}'))
 
     conn.commit()
     conn.close()
@@ -227,7 +244,7 @@ def build_boilers_view(records):
 @app.route('/')
 def index():
     if not auth():
-        return redirect('/login')
+        return redirect(url_for('login'))
 
     c = get_conn().cursor()
     c.execute("""
@@ -247,6 +264,7 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    error = None
     if request.method == 'POST':
         c = get_conn().cursor()
         c.execute("SELECT * FROM users WHERE username=%s", (request.form['username'],))
@@ -255,17 +273,59 @@ def login():
 
         if u and bcrypt.checkpw(request.form['password'].encode(), u['password_hash'].encode()):
             session['user_id'] = u['id']
-            return redirect('/')
+            return redirect(url_for('index'))
+        else:
+            error = 'Неверный логин или пароль'
 
-        return render_template('login.html', error='Неверный логин или пароль')
+    return render_template('login.html', error=error)
 
-    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    error = None
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        if not username or not password:
+            error = 'Логин и пароль обязательны'
+        elif len(password) < 4:
+            error = 'Пароль должен быть не менее 4 символов'
+        else:
+            try:
+                c = get_conn().cursor()
+                pwd_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+                c.execute("INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)", 
+                         (username, pwd_hash, 'operator'))
+                c.connection.commit()
+                c.connection.close()
+                return redirect(url_for('login'))
+            except psycopg2.IntegrityError:
+                c.connection.close()
+                error = 'Логин уже занят'
+
+    return render_template('register.html', error=error)
+
+
+@app.route('/users')
+def users_list():
+    if not admin():
+        return redirect(url_for('login'))
+    
+    c = get_conn().cursor()
+    c.execute("SELECT id, username, role FROM users ORDER BY role DESC, username")
+    users = c.fetchall()
+    c.execute("SELECT username, role FROM users WHERE id=%s", (session['user_id'],))
+    current_user = c.fetchone()
+    c.connection.close()
+    
+    return render_template('users.html', users=users, user=current_user)
 
 
 @app.route('/logout', methods=['POST'])
 def logout():
     session.pop('user_id', None)
-    return redirect('/login')
+    return redirect(url_for('login'))
 
 
 @app.route('/update', methods=['POST'])
