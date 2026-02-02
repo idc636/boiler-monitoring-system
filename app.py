@@ -9,7 +9,6 @@ app.secret_key = 'secret'
 DATABASE_URL = os.environ.get('DATABASE_URL') or \
     "postgresql://postgres:TzhRuKuliqaGilBouUfRjGtqZnBnubMN@switchback.proxy.rlwy.net:57256/railway"
 
-
 # ===================== DB INIT =====================
 
 def init_db():
@@ -46,7 +45,35 @@ def init_db():
 
         feed_pumps_working TEXT,
         feed_pumps_reserve TEXT,
-        feed_pumps_repair TEXT
+        feed_pumps_repair TEXT,
+
+        fuel_tanks_total TEXT,
+        fuel_tank_volume TEXT,
+        fuel_tanks_working TEXT,
+        fuel_tanks_reserve TEXT,
+        fuel_morning_balance TEXT,
+        fuel_daily_consumption TEXT,
+        fuel_tanks_repair TEXT,
+
+        water_tanks_total TEXT,
+        water_tank_volume TEXT,
+        water_tanks_working TEXT,
+        water_tanks_reserve TEXT,
+        water_tanks_repair TEXT,
+
+        temp_outdoor TEXT,
+        temp_supply TEXT,
+        temp_return TEXT,
+        temp_graph_supply TEXT,
+        temp_graph_return TEXT,
+
+        pressure_supply TEXT,
+        pressure_return TEXT,
+
+        water_consumption_daily TEXT,
+        staff_night TEXT,
+        staff_day TEXT,
+        notes TEXT
     );
     """)
 
@@ -125,9 +152,12 @@ def build_boilers_view(records):
             "number": boiler_number,
             "date": date,
             "location": rows[0]['boiler_location'],
+            "contact": rows[0]['boiler_contact'],
             "rows": len(rows),
             "years": years,
             "times": times,
+
+            "boiler_models": col("boiler_model"),
 
             "boilers": {
                 "work": col("boilers_working"),
@@ -147,14 +177,46 @@ def build_boilers_view(records):
                 "repair": rows[0]["feed_pumps_repair"]
             },
 
-            # пока пустые — структура готова
-            "fuel": {"total": "", "volume": "", "work": "", "reserve": "", "balance": "", "daily": "", "repair": ""},
-            "water": {"total": "", "volume": "", "work": "", "reserve": "", "repair": ""},
+            "fuel": {
+                "total": rows[0]["fuel_tanks_total"],
+                "volume": rows[0]["fuel_tank_volume"],
+                "work": rows[0]["fuel_tanks_working"],
+                "reserve": rows[0]["fuel_tanks_reserve"],
+                "balance": rows[0]["fuel_morning_balance"],
+                "daily": rows[0]["fuel_daily_consumption"],
+                "repair": rows[0]["fuel_tanks_repair"]
+            },
 
-            "temps": [("", "", "") for _ in rows],
-            "water_consumption": "",
-            "staff": {"night": "", "day": ""},
-            "notes": ""
+            "water": {
+                "total": rows[0]["water_tanks_total"],
+                "volume": rows[0]["water_tank_volume"],
+                "work": rows[0]["water_tanks_working"],
+                "reserve": rows[0]["water_tanks_reserve"],
+                "repair": rows[0]["water_tanks_repair"]
+            },
+
+            "temps": list(zip(
+                col("temp_outdoor"),
+                col("temp_supply"),
+                col("temp_return")
+            )),
+
+            "graph_temps": list(zip(
+                col("temp_graph_supply"),
+                col("temp_graph_return")
+            )),
+
+            "pressure": list(zip(
+                col("pressure_supply"),
+                col("pressure_return")
+            )),
+
+            "water_consumption": rows[0]["water_consumption_daily"],
+            "staff": {
+                "night": rows[0]["staff_night"],
+                "day": rows[0]["staff_day"]
+            },
+            "notes": rows[0]["notes"]
         })
 
     return boilers
@@ -209,9 +271,29 @@ def logout():
 @app.route('/update', methods=['POST'])
 def update():
     if not admin():
-        return jsonify({'status': 'error'})
+        return jsonify({'status': 'error', 'message': 'Нет прав'})
 
     d = request.get_json()
+    
+    # Безопасный список полей для обновления
+    allowed_fields = [
+        'boiler_model', 'equipment_year', 'time_interval',
+        'boilers_working', 'boilers_reserve', 'boilers_repair',
+        'pumps_working', 'pumps_reserve', 'pumps_repair',
+        'feed_pumps_working', 'feed_pumps_reserve', 'feed_pumps_repair',
+        'fuel_tanks_total', 'fuel_tank_volume', 'fuel_tanks_working',
+        'fuel_tanks_reserve', 'fuel_morning_balance', 'fuel_daily_consumption',
+        'fuel_tanks_repair', 'water_tanks_total', 'water_tank_volume',
+        'water_tanks_working', 'water_tanks_reserve', 'water_tanks_repair',
+        'temp_outdoor', 'temp_supply', 'temp_return',
+        'temp_graph_supply', 'temp_graph_return',
+        'pressure_supply', 'pressure_return',
+        'water_consumption_daily', 'staff_night', 'staff_day', 'notes'
+    ]
+
+    if d['field'] not in allowed_fields:
+        return jsonify({'status': 'error', 'message': 'Недопустимое поле'})
+
     c = get_conn().cursor()
     c.execute(f"UPDATE records SET {d['field']}=%s WHERE id=%s", (d['value'], d['id']))
     c.connection.commit()
@@ -222,17 +304,18 @@ def update():
 @app.route('/add', methods=['POST'])
 def add():
     if not admin():
-        return jsonify({'status': 'error'})
+        return jsonify({'status': 'error', 'message': 'Нет прав'})
 
     c = get_conn().cursor()
     c.execute("SELECT MAX(equipment_number) AS m FROM records WHERE boiler_number=1")
     num = (c.fetchone()['m'] or 0) + 1
 
     c.execute("""
-        INSERT INTO records (date, boiler_number, boiler_location, boiler_contact,
-                             equipment_number, time_interval)
-        VALUES (%s, %s, %s, %s, %s, %s)
-    """, ('30.01.2026', 1, 'Белоярск', '83499323373', num, '00:00'))
+        INSERT INTO records (
+            date, boiler_number, boiler_location, boiler_contact,
+            equipment_number, boiler_model, equipment_year, time_interval
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    """, ('30.01.2026', 1, 'Белоярск', '83499323373', num, '', '', '00:00'))
 
     c.connection.commit()
     c.connection.close()
