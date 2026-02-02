@@ -77,14 +77,17 @@ def init_db():
     );
     """)
 
-    # Создаём админов
+    # Создаём/обновляем админов
     admin_password = bcrypt.hashpw('1313'.encode(), bcrypt.gensalt()).decode()
+    
+    # Старый админ (оставляем как есть)
     cur.execute("""
     INSERT INTO users (username, password_hash, role)
-    SELECT 'admin1', %s, 'admin'
-    WHERE NOT EXISTS (SELECT 1 FROM users WHERE username='admin1')
+    SELECT 'admin', %s, 'admin'
+    WHERE NOT EXISTS (SELECT 1 FROM users WHERE username='admin')
     """, (admin_password,))
     
+    # Второй админ
     cur.execute("""
     INSERT INTO users (username, password_hash, role)
     SELECT 'admin2', %s, 'admin'
@@ -277,7 +280,7 @@ def login():
         else:
             error = 'Неверный логин или пароль'
 
-    # Показываем форму входа даже если пользователь уже залогинен
+    # Показываем форму входа
     return render_template('login.html', error=error)
 
 
