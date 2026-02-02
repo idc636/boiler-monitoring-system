@@ -245,7 +245,7 @@ def build_boilers_view(records):
 def index():
     if not auth():
         return redirect(url_for('login'))
-
+    
     c = get_conn().cursor()
     c.execute("""
         SELECT * FROM records
@@ -277,52 +277,11 @@ def login():
         else:
             error = 'Неверный логин или пароль'
 
+    # Показываем форму входа даже если пользователь уже залогинен
     return render_template('login.html', error=error)
 
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    error = None
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        
-        if not username or not password:
-            error = 'Логин и пароль обязательны'
-        elif len(password) < 4:
-            error = 'Пароль должен быть не менее 4 символов'
-        else:
-            try:
-                c = get_conn().cursor()
-                pwd_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-                c.execute("INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)", 
-                         (username, pwd_hash, 'operator'))
-                c.connection.commit()
-                c.connection.close()
-                return redirect(url_for('login'))
-            except psycopg2.IntegrityError:
-                c.connection.close()
-                error = 'Логин уже занят'
-
-    return render_template('register.html', error=error)
-
-
-@app.route('/users')
-def users_list():
-    if not admin():
-        return redirect(url_for('login'))
-    
-    c = get_conn().cursor()
-    c.execute("SELECT id, username, role FROM users ORDER BY role DESC, username")
-    users = c.fetchall()
-    c.execute("SELECT username, role FROM users WHERE id=%s", (session['user_id'],))
-    current_user = c.fetchone()
-    c.connection.close()
-    
-    return render_template('users.html', users=users, user=current_user)
-
-
-@app.route('/logout', methods=['POST'])
+@app.route('/logout')
 def logout():
     session.pop('user_id', None)
     return redirect(url_for('login'))
