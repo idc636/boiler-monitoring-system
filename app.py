@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for
 import psycopg2
 from psycopg2.extras import RealDictCursor
-import os, bcrypt
+import os
 
 app = Flask(__name__)
 app.secret_key = 'secret'
@@ -19,7 +19,7 @@ def init_db():
     CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         username VARCHAR(50) UNIQUE NOT NULL,
-        password_hash VARCHAR(128) NOT NULL,
+        password VARCHAR(128) NOT NULL,
         role VARCHAR(20) DEFAULT 'operator'
     );
 
@@ -76,32 +76,6 @@ def init_db():
         notes TEXT
     );
     """)
-
-    # Создаём/обновляем админов
-    admin_password = bcrypt.hashpw('1313'.encode(), bcrypt.gensalt()).decode()
-    
-    # Старый админ (оставляем как есть)
-    cur.execute("""
-    INSERT INTO users (username, password_hash, role)
-    SELECT 'admin', %s, 'admin'
-    WHERE NOT EXISTS (SELECT 1 FROM users WHERE username='admin')
-    """, (admin_password,))
-    
-    # Второй админ
-    cur.execute("""
-    INSERT INTO users (username, password_hash, role)
-    SELECT 'admin2', %s, 'admin'
-    WHERE NOT EXISTS (SELECT 1 FROM users WHERE username='admin2')
-    """, (admin_password,))
-
-    # Создаём обычных пользователей
-    user_password = bcrypt.hashpw('1313'.encode(), bcrypt.gensalt()).decode()
-    for i in range(1, 9):
-        cur.execute("""
-        INSERT INTO users (username, password_hash, role)
-        SELECT %s, %s, 'operator'
-        WHERE NOT EXISTS (SELECT 1 FROM users WHERE username=%s)
-        """, (f'user{i}', user_password, f'user{i}'))
 
     conn.commit()
     conn.close()
@@ -274,7 +248,8 @@ def login():
         u = c.fetchone()
         c.connection.close()
 
-        if u and bcrypt.checkpw(request.form['password'].encode(), u['password_hash'].encode()):
+        # Простая проверка пароля (без хеширования)
+        if u and request.form['password'] == u['password']:
             session['user_id'] = u['id']
             return redirect(url_for('index'))
         else:
