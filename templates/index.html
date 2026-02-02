@@ -13,6 +13,7 @@ thead th { background:#d9d9d9; }
 .wrap { overflow-x:auto; }
 .editable { cursor:pointer; }
 .editable:hover { background:#e3f2fd; }
+.static { background:#f5f5f5; cursor:default; }
 .archive-btn {
     background:#ffc107;
     color:black;
@@ -83,8 +84,8 @@ thead th { background:#d9d9d9; }
 <tr>
     {% if i == 0 %}
     <td rowspan="{{ boiler.rows }}">{{ loop.index }}</td>
-    <td rowspan="{{ boiler.rows }}" class="editable" data-field="boiler_model" data-id="{{ i+1 }}">{{ boiler.boiler_models[i] }}</td>
-    <td rowspan="{{ boiler.rows }}" class="editable" data-field="equipment_year" data-id="{{ i+1 }}">{{ boiler.years[0].year if boiler.years else '' }}</td>
+    <td rowspan="{{ boiler.rows }}" class="static">{{ boiler.boiler_models[i] }}</td>
+    <td rowspan="{{ boiler.rows }}" class="static">{{ boiler.years[0].year if boiler.years else '' }}</td>
     {% endif %}
     
     <td class="editable" data-field="time_interval" data-id="{{ i+1 }}">{{ boiler.times[i] }}</td>
