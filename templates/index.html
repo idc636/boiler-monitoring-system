@@ -18,7 +18,7 @@ thead th { background:#d9d9d9; }
 <body>
 
 <h3>АО «Ямалкомунэнерго» — Суточный журнал (30.01.2026)</h3>
-
+<button onclick="archiveRecords()" style="background:#ffc107;color:black;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;margin-bottom:15px;font-weight:bold;">🗄️ Архивировать данные</button>
 <div class="wrap">
 <table>
 <thead>
@@ -775,7 +775,25 @@ document.querySelectorAll('.editable').forEach(cell => {
         input.focus();
     });
 });
-</script>
+function archiveRecords() {
+    if (!confirm('Архивировать все данные? После этого основная таблица будет очищена.')) {
+        return;
+    }
+    
+    fetch('/archive', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'ok') {
+            alert('Данные успешно архивированы! Таблица очищена.');
+            location.reload();
+        } else {
+            alert('Ошибка: ' + (data.message || 'неизвестная ошибка'));
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert('Ошибка связи с сервером');
+    });
+}
 
-</body>
-</html>
+</script>
