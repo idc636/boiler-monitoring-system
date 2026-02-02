@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f2f2f2; margin: 20px; }
+        .header { background: white; padding: 15px; border-radius: 5px; margin-bottom: 15px; }
+        h1 { color: #0047AB; margin: 0 0 10px 0; }
+        .user-info { text-align: right; margin-bottom: 10px; }
+        .logout-btn { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+        table { border-collapse: collapse; width: 100%; background: white; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #0047AB; color: white; }
+        tr:hover { background-color: #f9f9f9; }
+        .admin { color: #dc3545; font-weight: bold; }
+        .operator { color: #28a745; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="user-info">
+            👤 {{ user.username }} ({{ user.role }})
+            <form method="POST" action="{{ url_for('logout') }}" style="display: inline;">
+                <button type="submit" class="logout-btn">Выход</button>
+            </form>
+        </div>
+        <h1>👥 Список пользователей</h1>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Логин</th>
+                <th>Роль</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in users %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.username }}</td>
+                <td>
+                    {% if u.role == 'admin' %}
+                    <span class="admin">Админ</span>
+                    {% else %}
+                    <span class="operator">Оператор</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
