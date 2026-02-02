@@ -738,11 +738,17 @@ thead th { background:#d9d9d9; }
 </tbody>
 </table>
 </div>
-
 <script>
 document.querySelectorAll('.editable').forEach(cell => {
     cell.addEventListener('click', function() {
+
         const field = this.getAttribute('data-field');
+
+        // 🔒 ЗАПРЕТ РЕДАКТИРОВАНИЯ
+        if (field === 'boiler_model' || field === 'equipment_year') {
+            return;
+        }
+
         const id = this.getAttribute('data-id');
         const currentValue = this.textContent;
 
@@ -780,25 +786,4 @@ document.querySelectorAll('.editable').forEach(cell => {
         input.focus();
     });
 });
-function archiveRecords() {
-    if (!confirm('Архивировать все данные? После этого основная таблица будет очищена.')) {
-        return;
-    }
-    
-    fetch('/archive', { method: 'POST' })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'ok') {
-            alert('Данные успешно архивированы! Таблица очищена.');
-            location.reload();
-        } else {
-            alert('Ошибка: ' + (data.message || 'неизвестная ошибка'));
-        }
-    })
-    .catch(error => {
-        console.error('Ошибка:', error);
-        alert('Ошибка связи с сервером');
-    });
-}
-
 </script>
