@@ -358,17 +358,16 @@ def add():
 
 
 # ===================== START =====================
-"@app.route('/archive', methods=['POST'])
+@app.route('/archive', methods=['POST'])
 def archive():
     if not admin():
         return jsonify({'status': 'error', 'message': 'Нет прав'})
 
     c = get_conn().cursor()
     
-    # Копируем все записи в архив
     c.execute("""
         INSERT INTO records_archive (
-            archive_date,  -- ДОБАВЬ ЭТУ СТРОКУ
+            archive_date,
             original_id, date, boiler_number, boiler_location, boiler_contact,
             equipment_number, boiler_model, equipment_year, time_interval,
             boilers_working, boilers_reserve, boilers_repair,
@@ -384,7 +383,7 @@ def archive():
             water_consumption_daily, staff_night, staff_day, notes
         )
         SELECT 
-            CURRENT_DATE,  -- ДОБАВЬ ЭТУ СТРОКУ
+            CURRENT_DATE,
             id, date, boiler_number, boiler_location, boiler_contact,
             equipment_number, boiler_model, equipment_year, time_interval,
             boilers_working, boilers_reserve, boilers_repair,
@@ -401,13 +400,12 @@ def archive():
         FROM records
     """)
     
-    # Очищаем основную таблицу
     c.execute("DELETE FROM records")
     
     c.connection.commit()
     c.connection.close()
     
-    return jsonify({'status': 'ok', 'message': 'Данные успешно архивированы'})"
+    return jsonify({'status': 'ok', 'message': 'Данные успешно архивированы'})
 
 # ⬇️ ДОБАВЬ ЭТОТ БЛОК СЮДА ⬇️
 from datetime import date
