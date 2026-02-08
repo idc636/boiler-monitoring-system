@@ -358,7 +358,7 @@ def add():
 
 
 # ===================== START =====================
-@app.route('/archive', methods=['POST'])
+"@app.route('/archive', methods=['POST'])
 def archive():
     if not admin():
         return jsonify({'status': 'error', 'message': 'Нет прав'})
@@ -407,7 +407,7 @@ def archive():
     c.connection.commit()
     c.connection.close()
     
-    return jsonify({'status': 'ok', 'message': 'Данные успешно архивированы'})
+    return jsonify({'status': 'ok', 'message': 'Данные успешно архивированы'})"
 
 # ⬇️ ДОБАВЬ ЭТОТ БЛОК СЮДА ⬇️
 from datetime import date
