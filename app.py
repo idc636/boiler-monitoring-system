@@ -368,6 +368,7 @@ def archive():
     # Копируем все записи в архив
     c.execute("""
         INSERT INTO records_archive (
+            archive_date,  -- ДОБАВЬ ЭТУ СТРОКУ
             original_id, date, boiler_number, boiler_location, boiler_contact,
             equipment_number, boiler_model, equipment_year, time_interval,
             boilers_working, boilers_reserve, boilers_repair,
@@ -383,6 +384,7 @@ def archive():
             water_consumption_daily, staff_night, staff_day, notes
         )
         SELECT 
+            CURRENT_DATE,  -- ДОБАВЬ ЭТУ СТРОКУ
             id, date, boiler_number, boiler_location, boiler_contact,
             equipment_number, boiler_model, equipment_year, time_interval,
             boilers_working, boilers_reserve, boilers_repair,
