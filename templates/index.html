@@ -14,7 +14,7 @@
         .editable { cursor:pointer; }
         .editable:hover { background:#e3f2fd; }
         
-        /* ДОБАВЛЕНО: стили для переключателя */
+        /* Стили для переключателя */
         .mode-switch {
             display: flex;
             gap: 10px;
@@ -59,7 +59,7 @@
 <body>
     <h3>АО «Ямалкомунэнерго» — Суточный журнал ({{ journal_date }})</h3>
     
-    <!-- ДОБАВЛЕНО: переключатель режимов -->
+    <!-- Переключатель режимов -->
     <div class="mode-switch">
         <button class="mode-btn current" onclick="switchMode('current')">
             🟢 Текущие данные
@@ -289,7 +289,7 @@
     </div>
 
     <script>
-        // ДОБАВЛЕНО: переключение режимов
+        // Переключение режимов
         function switchMode(mode) {
             const url = new URL(window.location.href);
             url.searchParams.set('mode', mode);
@@ -312,7 +312,7 @@
             window.location.href = url.toString();
         }
         
-        // ДОБАВЛЕНО: загрузка архива при смене даты
+        // Загрузка архива при смене даты
         function loadArchive() {
             const date = document.getElementById('archiveDate').value;
             const url = new URL(window.location.href);
