@@ -290,92 +290,51 @@
     </div>
 
     <script>
-        // Переключение режимов
-        function switchMode(mode) {
-            const url = new URL(window.location.href);
-            url.searchParams.set('mode', mode);
-            
-            if (mode === 'archive') {
-                document.getElementById('archiveControls').classList.add('show');
-                const dateSelect = document.getElementById('archiveDate');
-                if (dateSelect.options.length > 0 && !url.searchParams.has('date')) {
-                    url.searchParams.set('date', dateSelect.value);
+document.querySelectorAll('.editable').forEach(cell => {
+    cell.addEventListener('click', function() {
+        const field = this.getAttribute('data-field');
+        // 🔒 ЗАПРЕТ РЕДАКТИРОВАНИЯ критичных полей
+        if (field === 'boiler_model' || field === 'equipment_year') {
+            return;
+        }
+        
+        const id = this.getAttribute('data-id');
+        const currentValue = this.textContent;
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = currentValue;
+        
+        input.addEventListener('blur', function() {
+            const newValue = this.value;
+            fetch('/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ field: field, value: newValue, id: id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    cell.textContent = newValue;
+                } else {
+                    alert('Ошибка сохранения');
                 }
-            } else {
-                document.getElementById('archiveControls').classList.remove('show');
-                url.searchParams.delete('date');
-            }
-            
-            window.location.href = url.toString();
-        }
-        
-        // Загрузка архива при смене даты
-        function loadArchive() {
-            const date = document.getElementById('archiveDate').value;
-            const url = new URL(window.location.href);
-            url.searchParams.set('mode', 'archive');
-            url.searchParams.set('date', date);
-            window.location.href = url.toString();
-        }
-        
-        // Инициализация интерфейса
-        document.addEventListener('DOMContentLoaded', function() {
-            const mode = new URLSearchParams(window.location.search).get('mode') || 'current';
-            
-            if (mode === 'archive') {
-                document.getElementById('archiveControls').classList.add('show');
-            }
-            
-            // Только для режима current разрешаем редактирование
-            if (mode === 'current') {
-                document.querySelectorAll('.editable').forEach(cell => {
-                    cell.addEventListener('click', function() {
-                        const field = this.getAttribute('data-field');
-                        
-                        // 🔒 ЗАПРЕТ РЕДАКТИРОВАНИЯ критичных полей
-                        if (field === 'boiler_model' || field === 'equipment_year') {
-                            return;
-                        }
-                        
-                        const id = this.getAttribute('data-id');
-                        const currentValue = this.textContent;
-                        
-                        const input = document.createElement('input');
-                        input.type = 'text';
-                        input.value = currentValue;
-                        
-                        input.addEventListener('blur', function() {
-                            const newValue = this.value;
-                            fetch('/update', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ field: field, value: newValue, id: id })
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.status === 'ok') {
-                                    cell.textContent = newValue;
-                                } else {
-                                    alert('Ошибка сохранения');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Ошибка:', error);
-                                alert('Ошибка связи с сервером');
-                            });
-                        });
-                        
-                        input.addEventListener('keypress', function(e) {
-                            if (e.key === 'Enter') this.blur();
-                        });
-                        
-                        this.innerHTML = '';
-                        this.appendChild(input);
-                        input.focus();
-                    });
-                });
-            }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка связи с сервером');
+            });
         });
-    </script>
+        
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') this.blur();
+        });
+        
+        this.innerHTML = '';
+        this.appendChild(input);
+        input.focus();
+    });
+});
+</script>
 </body>
 </html>
