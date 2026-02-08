@@ -14,69 +14,107 @@ DATABASE_URL = os.environ.get('DATABASE_URL') or \
 def init_db():
     conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
     cur = conn.cursor()
-
     cur.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        username VARCHAR(50) UNIQUE NOT NULL,
-        password VARCHAR(128) NOT NULL,
-        role VARCHAR(20) DEFAULT 'operator'
-    );
-
-    CREATE TABLE IF NOT EXISTS records (
-        id SERIAL PRIMARY KEY,
-        date TEXT,
-        boiler_number INTEGER,
-        boiler_location TEXT,
-        boiler_contact TEXT,
-
-        equipment_number INTEGER,
-        boiler_model TEXT,
-        equipment_year TEXT,
-        time_interval TEXT,
-
-        boilers_working TEXT,
-        boilers_reserve TEXT,
-        boilers_repair TEXT,
-
-        pumps_working TEXT,
-        pumps_reserve TEXT,
-        pumps_repair TEXT,
-
-        feed_pumps_working TEXT,
-        feed_pumps_reserve TEXT,
-        feed_pumps_repair TEXT,
-
-        fuel_tanks_total TEXT,
-        fuel_tank_volume TEXT,
-        fuel_tanks_working TEXT,
-        fuel_tanks_reserve TEXT,
-        fuel_morning_balance TEXT,
-        fuel_daily_consumption TEXT,
-        fuel_tanks_repair TEXT,
-
-        water_tanks_total TEXT,
-        water_tank_volume TEXT,
-        water_tanks_working TEXT,
-        water_tanks_reserve TEXT,
-        water_tanks_repair TEXT,
-
-        temp_outdoor TEXT,
-        temp_supply TEXT,
-        temp_return TEXT,
-        temp_graph_supply TEXT,
-        temp_graph_return TEXT,
-
-        pressure_supply TEXT,
-        pressure_return TEXT,
-
-        water_consumption_daily TEXT,
-        staff_night TEXT,
-        staff_day TEXT,
-        notes TEXT
-    );
+        CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            username VARCHAR(50) UNIQUE NOT NULL,
+            password VARCHAR(128) NOT NULL,
+            role VARCHAR(20) DEFAULT 'operator'
+        );
+        
+        CREATE TABLE IF NOT EXISTS records (
+            id SERIAL PRIMARY KEY,
+            date TEXT,
+            boiler_number INTEGER,
+            boiler_location TEXT,
+            boiler_contact TEXT,
+            equipment_number INTEGER,
+            boiler_model TEXT,
+            equipment_year TEXT,
+            time_interval TEXT,
+            boilers_working TEXT,
+            boilers_reserve TEXT,
+            boilers_repair TEXT,
+            pumps_working TEXT,
+            pumps_reserve TEXT,
+            pumps_repair TEXT,
+            feed_pumps_working TEXT,
+            feed_pumps_reserve TEXT,
+            feed_pumps_repair TEXT,
+            fuel_tanks_total TEXT,
+            fuel_tank_volume TEXT,
+            fuel_tanks_working TEXT,
+            fuel_tanks_reserve TEXT,
+            fuel_morning_balance TEXT,
+            fuel_daily_consumption TEXT,
+            fuel_tanks_repair TEXT,
+            water_tanks_total TEXT,
+            water_tank_volume TEXT,
+            water_tanks_working TEXT,
+            water_tanks_reserve TEXT,
+            water_tanks_repair TEXT,
+            temp_outdoor TEXT,
+            temp_supply TEXT,
+            temp_return TEXT,
+            temp_graph_supply TEXT,
+            temp_graph_return TEXT,
+            pressure_supply TEXT,
+            pressure_return TEXT,
+            water_consumption_daily TEXT,
+            staff_night TEXT,
+            staff_day TEXT,
+            notes TEXT
+        );
+        
+        -- ДОБАВЛЕНО: таблица архива
+        CREATE TABLE IF NOT EXISTS records_archive (
+            id SERIAL PRIMARY KEY,
+            archive_date DATE NOT NULL,
+            original_id INTEGER,
+            date TEXT,
+            boiler_number INTEGER,
+            boiler_location TEXT,
+            boiler_contact TEXT,
+            equipment_number INTEGER,
+            boiler_model TEXT,
+            equipment_year TEXT,
+            time_interval TEXT,
+            boilers_working TEXT,
+            boilers_reserve TEXT,
+            boilers_repair TEXT,
+            pumps_working TEXT,
+            pumps_reserve TEXT,
+            pumps_repair TEXT,
+            feed_pumps_working TEXT,
+            feed_pumps_reserve TEXT,
+            feed_pumps_repair TEXT,
+            fuel_tanks_total TEXT,
+            fuel_tank_volume TEXT,
+            fuel_tanks_working TEXT,
+            fuel_tanks_reserve TEXT,
+            fuel_morning_balance TEXT,
+            fuel_daily_consumption TEXT,
+            fuel_tanks_repair TEXT,
+            water_tanks_total TEXT,
+            water_tank_volume TEXT,
+            water_tanks_working TEXT,
+            water_tanks_reserve TEXT,
+            water_tanks_repair TEXT,
+            temp_outdoor TEXT,
+            temp_supply TEXT,
+            temp_return TEXT,
+            temp_graph_supply TEXT,
+            temp_graph_return TEXT,
+            pressure_supply TEXT,
+            pressure_return TEXT,
+            water_consumption_daily TEXT,
+            staff_night TEXT,
+            staff_day TEXT,
+            notes TEXT
+        );
+        
+        CREATE INDEX IF NOT EXISTS idx_records_archive_date ON records_archive(archive_date);
     """)
-
     conn.commit()
     conn.close()
 
