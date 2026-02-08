@@ -109,181 +109,183 @@
                 </tr>
             </thead>
             <tbody>
-                {% for boiler in boilers %}
-                {% set boiler_index = loop.index0 %}
-                
-                <!-- КОТЕЛЬНАЯ -->
-                <tr class="section">
-                    <td colspan="24">
-                        Котельная №{{ boiler.number }} {{ boiler.location }} {{ boiler.contact }}
-                    </td>
-                </tr>
-                
-                <!-- МАРКА (цикл по времени) -->
-                {% for i in range(boiler.rows) %}
-                <tr>
-                    {% if i == 0 %}
-                    <td rowspan="{{ boiler.rows }}">{{ loop.index }}</td>
-                    <td rowspan="{{ boiler.rows }}" 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="boiler_model" data-id="{{ boiler_index * 100 + 1 }}"
-                        {% endif %}>
-                        {{ boiler.boiler_models[i] }}
-                    </td>
-                    <td rowspan="{{ boiler.rows }}" 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="equipment_year" data-id="{{ boiler_index * 100 + 1 }}"
-                        {% endif %}>
-                        {{ boiler.years[0].year if boiler.years else '' }}
-                    </td>
-                    {% endif %}
-                    
-                    <td 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="time_interval" data-id="{{ boiler_index * 100 + i + 1 }}"
-                        {% endif %}>
-                        {{ boiler.times[i] }}
-                    </td>
-                    
-                    <td 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="boilers_working" data-id="{{ boiler_index * 100 + i + 1 }}"
-                        {% endif %}>
-                        {{ boiler.boilers.work[i] }}
-                    </td>
-                    <td 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="boilers_reserve" data-id="{{ boiler_index * 100 + i + 1 }}"
-                        {% endif %}>
-                        {{ boiler.boilers.reserve[i] }}
-                    </td>
-                    
-                    {% if i == 0 %}
-                    <td rowspan="{{ boiler.rows }}" 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="boilers_repair" data-id="{{ boiler_index * 100 + 1 }}"
-                        {% endif %}>
-                        {{ boiler.boilers.repair }}
-                    </td>
-                    {% endif %}
-                    
-                    <td 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="pumps_working" data-id="{{ boiler_index * 100 + i + 1 }}"
-                        {% endif %}>
-                        {{ boiler.network_pumps.work[i] }}
-                    </td>
-                    <td 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="pumps_reserve" data-id="{{ boiler_index * 100 + i + 1 }}"
-                        {% endif %}>
-                        {{ boiler.network_pumps.reserve[i] }}
-                    </td>
-                    
-                    {% if i == 0 %}
-                    <td rowspan="{{ boiler.rows }}" 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="pumps_repair" data-id="{{ boiler_index * 100 + 1 }}"
-                        {% endif %}>
-                        {{ boiler.network_pumps.repair }}
-                    </td>
-                    {% endif %}
-                    
-                    <td 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="feed_pumps_working" data-id="{{ boiler_index * 100 + i + 1 }}"
-                        {% endif %}>
-                        {{ boiler.feed_pumps.work[i] }}
-                    </td>
-                    <td 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="feed_pumps_reserve" data-id="{{ boiler_index * 100 + i + 1 }}"
-                        {% endif %}>
-                        {{ boiler.feed_pumps.reserve[i] }}
-                    </td>
-                    
-                    {% if i == 0 %}
-                    <td rowspan="{{ boiler.rows }}" 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="feed_pumps_repair" data-id="{{ boiler_index * 100 + 1 }}"
-                        {% endif %}>
-                        {{ boiler.feed_pumps.repair }}
-                    </td>
-                    {% endif %}
-                    
-                    <td 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="temp_outdoor" data-id="{{ boiler_index * 100 + i + 1 }}"
-                        {% endif %}>
-                        {{ boiler.temps[i][0] }}
-                    </td>
-                    <td 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="temp_supply" data-id="{{ boiler_index * 100 + i + 1 }}"
-                        {% endif %}>
-                        {{ boiler.temps[i][1] }}
-                    </td>
-                    <td 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="temp_return" data-id="{{ boiler_index * 100 + i + 1 }}"
-                        {% endif %}>
-                        {{ boiler.temps[i][2] }}
-                    </td>
-                    <td 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="temp_graph_supply" data-id="{{ boiler_index * 100 + i + 1 }}"
-                        {% endif %}>
-                        {{ boiler.graph_temps[i][0] }}
-                    </td>
-                    <td 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="temp_graph_return" data-id="{{ boiler_index * 100 + i + 1 }}"
-                        {% endif %}>
-                        {{ boiler.graph_temps[i][1] }}
-                    </td>
-                    <td 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="pressure_supply" data-id="{{ boiler_index * 100 + i + 1 }}"
-                        {% endif %}>
-                        {{ boiler.pressure[i][0] }}
-                    </td>
-                    <td 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="pressure_return" data-id="{{ boiler_index * 100 + i + 1 }}"
-                        {% endif %}>
-                        {{ boiler.pressure[i][1] }}
-                    </td>
-                    
-                    {% if i == 0 %}
-                    <td rowspan="{{ boiler.rows }}" 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="water_consumption_daily" data-id="{{ boiler_index * 100 + 1 }}"
-                        {% endif %}>
-                        {{ boiler.water_consumption }}
-                    </td>
-                    <td rowspan="{{ boiler.rows }}" 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="staff_night" data-id="{{ boiler_index * 100 + 1 }}"
-                        {% endif %}>
-                        {{ boiler.staff.night }}
-                    </td>
-                    <td rowspan="{{ boiler.rows }}" 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="staff_day" data-id="{{ boiler_index * 100 + 1 }}"
-                        {% endif %}>
-                        {{ boiler.staff.day }}
-                    </td>
-                    <td rowspan="{{ boiler.rows }}" 
-                        {% if mode == 'current' %}
-                        class="editable" data-field="notes" data-id="{{ boiler_index * 100 + 1 }}"
-                        {% endif %}>
-                        {{ boiler.notes }}
-                    </td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-                {% endfor %}
-            </tbody>
+    {% for boiler in boilers %}
+    {% set boiler_index = loop.index0 %}
+    
+    <!-- КОТЕЛЬНАЯ -->
+    <tr class="section">
+        <td colspan="24">
+            Котельная №{{ boiler.number }} {{ boiler.location }} {{ boiler.contact }}
+        </td>
+    </tr>
+    
+    <!-- МАРКА (цикл по времени) -->
+    {% for i in range(boiler.rows) %}
+    {% set record_id = boiler.record_ids[i] %}
+    {% set group_id = boiler.record_ids[0] %}  <!-- id первой записи в группе -->
+    <tr>
+        {% if i == 0 %}
+        <td rowspan="{{ boiler.rows }}">{{ loop.index }}</td>
+        <td rowspan="{{ boiler.rows }}" 
+            {% if mode == 'current' %}
+            class="editable" data-field="boiler_model" data-id="{{ group_id }}"
+            {% endif %}>
+            {{ boiler.boiler_models[i] }}
+        </td>
+        <td rowspan="{{ boiler.rows }}" 
+            {% if mode == 'current' %}
+            class="editable" data-field="equipment_year" data-id="{{ group_id }}"
+            {% endif %}>
+            {{ boiler.years[0].year if boiler.years else '' }}
+        </td>
+        {% endif %}
+        
+        <td 
+            {% if mode == 'current' %}
+            class="editable" data-field="time_interval" data-id="{{ record_id }}"
+            {% endif %}>
+            {{ boiler.times[i] }}
+        </td>
+        
+        <td 
+            {% if mode == 'current' %}
+            class="editable" data-field="boilers_working" data-id="{{ record_id }}"
+            {% endif %}>
+            {{ boiler.boilers.work[i] }}
+        </td>
+        <td 
+            {% if mode == 'current' %}
+            class="editable" data-field="boilers_reserve" data-id="{{ record_id }}"
+            {% endif %}>
+            {{ boiler.boilers.reserve[i] }}
+        </td>
+        
+        {% if i == 0 %}
+        <td rowspan="{{ boiler.rows }}" 
+            {% if mode == 'current' %}
+            class="editable" data-field="boilers_repair" data-id="{{ group_id }}"
+            {% endif %}>
+            {{ boiler.boilers.repair }}
+        </td>
+        {% endif %}
+        
+        <td 
+            {% if mode == 'current' %}
+            class="editable" data-field="pumps_working" data-id="{{ record_id }}"
+            {% endif %}>
+            {{ boiler.network_pumps.work[i] }}
+        </td>
+        <td 
+            {% if mode == 'current' %}
+            class="editable" data-field="pumps_reserve" data-id="{{ record_id }}"
+            {% endif %}>
+            {{ boiler.network_pumps.reserve[i] }}
+        </td>
+        
+        {% if i == 0 %}
+        <td rowspan="{{ boiler.rows }}" 
+            {% if mode == 'current' %}
+            class="editable" data-field="pumps_repair" data-id="{{ group_id }}"
+            {% endif %}>
+            {{ boiler.network_pumps.repair }}
+        </td>
+        {% endif %}
+        
+        <td 
+            {% if mode == 'current' %}
+            class="editable" data-field="feed_pumps_working" data-id="{{ record_id }}"
+            {% endif %}>
+            {{ boiler.feed_pumps.work[i] }}
+        </td>
+        <td 
+            {% if mode == 'current' %}
+            class="editable" data-field="feed_pumps_reserve" data-id="{{ record_id }}"
+            {% endif %}>
+            {{ boiler.feed_pumps.reserve[i] }}
+        </td>
+        
+        {% if i == 0 %}
+        <td rowspan="{{ boiler.rows }}" 
+            {% if mode == 'current' %}
+            class="editable" data-field="feed_pumps_repair" data-id="{{ group_id }}"
+            {% endif %}>
+            {{ boiler.feed_pumps.repair }}
+        </td>
+        {% endif %}
+        
+        <td 
+            {% if mode == 'current' %}
+            class="editable" data-field="temp_outdoor" data-id="{{ record_id }}"
+            {% endif %}>
+            {{ boiler.temps[i][0] }}
+        </td>
+        <td 
+            {% if mode == 'current' %}
+            class="editable" data-field="temp_supply" data-id="{{ record_id }}"
+            {% endif %}>
+            {{ boiler.temps[i][1] }}
+        </td>
+        <td 
+            {% if mode == 'current' %}
+            class="editable" data-field="temp_return" data-id="{{ record_id }}"
+            {% endif %}>
+            {{ boiler.temps[i][2] }}
+        </td>
+        <td 
+            {% if mode == 'current' %}
+            class="editable" data-field="temp_graph_supply" data-id="{{ record_id }}"
+            {% endif %}>
+            {{ boiler.graph_temps[i][0] }}
+        </td>
+        <td 
+            {% if mode == 'current' %}
+            class="editable" data-field="temp_graph_return" data-id="{{ record_id }}"
+            {% endif %}>
+            {{ boiler.graph_temps[i][1] }}
+        </td>
+        <td 
+            {% if mode == 'current' %}
+            class="editable" data-field="pressure_supply" data-id="{{ record_id }}"
+            {% endif %}>
+            {{ boiler.pressure[i][0] }}
+        </td>
+        <td 
+            {% if mode == 'current' %}
+            class="editable" data-field="pressure_return" data-id="{{ record_id }}"
+            {% endif %}>
+            {{ boiler.pressure[i][1] }}
+        </td>
+        
+        {% if i == 0 %}
+        <td rowspan="{{ boiler.rows }}" 
+            {% if mode == 'current' %}
+            class="editable" data-field="water_consumption_daily" data-id="{{ group_id }}"
+            {% endif %}>
+            {{ boiler.water_consumption }}
+        </td>
+        <td rowspan="{{ boiler.rows }}" 
+            {% if mode == 'current' %}
+            class="editable" data-field="staff_night" data-id="{{ group_id }}"
+            {% endif %}>
+            {{ boiler.staff.night }}
+        </td>
+        <td rowspan="{{ boiler.rows }}" 
+            {% if mode == 'current' %}
+            class="editable" data-field="staff_day" data-id="{{ group_id }}"
+            {% endif %}>
+            {{ boiler.staff.day }}
+        </td>
+        <td rowspan="{{ boiler.rows }}" 
+            {% if mode == 'current' %}
+            class="editable" data-field="notes" data-id="{{ group_id }}"
+            {% endif %}>
+            {{ boiler.notes }}
+        </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    {% endfor %}
+</tbody>
         </table>
     </div>
 
