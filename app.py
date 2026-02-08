@@ -248,14 +248,14 @@ def login():
         u = c.fetchone()
         c.connection.close()
 
-        # РџСЂРѕСЃС‚Р°СЏ РїСЂРѕРІРµСЂРєР° РїР°СЂРѕР»СЏ (Р±РµР· С…РµС€РёСЂРѕРІР°РЅРёСЏ)
+        # Простая проверка пароля (без хеширования)
         if u and request.form['password'] == u['password']:
             session['user_id'] = u['id']
             return redirect(url_for('index'))
         else:
-            error = 'РќРµРІРµСЂРЅС‹Р№ Р»РѕРіРёРЅ РёР»Рё РїР°СЂРѕР»СЊ'
+            error = 'Неверный логин или пароль'
 
-    # РџРѕРєР°Р·С‹РІР°РµРј С„РѕСЂРјСѓ РІС…РѕРґР°
+    # Показываем форму входа
     return render_template('login.html', error=error)
 
 
@@ -268,11 +268,11 @@ def logout():
 @app.route('/update', methods=['POST'])
 def update():
     if not admin():
-        return jsonify({'status': 'error', 'message': 'РќРµС‚ РїСЂР°РІ'})
+        return jsonify({'status': 'error', 'message': 'Нет прав'})
 
     d = request.get_json()
     
-    # Р‘РµР·РѕРїР°СЃРЅС‹Р№ СЃРїРёСЃРѕРє РїРѕР»РµР№ РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ
+    # Безопасный список полей для обновления
     allowed_fields = [
         'boiler_model', 'equipment_year', 'time_interval',
         'boilers_working', 'boilers_reserve', 'boilers_repair',
@@ -289,7 +289,7 @@ def update():
     ]
 
     if d['field'] not in allowed_fields:
-        return jsonify({'status': 'error', 'message': 'РќРµРґРѕРїСѓСЃС‚РёРјРѕРµ РїРѕР»Рµ'})
+        return jsonify({'status': 'error', 'message': 'Недопустимое поле'})
 
     c = get_conn().cursor()
     c.execute(f"UPDATE records SET {d['field']}=%s WHERE id=%s", (d['value'], d['id']))
@@ -301,7 +301,7 @@ def update():
 @app.route('/add', methods=['POST'])
 def add():
     if not admin():
-        return jsonify({'status': 'error', 'message': 'РќРµС‚ РїСЂР°РІ'})
+        return jsonify({'status': 'error', 'message': 'Нет прав'})
 
     c = get_conn().cursor()
     c.execute("SELECT MAX(equipment_number) AS m FROM records WHERE boiler_number=1")
@@ -312,7 +312,7 @@ def add():
             date, boiler_number, boiler_location, boiler_contact,
             equipment_number, boiler_model, equipment_year, time_interval
         ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-    """, ('30.01.2026', 1, 'Р‘РµР»РѕСЏСЂСЃРє', '83499323373', num, '', '', '00:00'))
+    """, ('30.01.2026', 1, 'Белоярск', '83499323373', num, '', '', '00:00'))
 
     c.connection.commit()
     c.connection.close()
@@ -323,11 +323,11 @@ def add():
 @app.route('/archive', methods=['POST'])
 def archive():
     if not admin():
-        return jsonify({'status': 'error', 'message': 'РќРµС‚ РїСЂР°РІ'})
+        return jsonify({'status': 'error', 'message': 'Нет прав'})
 
     c = get_conn().cursor()
     
-    # РљРѕРїРёСЂСѓРµРј РІСЃРµ Р·Р°РїРёСЃРё РІ Р°СЂС…РёРІ
+    # Копируем все записи в архив
     c.execute("""
         INSERT INTO records_archive (
             original_id, date, boiler_number, boiler_location, boiler_contact,
@@ -361,13 +361,13 @@ def archive():
         FROM records
     """)
     
-    # РћС‡РёС‰Р°РµРј РѕСЃРЅРѕРІРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ
+    # Очищаем основную таблицу
     c.execute("DELETE FROM records")
     
     c.connection.commit()
     c.connection.close()
     
-    return jsonify({'status': 'ok', 'message': 'Р”Р°РЅРЅС‹Рµ СѓСЃРїРµС€РЅРѕ Р°СЂС…РёРІРёСЂРѕРІР°РЅС‹'})
+    return jsonify({'status': 'ok', 'message': 'Данные успешно архивированы'})
 if __name__ == '__main__':
     init_db()
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
