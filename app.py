@@ -2,10 +2,10 @@ from flask import Flask, render_template, request, jsonify, redirect, session, u
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
+from datetime import date, datetime, timedelta
 
 app = Flask(__name__)
 app.secret_key = 'secret'
-
 DATABASE_URL = os.environ.get('DATABASE_URL') or \
     "postgresql://postgres:TzhRuKuliqaGilBouUfRjGtqZnBnubMN@switchback.proxy.rlwy.net:57256/railway"
 
@@ -20,6 +20,7 @@ def init_db():
             password VARCHAR(128) NOT NULL,
             role VARCHAR(20) DEFAULT 'operator'
         );
+        
         CREATE TABLE IF NOT EXISTS records (
             id SERIAL PRIMARY KEY,
             date TEXT,
@@ -63,10 +64,56 @@ def init_db():
             staff_day TEXT,
             notes TEXT
         );
+        
+        -- Таблица архива (с колонкой archive_date, а не archived_at)
+        CREATE TABLE IF NOT EXISTS records_archive (
+            id SERIAL PRIMARY KEY,
+            archive_date DATE NOT NULL,
+            original_id INTEGER,
+            date TEXT,
+            boiler_number INTEGER,
+            boiler_location TEXT,
+            boiler_contact TEXT,
+            equipment_number INTEGER,
+            boiler_model TEXT,
+            equipment_year TEXT,
+            time_interval TEXT,
+            boilers_working TEXT,
+            boilers_reserve TEXT,
+            boilers_repair TEXT,
+            pumps_working TEXT,
+            pumps_reserve TEXT,
+            pumps_repair TEXT,
+            feed_pumps_working TEXT,
+            feed_pumps_reserve TEXT,
+            feed_pumps_repair TEXT,
+            fuel_tanks_total TEXT,
+            fuel_tank_volume TEXT,
+            fuel_tanks_working TEXT,
+            fuel_tanks_reserve TEXT,
+            fuel_morning_balance TEXT,
+            fuel_daily_consumption TEXT,
+            fuel_tanks_repair TEXT,
+            water_tanks_total TEXT,
+            water_tank_volume TEXT,
+            water_tanks_working TEXT,
+            water_tanks_reserve TEXT,
+            water_tanks_repair TEXT,
+            temp_outdoor TEXT,
+            temp_supply TEXT,
+            temp_return TEXT,
+            temp_graph_supply TEXT,
+            temp_graph_return TEXT,
+            pressure_supply TEXT,
+            pressure_return TEXT,
+            water_consumption_daily TEXT,
+            staff_night TEXT,
+            staff_day TEXT,
+            notes TEXT
+        );
+        
+        CREATE INDEX IF NOT EXISTS idx_records_archive_date ON records_archive(archive_date);
     """)
-    # Добавим тестового пользователя
-    cur.execute("INSERT INTO users (username, password, role) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING", 
-                ('admin', 'admin', 'admin'))
     conn.commit()
     conn.close()
 
@@ -85,47 +132,226 @@ def admin():
     c.connection.close()
     return r and r['role'] == 'admin'
 
+# ===================== ARCHIVE FUNCTION =====================
+def archive_all_records():
+    """Архивирует все записи из records в records_archive и очищает records"""
+    conn = get_conn()
+    c = conn.cursor()
+    
+    today = date.today()
+    
+    # Защита от двойного архива за день
+    c.execute("SELECT 1 FROM records_archive WHERE archive_date=%s LIMIT 1", (today,))
+    if c.fetchone():
+        conn.close()
+        return False  # Уже архивировано сегодня
+    
+    # Копируем в архив
+    c.execute("""
+        INSERT INTO records_archive (
+            archive_date,
+            original_id, date, boiler_number, boiler_location, boiler_contact,
+            equipment_number, boiler_model, equipment_year, time_interval,
+            boilers_working, boilers_reserve, boilers_repair,
+            pumps_working, pumps_reserve, pumps_repair,
+            feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
+            fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
+            fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
+            water_tanks_total, water_tank_volume, water_tanks_working,
+            water_tanks_reserve, water_tanks_repair,
+            temp_outdoor, temp_supply, temp_return,
+            temp_graph_supply, temp_graph_return,
+            pressure_supply, pressure_return,
+            water_consumption_daily, staff_night, staff_day, notes
+        )
+        SELECT
+            %s,
+            id, date, boiler_number, boiler_location, boiler_contact,
+            equipment_number, boiler_model, equipment_year, time_interval,
+            boilers_working, boilers_reserve, boilers_repair,
+            pumps_working, pumps_reserve, pumps_repair,
+            feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
+            fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
+            fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
+            water_tanks_total, water_tank_volume, water_tanks_working,
+            water_tanks_reserve, water_tanks_repair,
+            temp_outdoor, temp_supply, temp_return,
+            temp_graph_supply, temp_graph_return,
+            pressure_supply, pressure_return,
+            water_consumption_daily, staff_night, staff_day, notes
+        FROM records
+    """, (today,))
+    
+    # Очищаем основную таблицу
+    c.execute("DELETE FROM records")
+    
+    conn.commit()
+    conn.close()
+    return True
+
 # ===================== DATA BUILDER =====================
 def build_boilers_view(records):
-    boilers = []
+    groups = {}
     for r in records:
+        key = (r['date'], r['boiler_number'])
+        groups.setdefault(key, []).append(r)
+    
+    boilers = []
+    for (date, boiler_number), rows in groups.items():
+        rows.sort(key=lambda x: x['time_interval'])
+        times = [r['time_interval'] for r in rows]
+        
+        years = []
+        last = None
+        start = 0
+        for i, r in enumerate(rows):
+            y = r['equipment_year']
+            if y != last:
+                if last is not None:
+                    years.append({
+                        "year": last,
+                        "start": start,
+                        "span": i - start
+                    })
+                last = y
+                start = i
+        if last is not None:
+            years.append({
+                "year": last,
+                "start": start,
+                "span": len(rows) - start
+            })
+        
+        def col(name):
+            return [r[name] for r in rows]
+        
         boilers.append({
-            "number": r["boiler_number"],
-            "date": r["date"],
-            "location": r["boiler_location"],
-            "contact": r["boiler_contact"],
-            "rows": 1,
-            "times": [r["time_interval"]],
-            "boiler_models": [r["boiler_model"]],
-            "boilers": {"work": [r["boilers_working"]], "reserve": [r["boilers_reserve"]], "repair": r["boilers_repair"]},
-            "network_pumps": {"work": [r["pumps_working"]], "reserve": [r["pumps_reserve"]], "repair": r["pumps_repair"]},
-            "feed_pumps": {"work": [r["feed_pumps_working"]], "reserve": [r["feed_pumps_reserve"]], "repair": r["feed_pumps_repair"]},
-            "fuel": {"total": r["fuel_tanks_total"], "volume": r["fuel_tank_volume"], "work": r["fuel_tanks_working"], 
-                     "reserve": r["fuel_tanks_reserve"], "balance": r["fuel_morning_balance"], "daily": r["fuel_daily_consumption"], "repair": r["fuel_tanks_repair"]},
-            "water": {"total": r["water_tanks_total"], "volume": r["water_tank_volume"], "work": r["water_tanks_working"], 
-                      "reserve": r["water_tanks_reserve"], "repair": r["water_tanks_repair"]},
-            "temps": [(r["temp_outdoor"], r["temp_supply"], r["temp_return"])],
-            "graph_temps": [(r["temp_graph_supply"], r["temp_graph_return"])],
-            "pressure": [(r["pressure_supply"], r["pressure_return"])],
-            "water_consumption": r["water_consumption_daily"],
-            "staff": {"night": r["staff_night"], "day": r["staff_day"]},
-            "notes": r["notes"]
+            "number": boiler_number,
+            "date": date,
+            "location": rows[0]['boiler_location'],
+            "contact": rows[0]['boiler_contact'],
+            "rows": len(rows),
+            "years": years,
+            "times": times,
+            "boiler_models": col("boiler_model"),
+            "boilers": {
+                "work": col("boilers_working"),
+                "reserve": col("boilers_reserve"),
+                "repair": rows[0]["boilers_repair"]
+            },
+            "network_pumps": {
+                "work": col("pumps_working"),
+                "reserve": col("pumps_reserve"),
+                "repair": rows[0]["pumps_repair"]
+            },
+            "feed_pumps": {
+                "work": col("feed_pumps_working"),
+                "reserve": col("feed_pumps_reserve"),
+                "repair": rows[0]["feed_pumps_repair"]
+            },
+            "fuel": {
+                "total": rows[0]["fuel_tanks_total"],
+                "volume": rows[0]["fuel_tank_volume"],
+                "work": rows[0]["fuel_tanks_working"],
+                "reserve": rows[0]["fuel_tanks_reserve"],
+                "balance": rows[0]["fuel_morning_balance"],
+                "daily": rows[0]["fuel_daily_consumption"],
+                "repair": rows[0]["fuel_tanks_repair"]
+            },
+            "water": {
+                "total": rows[0]["water_tanks_total"],
+                "volume": rows[0]["water_tank_volume"],
+                "work": rows[0]["water_tanks_working"],
+                "reserve": rows[0]["water_tanks_reserve"],
+                "repair": rows[0]["water_tanks_repair"]
+            },
+            "temps": list(zip(
+                col("temp_outdoor"),
+                col("temp_supply"),
+                col("temp_return")
+            )),
+            "graph_temps": list(zip(
+                col("temp_graph_supply"),
+                col("temp_graph_return")
+            )),
+            "pressure": list(zip(
+                col("pressure_supply"),
+                col("pressure_return")
+            )),
+            "water_consumption": rows[0]["water_consumption_daily"],
+            "staff": {
+                "night": rows[0]["staff_night"],
+                "day": rows[0]["staff_day"]
+            },
+            "notes": rows[0]["notes"]
         })
     return boilers
 
 # ===================== ROUTES =====================
+
+@app.route('/cron/archive', methods=['POST'])
+def cron_archive():
+    """Маршрут для автоматической архивации (вызывается cron)"""
+    key = request.headers.get('X-API-KEY')
+    if key != os.environ.get('ARCHIVE_API_KEY'):
+        return jsonify({'status': 'forbidden'}), 403
+    
+    success = archive_all_records()
+    if success:
+        return jsonify({'status': 'ok', 'message': 'Архивация выполнена'})
+    else:
+        return jsonify({'status': 'ok', 'message': 'Уже архивировано сегодня'})
+
 @app.route('/')
 def index():
     if not auth():
         return redirect(url_for('login'))
-    c = get_conn().cursor()
-    c.execute("SELECT * FROM records ORDER BY date, boiler_number, time_interval")
-    records = c.fetchall()
+    
+    mode = request.args.get('mode', 'current')
+    archive_date = request.args.get('date')
+    
+    conn = get_conn()
+    c = conn.cursor()
+    
+    if mode == 'archive' and archive_date:
+        c.execute("""
+            SELECT * FROM records_archive 
+            WHERE archive_date = %s 
+            ORDER BY date, boiler_number, time_interval
+        """, (archive_date,))
+        records = c.fetchall()
+        journal_date = records[0]['date'] if records else archive_date
+    else:
+        c.execute("""
+            SELECT * FROM records 
+            ORDER BY date, boiler_number, time_interval
+        """)
+        records = c.fetchall()
+        journal_date = records[0]['date'] if records else datetime.now().strftime('%d.%m.%Y')
+    
     c.execute("SELECT username, role FROM users WHERE id=%s", (session['user_id'],))
     user = c.fetchone()
-    c.connection.close()
+    
+    c.execute("""
+        SELECT DISTINCT archive_date 
+        FROM records_archive 
+        ORDER BY archive_date DESC
+    """)
+    archive_dates = [row['archive_date'].strftime('%Y-%m-%d') for row in c.fetchall()]
+    
+    conn.close()
+    
     boilers = build_boilers_view(records)
-    return render_template('index.html', boilers=boilers, user=user)
+    
+    return render_template(
+        'index.html', 
+        boilers=boilers, 
+        user=user,
+        mode=mode,
+        journal_date=journal_date,
+        archive_dates=archive_dates,
+        selected_date=archive_date
+    )
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -135,11 +361,13 @@ def login():
         c.execute("SELECT * FROM users WHERE username=%s", (request.form['username'],))
         u = c.fetchone()
         c.connection.close()
+        
         if u and request.form['password'] == u['password']:
             session['user_id'] = u['id']
             return redirect(url_for('index'))
         else:
             error = 'Неверный логин или пароль'
+    
     return render_template('login.html', error=error)
 
 @app.route('/logout')
@@ -147,19 +375,57 @@ def logout():
     session.pop('user_id', None)
     return redirect(url_for('login'))
 
-# Добавление тестовой записи
+@app.route('/update', methods=['POST'])
+def update():
+    if not admin():
+        return jsonify({'status': 'error', 'message': 'Нет прав'})
+    
+    d = request.get_json()
+    
+    allowed_fields = [
+        'boiler_model', 'equipment_year', 'time_interval',
+        'boilers_working', 'boilers_reserve', 'boilers_repair',
+        'pumps_working', 'pumps_reserve', 'pumps_repair',
+        'feed_pumps_working', 'feed_pumps_reserve', 'feed_pumps_repair',
+        'fuel_tanks_total', 'fuel_tank_volume', 'fuel_tanks_working',
+        'fuel_tanks_reserve', 'fuel_morning_balance', 'fuel_daily_consumption',
+        'fuel_tanks_repair', 'water_tanks_total', 'water_tank_volume',
+        'water_tanks_working', 'water_tanks_reserve', 'water_tanks_repair',
+        'temp_outdoor', 'temp_supply', 'temp_return',
+        'temp_graph_supply', 'temp_graph_return',
+        'pressure_supply', 'pressure_return',
+        'water_consumption_daily', 'staff_night', 'staff_day', 'notes'
+    ]
+    
+    if d['field'] not in allowed_fields:
+        return jsonify({'status': 'error', 'message': 'Недопустимое поле'})
+    
+    c = get_conn().cursor()
+    c.execute(f"UPDATE records SET {d['field']}=%s WHERE id=%s", (d['value'], d['id']))
+    c.connection.commit()
+    c.connection.close()
+    
+    return jsonify({'status': 'ok'})
+
 @app.route('/add', methods=['POST'])
 def add():
     if not admin():
         return jsonify({'status': 'error', 'message': 'Нет прав'})
+    
     c = get_conn().cursor()
-    c.execute("INSERT INTO records (date, boiler_number, boiler_location, boiler_contact, equipment_number, boiler_model, equipment_year, time_interval) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
-              ('30.01.2026', 1, 'Белоярск', '83499323373', 1, 'Модель1', '2020', '00:00'))
+    c.execute("SELECT MAX(equipment_number) AS m FROM records WHERE boiler_number=1")
+    num = (c.fetchone()['m'] or 0) + 1
+    c.execute("""
+        INSERT INTO records (
+            date, boiler_number, boiler_location, boiler_contact,
+            equipment_number, boiler_model, equipment_year, time_interval
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    """, ('30.01.2026', 1, 'Белоярск', '83499323373', num, '', '', '00:00'))
     c.connection.commit()
     c.connection.close()
+    
     return jsonify({'status': 'ok'})
 
-# ===================== START =====================
 if __name__ == '__main__':
     init_db()
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
