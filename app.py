@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify, redirect, session, u
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
-from datetime import date, datetime, timedelta  # ДОБАВЛЕНО
+from datetime import date, datetime, timedelta
 
 app = Flask(__name__)
 app.secret_key = 'secret'
@@ -65,10 +65,10 @@ def init_db():
             notes TEXT
         );
         
-        -- ДОБАВЛЕНО: таблица архива
+        -- Таблица архива (с колонкой archive_date, а не archived_at)
         CREATE TABLE IF NOT EXISTS records_archive (
             id SERIAL PRIMARY KEY,
-            archived_at DATE NOT NULL,
+            archive_date DATE NOT NULL,
             original_id INTEGER,
             date TEXT,
             boiler_number INTEGER,
@@ -112,8 +112,7 @@ def init_db():
             notes TEXT
         );
         
-        -- ДОБАВЛЕНО: индекс для быстрого поиска по дате архива
-        CREATE INDEX IF NOT EXISTS idx_records_archive_date ON records_archive(archived_at);
+        CREATE INDEX IF NOT EXISTS idx_records_archive_date ON records_archive(archive_date);
     """)
     conn.commit()
     conn.close()
@@ -134,7 +133,6 @@ def admin():
     return r and r['role'] == 'admin'
 
 # ===================== ARCHIVE FUNCTION =====================
-# ДОБАВЛЕНО: функция архивации
 def archive_all_records():
     """Архивирует все записи из records в records_archive и очищает records"""
     conn = get_conn()
@@ -143,7 +141,7 @@ def archive_all_records():
     today = date.today()
     
     # Защита от двойного архива за день
-    c.execute("SELECT 1 FROM records_archive WHERE archived_at=%s LIMIT 1", (today,))
+    c.execute("SELECT 1 FROM records_archive WHERE archive_date=%s LIMIT 1", (today,))
     if c.fetchone():
         conn.close()
         return False  # Уже архивировано сегодня
@@ -151,7 +149,7 @@ def archive_all_records():
     # Копируем в архив
     c.execute("""
         INSERT INTO records_archive (
-            archived_at,
+            archive_date,
             original_id, date, boiler_number, boiler_location, boiler_contact,
             equipment_number, boiler_model, equipment_year, time_interval,
             boilers_working, boilers_reserve, boilers_repair,
@@ -203,7 +201,6 @@ def build_boilers_view(records):
         rows.sort(key=lambda x: x['time_interval'])
         times = [r['time_interval'] for r in rows]
         
-        # ---- equipment years (rowspan)
         years = []
         last = None
         start = 0
@@ -292,7 +289,6 @@ def build_boilers_view(records):
 
 # ===================== ROUTES =====================
 
-# ДОБАВЛЕНО: маршрут для cron-архивации
 @app.route('/cron/archive', methods=['POST'])
 def cron_archive():
     """Маршрут для автоматической архивации (вызывается cron)"""
@@ -306,52 +302,42 @@ def cron_archive():
     else:
         return jsonify({'status': 'ok', 'message': 'Уже архивировано сегодня'})
 
-# ИЗМЕНЕНО: главная страница поддерживает режимы
 @app.route('/')
 def index():
     if not auth():
         return redirect(url_for('login'))
     
-    # Определяем режим: текущие или архив
-    mode = request.args.get('mode', 'current')  # current или archive
-    archive_date = request.args.get('date')  # для режима архива
+    mode = request.args.get('mode', 'current')
+    archive_date = request.args.get('date')
     
     conn = get_conn()
     c = conn.cursor()
     
     if mode == 'archive' and archive_date:
-        # Загружаем из архива за указанную дату
         c.execute("""
             SELECT * FROM records_archive 
-            WHERE archived_at = %s 
+            WHERE archive_date = %s 
             ORDER BY date, boiler_number, time_interval
         """, (archive_date,))
         records = c.fetchall()
-        
-        # Получаем дату журнала из первой записи (или текущую)
         journal_date = records[0]['date'] if records else archive_date
     else:
-        # Загружаем текущие данные
         c.execute("""
             SELECT * FROM records 
             ORDER BY date, boiler_number, time_interval
         """)
         records = c.fetchall()
-        
-        # Дата журнала - из первой записи или сегодня
         journal_date = records[0]['date'] if records else datetime.now().strftime('%d.%m.%Y')
     
-    # Получаем пользователя
     c.execute("SELECT username, role FROM users WHERE id=%s", (session['user_id'],))
     user = c.fetchone()
     
-    # Получаем список доступных дат для архива
     c.execute("""
-        SELECT DISTINCT archived_at 
+        SELECT DISTINCT archive_date 
         FROM records_archive 
-        ORDER BY archived_at DESC
+        ORDER BY archive_date DESC
     """)
-    archive_dates = [row['archived_at'].strftime('%Y-%m-%d') for row in c.fetchall()]
+    archive_dates = [row['archive_date'].strftime('%Y-%m-%d') for row in c.fetchall()]
     
     conn.close()
     
