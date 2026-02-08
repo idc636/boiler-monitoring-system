@@ -406,6 +406,73 @@ def archive():
     c.connection.close()
     
     return jsonify({'status': 'ok', 'message': 'Данные успешно архивированы'})
+
+# ⬇️ ДОБАВЬ ЭТОТ БЛОК СЮДА ⬇️
+from datetime import date
+
+@app.route('/cron/archive', methods=['POST'])
+def cron_archive():
+    """Автоматическая архивация (вызывается cron)"""
+    key = request.headers.get('X-API-KEY')
+    if key != os.environ.get('ARCHIVE_API_KEY'):
+        return jsonify({'status': 'forbidden'}), 403
+    
+    conn = get_conn()
+    c = conn.cursor()
+    
+    today = date.today()
+    
+    # Защита от двойного архива за день
+    c.execute("SELECT 1 FROM records_archive WHERE archive_date=%s LIMIT 1", (today,))
+    if c.fetchone():
+        conn.close()
+        return jsonify({'status': 'ok', 'message': 'Уже архивировано сегодня'})
+    
+    # Копируем в архив
+    c.execute("""
+        INSERT INTO records_archive (
+            archive_date,
+            original_id, date, boiler_number, boiler_location, boiler_contact,
+            equipment_number, boiler_model, equipment_year, time_interval,
+            boilers_working, boilers_reserve, boilers_repair,
+            pumps_working, pumps_reserve, pumps_repair,
+            feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
+            fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
+            fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
+            water_tanks_total, water_tank_volume, water_tanks_working,
+            water_tanks_reserve, water_tanks_repair,
+            temp_outdoor, temp_supply, temp_return,
+            temp_graph_supply, temp_graph_return,
+            pressure_supply, pressure_return,
+            water_consumption_daily, staff_night, staff_day, notes
+        )
+        SELECT
+            %s,
+            id, date, boiler_number, boiler_location, boiler_contact,
+            equipment_number, boiler_model, equipment_year, time_interval,
+            boilers_working, boilers_reserve, boilers_repair,
+            pumps_working, pumps_reserve, pumps_repair,
+            feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
+            fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
+            fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
+            water_tanks_total, water_tank_volume, water_tanks_working,
+            water_tanks_reserve, water_tanks_repair,
+            temp_outdoor, temp_supply, temp_return,
+            temp_graph_supply, temp_graph_return,
+            pressure_supply, pressure_return,
+            water_consumption_daily, staff_night, staff_day, notes
+        FROM records
+    """, (today,))
+    
+    # Очищаем основную таблицу
+    c.execute("DELETE FROM records")
+    
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'status': 'ok', 'message': 'Архивация выполнена'})
+# ⬆️ ДОБАВЬ ЭТОТ БЛОК СЮДА ⬆️
+
 if __name__ == '__main__':
     init_db()
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
