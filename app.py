@@ -226,7 +226,7 @@ def build_boilers_view(records):
         def col(name):
             return [r[name] for r in rows]
         
-        # Получаем реальные id записей
+        # 🔑 ДОБАВЛЕНО: реальные id записей из БД
         record_ids = [r['id'] for r in rows]
         
         boilers.append({
@@ -237,7 +237,7 @@ def build_boilers_view(records):
             "rows": len(rows),
             "years": years,
             "times": times,
-            "record_ids": record_ids,  # ДОБАВЛЕНО: реальные id
+            "record_ids": record_ids,  # 🔑 реальные id
             "boiler_models": col("boiler_model"),
             "boilers": {
                 "work": col("boilers_working"),
