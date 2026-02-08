@@ -201,6 +201,7 @@ def build_boilers_view(records):
         rows.sort(key=lambda x: x['time_interval'])
         times = [r['time_interval'] for r in rows]
         
+        # ---- equipment years (rowspan)
         years = []
         last = None
         start = 0
@@ -225,6 +226,9 @@ def build_boilers_view(records):
         def col(name):
             return [r[name] for r in rows]
         
+        # Получаем реальные id записей
+        record_ids = [r['id'] for r in rows]
+        
         boilers.append({
             "number": boiler_number,
             "date": date,
@@ -233,6 +237,7 @@ def build_boilers_view(records):
             "rows": len(rows),
             "years": years,
             "times": times,
+            "record_ids": record_ids,  # ДОБАВЛЕНО: реальные id
             "boiler_models": col("boiler_model"),
             "boilers": {
                 "work": col("boilers_working"),
