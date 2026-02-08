@@ -2,207 +2,48 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Суточный журнал</title>
-
+<title>АО «Ямалкомунэнерго» — Суточный журнал</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background:#f2f2f2;
-  margin:10px;
-}
-
-h3 {
-  text-align:center;
-  margin-bottom:10px;
-}
-
-.controls {
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  margin-bottom:15px;
-}
-
-button {
-  border:none;
-  padding:10px 20px;
-  border-radius:5px;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-.archive-btn {
-  background:#ffc107;
-  color:#000;
-}
-
-.switch-btn {
-  background:#2196f3;
-  color:#fff;
-}
-
-.wrap {
-  overflow-x:auto;
-}
-
-table {
-  border-collapse:collapse;
-  background:#fff;
-  font-size:12px;
-  min-width:2600px;
-}
-
-th, td {
-  border:1px solid #000;
-  padding:4px 6px;
-  text-align:center;
-  white-space:nowrap;
-}
-
-thead th {
-  background:#d9d9d9;
-}
-
-.section {
-  background:#b7d78a;
-  font-weight:bold;
-  text-align:left;
-}
-
-.editable {
-  cursor:pointer;
-}
-
-.editable:hover {
-  background:#e3f2fd;
-}
-
-.hidden {
-  display:none;
-}
-
-.archive-list {
-  max-width:900px;
-  margin:0 auto;
-}
-
-.archive-item {
-  background:#fff;
-  border:1px solid #ccc;
-  padding:10px;
-  margin-bottom:10px;
-}
+body { font-family: Arial; margin: 20px; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+th, td { border: 1px solid #333; padding: 5px; text-align: center; }
+th { background: #eee; }
+button { margin: 5px; padding: 5px 10px; }
 </style>
-</head>
-
-<body>
-
-<h3>АО «Ямалкомунэнерго» — Суточный журнал</h3>
-
-<div class="controls">
-  <button class="archive-btn" onclick="archiveRecords()">🗄️ Архивировать данные</button>
-  <button class="switch-btn" onclick="toggleView()">🔁 Переключить вид</button>
-</div>
-
-<!-- ТЕКУЩИЙ ЖУРНАЛ -->
-<div id="journalView" class="wrap">
-  <!-- ⚠️ ТВОЯ ТАБЛИЦА — БЕЗ ИЗМЕНЕНИЙ -->
-  <!-- я её не трогал, она остаётся такой, как ты прислал -->
-  <!-- просто вставь сюда ТЕКУЩУЮ таблицу целиком -->
-</div>
-
-<!-- АРХИВ -->
-<div id="archiveView" class="hidden">
-  <div class="archive-list" id="archiveList"></div>
-</div>
-
 <script>
-const STORAGE_KEY = 'dailyJournalData';
-const ARCHIVE_KEY = 'dailyJournalArchive';
-
-/* ====== РЕДАКТИРОВАНИЕ ЯЧЕЕК ====== */
-document.addEventListener('click', e => {
-  if (!e.target.classList.contains('editable')) return;
-
-  const cell = e.target;
-  const oldValue = cell.innerText;
-
-  const input = document.createElement('input');
-  input.value = oldValue;
-  input.style.width = '100%';
-
-  cell.innerHTML = '';
-  cell.appendChild(input);
-  input.focus();
-
-  input.addEventListener('blur', () => {
-    cell.innerText = input.value;
-    saveData();
-  });
-
-  input.addEventListener('keydown', ev => {
-    if (ev.key === 'Enter') input.blur();
-  });
-});
-
-/* ====== СОХРАНЕНИЕ ====== */
-function saveData() {
-  const data = {};
-  document.querySelectorAll('.editable').forEach((cell, i) => {
-    data[i] = cell.innerText;
-  });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+function addRecord() {
+    fetch('/add', {method: 'POST'})
+    .then(res => res.json())
+    .then(r => { if(r.status=='ok'){ location.reload(); } });
 }
-
-/* ====== ЗАГРУЗКА ====== */
-function loadData() {
-  const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-  document.querySelectorAll('.editable').forEach((cell, i) => {
-    if (data[i] !== undefined) cell.innerText = data[i];
-  });
-}
-
-/* ====== АРХИВ ====== */
-function archiveRecords() {
-  if (!confirm('Архивировать данные и очистить журнал?')) return;
-
-  const snapshot = document.getElementById('journalView').innerHTML;
-  const archive = JSON.parse(localStorage.getItem(ARCHIVE_KEY) || '[]');
-
-  archive.push({
-    date: new Date().toLocaleDateString(),
-    html: snapshot
-  });
-
-  localStorage.setItem(ARCHIVE_KEY, JSON.stringify(archive));
-  localStorage.removeItem(STORAGE_KEY);
-
-  document.querySelectorAll('.editable').forEach(c => c.innerText = '');
-  alert('Данные архивированы');
-}
-
-/* ====== ПЕРЕКЛЮЧАТЕЛЬ ====== */
-function toggleView() {
-  document.getElementById('journalView').classList.toggle('hidden');
-  document.getElementById('archiveView').classList.toggle('hidden');
-  renderArchive();
-}
-
-function renderArchive() {
-  const archive = JSON.parse(localStorage.getItem(ARCHIVE_KEY) || '[]');
-  const list = document.getElementById('archiveList');
-  list.innerHTML = '';
-
-  archive.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'archive-item';
-    div.innerHTML = `<strong>${item.date}</strong><div class="wrap">${item.html}</div>`;
-    list.appendChild(div);
-  });
-}
-
-loadData();
 </script>
+</head>
+<body>
+<h1>АО «Ямалкомунэнерго» — Суточный журнал</h1>
+<button onclick="addRecord()">Добавить тестовую запись</button>
+<a href="/logout">Выйти</a>
+
+{% for boiler in boilers %}
+<h3>Котёл №{{ boiler.number }} ({{ boiler.date }})</h3>
+<table>
+  <tr>
+    <th>Модель</th>
+    <th>Темп. наруж.</th>
+    <th>Темп. подачи</th>
+    <th>Темп. обратки</th>
+    <th>Примечания</th>
+  </tr>
+  {% for i in range(boiler.rows) %}
+  <tr>
+    <td>{{ boiler.boiler_models[i] }}</td>
+    <td>{{ boiler.temps[i][0] or '' }}</td>
+    <td>{{ boiler.temps[i][1] or '' }}</td>
+    <td>{{ boiler.temps[i][2] or '' }}</td>
+    <td>{{ boiler.notes or '' }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endfor %}
 
 </body>
 </html>
