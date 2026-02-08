@@ -410,65 +410,81 @@ def archive():
 # ⬇️ ДОБАВЬ ЭТОТ БЛОК СЮДА ⬇️
 from datetime import date
 
-@app.route('/cron/archive', methods=['POST'])
-def cron_archive():
-    """Автоматическая архивация (вызывается cron)"""
-    key = request.headers.get('X-API-KEY')
-    if key != os.environ.get('ARCHIVE_API_KEY'):
-        return jsonify({'status': 'forbidden'}), 403
-    
+@app.route('/archive', methods=['POST'])
+def archive():
+    if not admin():
+        return jsonify({'status': 'error', 'message': 'Нет прав'}), 403
+
     conn = get_conn()
     c = conn.cursor()
-    
-    today = date.today()
-    
-    # Защита от двойного архива за день
-    c.execute("SELECT 1 FROM records_archive WHERE archive_date=%s LIMIT 1", (today,))
-    if c.fetchone():
+
+    try:
+        # Проверяем, есть ли данные
+        c.execute("SELECT COUNT(*) FROM records")
+        count_before = c.fetchone()['count']
+
+        if count_before == 0:
+            return jsonify({
+                'status': 'ok',
+                'message': 'Таблица уже пустая'
+            })
+
+        # Архивируем
+        c.execute("""
+            INSERT INTO records_archive (
+                archive_date,
+                original_id, date, boiler_number, boiler_location, boiler_contact,
+                equipment_number, boiler_model, equipment_year, time_interval,
+                boilers_working, boilers_reserve, boilers_repair,
+                pumps_working, pumps_reserve, pumps_repair,
+                feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
+                fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
+                fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
+                water_tanks_total, water_tank_volume, water_tanks_working,
+                water_tanks_reserve, water_tanks_repair,
+                temp_outdoor, temp_supply, temp_return,
+                temp_graph_supply, temp_graph_return,
+                pressure_supply, pressure_return,
+                water_consumption_daily, staff_night, staff_day, notes
+            )
+            SELECT
+                CURRENT_DATE,
+                id, date, boiler_number, boiler_location, boiler_contact,
+                equipment_number, boiler_model, equipment_year, time_interval,
+                boilers_working, boilers_reserve, boilers_repair,
+                pumps_working, pumps_reserve, pumps_repair,
+                feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
+                fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
+                fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
+                water_tanks_total, water_tank_volume, water_tanks_working,
+                water_tanks_reserve, water_tanks_repair,
+                temp_outdoor, temp_supply, temp_return,
+                temp_graph_supply, temp_graph_return,
+                pressure_supply, pressure_return,
+                water_consumption_daily, staff_night, staff_day, notes
+            FROM records
+        """)
+
+        # Очищаем
+        c.execute("DELETE FROM records")
+
+        conn.commit()
+
+        return jsonify({
+            'status': 'ok',
+            'message': f'Заархивировано и очищено записей: {count_before}'
+        })
+
+    except Exception as e:
+        conn.rollback()
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+    finally:
         conn.close()
-        return jsonify({'status': 'ok', 'message': 'Уже архивировано сегодня'})
-    
-    # Копируем в архив
-    c.execute("""
-        INSERT INTO records_archive (
-            archive_date,
-            original_id, date, boiler_number, boiler_location, boiler_contact,
-            equipment_number, boiler_model, equipment_year, time_interval,
-            boilers_working, boilers_reserve, boilers_repair,
-            pumps_working, pumps_reserve, pumps_repair,
-            feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
-            fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
-            fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
-            water_tanks_total, water_tank_volume, water_tanks_working,
-            water_tanks_reserve, water_tanks_repair,
-            temp_outdoor, temp_supply, temp_return,
-            temp_graph_supply, temp_graph_return,
-            pressure_supply, pressure_return,
-            water_consumption_daily, staff_night, staff_day, notes
-        )
-        SELECT
-            %s,
-            id, date, boiler_number, boiler_location, boiler_contact,
-            equipment_number, boiler_model, equipment_year, time_interval,
-            boilers_working, boilers_reserve, boilers_repair,
-            pumps_working, pumps_reserve, pumps_repair,
-            feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
-            fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
-            fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
-            water_tanks_total, water_tank_volume, water_tanks_working,
-            water_tanks_reserve, water_tanks_repair,
-            temp_outdoor, temp_supply, temp_return,
-            temp_graph_supply, temp_graph_return,
-            pressure_supply, pressure_return,
-            water_consumption_daily, staff_night, staff_day, notes
-        FROM records
-    """, (today,))
-    
-    # Очищаем основную таблицу
-    c.execute("DELETE FROM records")
-    
-    conn.commit()
-    conn.close()
+
     
     return jsonify({'status': 'ok', 'message': 'Архивация выполнена'})
 # ⬆️ ДОБАВЬ ЭТОТ БЛОК СЮДА ⬆️
