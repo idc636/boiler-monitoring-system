@@ -291,7 +291,6 @@ def build_boilers_view(records):
             "notes": rows[0]["notes"]
         })
     return boilers
-
 # ===================== ROUTES =====================
 
 @app.route('/cron/archive', methods=['POST'])
