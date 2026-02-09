@@ -75,7 +75,86 @@ def init_db():
         staff_day TEXT,
         notes TEXT
     );
+
+    CREATE TABLE IF NOT EXISTS records_archive (
+        id SERIAL PRIMARY KEY,
+        archive_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        original_id INTEGER,
+        
+        date TEXT,
+        boiler_number INTEGER,
+        boiler_location TEXT,
+        boiler_contact TEXT,
+
+        equipment_number INTEGER,
+        boiler_model TEXT,
+        equipment_year TEXT,
+        time_interval TEXT,
+
+        boilers_working TEXT,
+        boilers_reserve TEXT,
+        boilers_repair TEXT,
+
+        pumps_working TEXT,
+        pumps_reserve TEXT,
+        pumps_repair TEXT,
+
+        feed_pumps_working TEXT,
+        feed_pumps_reserve TEXT,
+        feed_pumps_repair TEXT,
+
+        fuel_tanks_total TEXT,
+        fuel_tank_volume TEXT,
+        fuel_tanks_working TEXT,
+        fuel_tanks_reserve TEXT,
+        fuel_morning_balance TEXT,
+        fuel_daily_consumption TEXT,
+        fuel_tanks_repair TEXT,
+
+        water_tanks_total TEXT,
+        water_tank_volume TEXT,
+        water_tanks_working TEXT,
+        water_tanks_reserve TEXT,
+        water_tanks_repair TEXT,
+
+        temp_outdoor TEXT,
+        temp_supply TEXT,
+        temp_return TEXT,
+        temp_graph_supply TEXT,
+        temp_graph_return TEXT,
+
+        pressure_supply TEXT,
+        pressure_return TEXT,
+
+        water_consumption_daily TEXT,
+        staff_night TEXT,
+        staff_day TEXT,
+        notes TEXT
+    );
     """)
+
+    # Создаём админов и операторов
+    admin_password = '1313'
+    user_password = '1313'
+    
+    cur.execute("""
+    INSERT INTO users (username, password, role)
+    SELECT 'admin', %s, 'admin'
+    WHERE NOT EXISTS (SELECT 1 FROM users WHERE username='admin')
+    """, (admin_password,))
+    
+    cur.execute("""
+    INSERT INTO users (username, password, role)
+    SELECT 'admin2', %s, 'admin'
+    WHERE NOT EXISTS (SELECT 1 FROM users WHERE username='admin2')
+    """, (admin_password,))
+
+    for i in range(1, 9):
+        cur.execute("""
+        INSERT INTO users (username, password, role)
+        SELECT %s, %s, 'operator'
+        WHERE NOT EXISTS (SELECT 1 FROM users WHERE username=%s)
+        """, (f'user{i}', user_password, f'user{i}'))
 
     conn.commit()
     conn.close()
@@ -99,123 +178,6 @@ def admin():
     return r and r['role'] == 'admin'
 
 
-# ===================== DATA BUILDER =====================
-
-def build_boilers_view(records):
-    groups = {}
-
-    for r in records:
-        key = (r['date'], r['boiler_number'])
-        groups.setdefault(key, []).append(r)
-
-    boilers = []
-
-    for (date, boiler_number), rows in groups.items():
-        rows.sort(key=lambda x: x['time_interval'])
-
-        times = [r['time_interval'] for r in rows]
-
-        # ---- equipment years (rowspan)
-        years = []
-        last = None
-        start = 0
-
-        for i, r in enumerate(rows):
-            y = r['equipment_year']
-            if y != last:
-                if last is not None:
-                    years.append({
-                        "year": last,
-                        "start": start,
-                        "span": i - start
-                    })
-                last = y
-                start = i
-
-        if last is not None:
-            years.append({
-                "year": last,
-                "start": start,
-                "span": len(rows) - start
-            })
-
-        def col(name):
-            return [r[name] for r in rows]
-
-        boilers.append({
-            "number": boiler_number,
-            "date": date,
-            "location": rows[0]['boiler_location'],
-            "contact": rows[0]['boiler_contact'],
-            "rows": len(rows),
-            "years": years,
-            "times": times,
-
-            "boiler_models": col("boiler_model"),
-
-            "boilers": {
-                "work": col("boilers_working"),
-                "reserve": col("boilers_reserve"),
-                "repair": rows[0]["boilers_repair"]
-            },
-
-            "network_pumps": {
-                "work": col("pumps_working"),
-                "reserve": col("pumps_reserve"),
-                "repair": rows[0]["pumps_repair"]
-            },
-
-            "feed_pumps": {
-                "work": col("feed_pumps_working"),
-                "reserve": col("feed_pumps_reserve"),
-                "repair": rows[0]["feed_pumps_repair"]
-            },
-
-            "fuel": {
-                "total": rows[0]["fuel_tanks_total"],
-                "volume": rows[0]["fuel_tank_volume"],
-                "work": rows[0]["fuel_tanks_working"],
-                "reserve": rows[0]["fuel_tanks_reserve"],
-                "balance": rows[0]["fuel_morning_balance"],
-                "daily": rows[0]["fuel_daily_consumption"],
-                "repair": rows[0]["fuel_tanks_repair"]
-            },
-
-            "water": {
-                "total": rows[0]["water_tanks_total"],
-                "volume": rows[0]["water_tank_volume"],
-                "work": rows[0]["water_tanks_working"],
-                "reserve": rows[0]["water_tanks_reserve"],
-                "repair": rows[0]["water_tanks_repair"]
-            },
-
-            "temps": list(zip(
-                col("temp_outdoor"),
-                col("temp_supply"),
-                col("temp_return")
-            )),
-
-            "graph_temps": list(zip(
-                col("temp_graph_supply"),
-                col("temp_graph_return")
-            )),
-
-            "pressure": list(zip(
-                col("pressure_supply"),
-                col("pressure_return")
-            )),
-
-            "water_consumption": rows[0]["water_consumption_daily"],
-            "staff": {
-                "night": rows[0]["staff_night"],
-                "day": rows[0]["staff_day"]
-            },
-            "notes": rows[0]["notes"]
-        })
-
-    return boilers
-
-
 # ===================== ROUTES =====================
 
 @app.route('/')
@@ -226,7 +188,7 @@ def index():
     c = get_conn().cursor()
     c.execute("""
         SELECT * FROM records
-        ORDER BY date, boiler_number, time_interval
+        ORDER BY date, boiler_number, equipment_number, time_interval
     """)
     records = c.fetchall()
 
@@ -234,9 +196,13 @@ def index():
     user = c.fetchone()
     c.connection.close()
 
-    boilers = build_boilers_view(records)
-
-    return render_template('index.html', boilers=boilers, user=user)
+    # Преобразуем данные в структуру, подходящую для index.html
+    data = {}
+    for r in records:
+        key = r['id']  # Используем id записи как ключ для data-id
+        data[key] = r
+    
+    return render_template('index.html', data=data, user=user)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -304,15 +270,15 @@ def add():
         return jsonify({'status': 'error', 'message': 'Нет прав'})
 
     c = get_conn().cursor()
-    c.execute("SELECT MAX(equipment_number) AS m FROM records WHERE boiler_number=1")
-    num = (c.fetchone()['m'] or 0) + 1
+    c.execute("SELECT MAX(id) AS m FROM records")
+    new_id = (c.fetchone()['m'] or 0) + 1
 
     c.execute("""
         INSERT INTO records (
             date, boiler_number, boiler_location, boiler_contact,
             equipment_number, boiler_model, equipment_year, time_interval
         ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-    """, ('30.01.2026', 1, 'Белоярск', '83499323373', num, '', '', '00:00'))
+    """, ('30.01.2026', 1, 'Белоярск', '83499323373', 1, '', '', '00:00'))
 
     c.connection.commit()
     c.connection.close()
