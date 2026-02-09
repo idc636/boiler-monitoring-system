@@ -17,8 +17,12 @@ thead th { background:#d9d9d9; }
 </head>
 <body>
 
-<h3>АО «Ямалкомунэнерго» — Суточный журнал (30.01.2026)</h3>
-<button onclick="archiveRecords()" style="background:#ffc107;color:black;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;margin-bottom:15px;font-weight:bold;">🗄️ Архивировать данные</button>
+<h3>АО «Ямалкомунэнерго» — Суточный журнал</h3>
+<div style="display:flex;gap:10px;margin-bottom:15px;align-items:center;">
+    <button onclick="archiveRecords()"
+        style="background:#ffc107;color:black;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;font-weight:bold;">
+        🗄️ Архивировать данные
+    </button>
     
     <!-- Переключатель режимов -->
 <div style="display:flex;gap:10px;margin-bottom:15px;align-items:center;">
@@ -752,74 +756,26 @@ thead th { background:#d9d9d9; }
 </table>
 </div>
 <script>
-document.querySelectorAll('.editable').forEach(cell => {
-    cell.addEventListener('click', function() {
+async function archiveRecords() {
+    if (!confirm('Архивировать все текущие записи?')) return;
 
-        const field = this.getAttribute('data-field');
+    try {
+        const response = await fetch('/archive', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
 
-        // 🔒 ЗАПРЕТ РЕДАКТИРОВАНИЯ
-        if (field === 'boiler_model' || field === 'equipment_year') {
-            return;
+        const result = await response.json();
+
+        if (result.status === 'ok') {
+            alert('В архив перенесено записей: ' + result.archived);
+            location.reload(); // 🔥 ЭТО КЛЮЧЕВО
+        } else {
+            alert('Ошибка: ' + result.message);
         }
-
-        const id = this.getAttribute('data-id');
-        const currentValue = this.textContent;
-
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.value = currentValue;
-
-        input.addEventListener('blur', function() {
-            const newValue = this.value;
-            fetch('/update', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ field: field, value: newValue, id: id })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'ok') {
-                    cell.textContent = newValue;
-                } else {
-                    alert('Ошибка сохранения');
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-                alert('Ошибка связи с сервером');
-            });
-        });
-
-        input.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') this.blur();
-        });
-
-        this.innerHTML = '';
-        this.appendChild(input);
-        input.focus();
-    });
-});
-
-// ⬇️ ДОБАВЬ ЭТУ ФУНКЦИЮ В КОНЕЦ ⬇️
-function archiveRecords() {
-    if (!confirm('Архивировать ВСЕ текущие данные? После этого таблица очистится!')) {
-        return;
+    } catch (err) {
+        alert('Ошибка соединения с сервером');
+        console.error(err);
     }
-    
-    fetch('/archive', { method: 'POST' })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'ok') {
-                alert('✅ ' + data.message);
-                location.reload();
-            } else {
-                alert('❌ ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Ошибка:', error);
-            alert('Ошибка архивации');
-        });
 }
-// ⬆️ ДОБАВЬ ЭТУ ФУНКЦИЮ В КОНЕЦ ⬆️
 </script>
