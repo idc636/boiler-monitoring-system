@@ -113,105 +113,58 @@ def build_boilers_view(records):
     for (date, boiler_number), rows in groups.items():
         rows.sort(key=lambda x: x['time_interval'])
 
-        times = [r['time_interval'] for r in rows]
+        # Группируем по equipment_number (марка котла)
+        equipment_groups = {}
+        for r in rows:
+            eq_num = r['equipment_number']
+            equipment_groups.setdefault(eq_num, []).append(r)
 
-        # ---- equipment years (rowspan)
-        years = []
-        last = None
-        start = 0
-
-        for i, r in enumerate(rows):
-            y = r['equipment_year']
-            if y != last:
-                if last is not None:
-                    years.append({
-                        "year": last,
-                        "start": start,
-                        "span": i - start
-                    })
-                last = y
-                start = i
-
-        if last is not None:
-            years.append({
-                "year": last,
-                "start": start,
-                "span": len(rows) - start
-            })
-
-        def col(name):
-            return [r[name] for r in rows]
-
-        boilers.append({
+        # Создаём структуру для каждой котельной
+        boiler_data = {
             "number": boiler_number,
             "date": date,
             "location": rows[0]['boiler_location'],
             "contact": rows[0]['boiler_contact'],
-            "rows": len(rows),
-            "years": years,
-            "times": times,
+            "models": []  # Список марок котлов
+        }
 
-            "boiler_models": col("boiler_model"),
+        for eq_num in sorted(equipment_groups.keys()):
+            eq_rows = equipment_groups[eq_num]
+            
+            # Информация о марке котла
+            model_info = {
+                "model": eq_rows[0]['boiler_model'],
+                "year": eq_rows[0]['equipment_year'],
+                "times": [r['time_interval'] for r in eq_rows],
+                "boilers": {
+                    "work": [r['boilers_working'] for r in eq_rows],
+                    "reserve": [r['boilers_reserve'] for r in eq_rows],
+                    "repair": eq_rows[0]['boilers_repair']
+                },
+                "pumps": {
+                    "work": [r['pumps_working'] for r in eq_rows],
+                    "reserve": [r['pumps_reserve'] for r in eq_rows],
+                    "repair": eq_rows[0]['pumps_repair']
+                },
+                "feed_pumps": {
+                    "work": [r['feed_pumps_working'] for r in eq_rows],
+                    "reserve": [r['feed_pumps_reserve'] for r in eq_rows],
+                    "repair": eq_rows[0]['feed_pumps_repair']
+                },
+                "temps": [(r['temp_outdoor'], r['temp_supply'], r['temp_return']) for r in eq_rows],
+                "graph_temps": [(r['temp_graph_supply'], r['temp_graph_return']) for r in eq_rows],
+                "pressure": [(r['pressure_supply'], r['pressure_return']) for r in eq_rows],
+                "water_consumption": eq_rows[0]['water_consumption_daily'],
+                "staff": {
+                    "night": eq_rows[0]['staff_night'],
+                    "day": eq_rows[0]['staff_day']
+                },
+                "notes": eq_rows[0]['notes']
+            }
+            
+            boiler_data["models"].append(model_info)
 
-            "boilers": {
-                "work": col("boilers_working"),
-                "reserve": col("boilers_reserve"),
-                "repair": rows[0]["boilers_repair"]
-            },
-
-            "network_pumps": {
-                "work": col("pumps_working"),
-                "reserve": col("pumps_reserve"),
-                "repair": rows[0]["pumps_repair"]
-            },
-
-            "feed_pumps": {
-                "work": col("feed_pumps_working"),
-                "reserve": col("feed_pumps_reserve"),
-                "repair": rows[0]["feed_pumps_repair"]
-            },
-
-            "fuel": {
-                "total": rows[0]["fuel_tanks_total"],
-                "volume": rows[0]["fuel_tank_volume"],
-                "work": rows[0]["fuel_tanks_working"],
-                "reserve": rows[0]["fuel_tanks_reserve"],
-                "balance": rows[0]["fuel_morning_balance"],
-                "daily": rows[0]["fuel_daily_consumption"],
-                "repair": rows[0]["fuel_tanks_repair"]
-            },
-
-            "water": {
-                "total": rows[0]["water_tanks_total"],
-                "volume": rows[0]["water_tank_volume"],
-                "work": rows[0]["water_tanks_working"],
-                "reserve": rows[0]["water_tanks_reserve"],
-                "repair": rows[0]["water_tanks_repair"]
-            },
-
-            "temps": list(zip(
-                col("temp_outdoor"),
-                col("temp_supply"),
-                col("temp_return")
-            )),
-
-            "graph_temps": list(zip(
-                col("temp_graph_supply"),
-                col("temp_graph_return")
-            )),
-
-            "pressure": list(zip(
-                col("pressure_supply"),
-                col("pressure_return")
-            )),
-
-            "water_consumption": rows[0]["water_consumption_daily"],
-            "staff": {
-                "night": rows[0]["staff_night"],
-                "day": rows[0]["staff_day"]
-            },
-            "notes": rows[0]["notes"]
-        })
+        boilers.append(boiler_data)
 
     return boilers
 
