@@ -402,11 +402,11 @@ def archive_data(date):
     conn = get_conn()
     c = conn.cursor()
 
-    c.execute("""
-        SELECT * FROM records_archive 
-        WHERE archive_date::date = %s
-        ORDER BY date, boiler_number, equipment_number, time_interval
-    """, (date,))
+ c.execute("""
+    SELECT * FROM records_archive 
+    WHERE archive_date::date = %s 
+    ORDER BY date, boiler_number, equipment_number, time_interval
+""", (date,))
 
     records = c.fetchall()
     conn.close()
