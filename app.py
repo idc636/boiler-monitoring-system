@@ -314,8 +314,31 @@ def archive():
         FROM records
     """)
     
-    # Очищаем основную таблицу
-    c.execute("DELETE FROM records")
+    # Очищаем значения в ячейках (оставляем структуру)
+    c.execute("""
+        UPDATE records SET
+            time_interval = '',
+            boilers_working = '',
+            boilers_reserve = '',
+            boilers_repair = '',
+            pumps_working = '',
+            pumps_reserve = '',
+            pumps_repair = '',
+            feed_pumps_working = '',
+            feed_pumps_reserve = '',
+            feed_pumps_repair = '',
+            temp_outdoor = '',
+            temp_supply = '',
+            temp_return = '',
+            temp_graph_supply = '',
+            temp_graph_return = '',
+            pressure_supply = '',
+            pressure_return = '',
+            water_consumption_daily = '',
+            staff_night = '',
+            staff_day = '',
+            notes = ''
+    """)
     
     c.connection.commit()
     c.connection.close()
