@@ -399,17 +399,20 @@ def archive_data(date):
     if not admin():
         return redirect(url_for('login'))
     
-    c = get_conn().cursor()
-    # Получаем данные для выбранной даты архивации
+    conn = get_conn()
+    c = conn.cursor()
+
+    # Сравниваем только дату, игнорируя время
     c.execute("""
-        SELECT * FROM records_archive 
-        WHERE archive_date = %s 
+        SELECT *
+        FROM records_archive
+        WHERE archive_date::date = %s::date
         ORDER BY date, boiler_number, equipment_number, time_interval
     """, (date,))
+
     records = c.fetchall()
-    c.connection.close()
-    
-    # Преобразуем в структуру для таблицы (как в index.html)
+    conn.close()
+
     data = {r['original_id']: r for r in records}
     return render_template('archive_table.html', data=data, selected_date=date)
 
