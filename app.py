@@ -473,7 +473,7 @@ def archive_data(date):
     
     data = {}
     for r in records:
-        key = r['id']   # ← ВАЖНО
+        key = r['original_id']   # ← ВАЖНО
         data[key] = r
     
     return render_template('archive_table.html', data=data, selected_date=date)
