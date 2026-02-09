@@ -440,17 +440,15 @@ def view_archive():
         return redirect(url_for('login'))
     
     c = get_conn().cursor()
-    # Получаем уникальные даты архивации
-c.execute("""
-    SELECT DISTINCT 
-        archive_date,
-        TO_CHAR(archive_date, 'YYYY-MM-DD HH24:MI:SS') as formatted
-    FROM records_archive
-    WHERE archive_date IS NOT NULL
-    ORDER BY archive_date DESC
-""")
+    c.execute("""
+        SELECT DISTINCT 
+            archive_date,
+            TO_CHAR(archive_date, 'YYYY-MM-DD HH24:MI:SS') AS formatted
+        FROM records_archive
+        WHERE archive_date IS NOT NULL
+        ORDER BY archive_date DESC
+    """)
     dates = c.fetchall()
-    
     c.connection.close()
     
     return render_template('archive_dates.html', dates=dates)
