@@ -433,6 +433,7 @@ FROM records
         return jsonify({'status': 'error', 'message': str(e)})
 
 
+
 @app.route('/archive/view')
 def view_archive():
     if not admin():
