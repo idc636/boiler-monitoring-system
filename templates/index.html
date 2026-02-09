@@ -2,19 +2,19 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Журнал котельных</title>
+    <title>Журнал котельной</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 20px;
         }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 10px 20px;
+        h1 {
+            margin-bottom: 20px;
         }
 
         table {
@@ -24,189 +24,155 @@
         }
 
         th, td {
-            border: 1px solid #999;
-            padding: 4px 6px;
+            border: 1px solid #ccc;
+            padding: 6px 8px;
             text-align: center;
             font-size: 13px;
         }
 
         th {
-            background: #eaeaea;
+            background: #e9ecef;
+            font-weight: bold;
         }
 
-        tr.section td {
-            background: #d0d0d0;
-            font-weight: bold;
-            text-align: left;
+        tr:nth-child(even) {
+            background: #f9f9f9;
         }
 
         td.editable {
             cursor: pointer;
+            background: #fffdf5;
         }
 
-        td.editable:hover {
-            background: #ffffcc;
+        td.editable:focus {
+            outline: 2px solid #4da3ff;
+            background: #ffffff;
+        }
+
+        .boiler-block {
+            margin-bottom: 50px;
+            border: 2px solid #333;
+            background: #fff;
+        }
+
+        .boiler-header {
+            background: #333;
+            color: #fff;
+            padding: 10px;
+            font-size: 15px;
+            text-align: left;
+        }
+
+        .controls {
+            margin-bottom: 20px;
         }
 
         button {
             padding: 6px 12px;
-            margin-left: 6px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <div>
-        Пользователь: <b>{{ user.username }}</b> ({{ user.role }})
+<h1>Журнал работы котельной</h1>
+
+<div class="controls">
+    <button onclick="location.reload()">Обновить</button>
+</div>
+
+{% for b in boilers %}
+<div class="boiler-block">
+
+    <div class="boiler-header">
+        Котельная №{{ b.number }} | Дата: {{ b.date }} | {{ b.location }} | Контакт: {{ b.contact }}
     </div>
-    <div>
-        {% if user.role == 'admin' %}
-            <button onclick="addRow()">Добавить</button>
-            <button onclick="archive()">Архивировать</button>
-        {% endif %}
-        <a href="{{ url_for('logout') }}">Выйти</a>
-    </div>
-</header>
 
-<table>
-    <thead>
-        <tr>
-            <th rowspan="2">№</th>
-            <th rowspan="2">Модель</th>
-            <th rowspan="2">Год</th>
-            <th rowspan="2">Время</th>
-
-            <th colspan="3">Котлы</th>
-            <th colspan="3">Сетевые насосы</th>
-            <th colspan="3">Подпиточные насосы</th>
-
-            <th colspan="3">Температура</th>
-            <th colspan="2">По графику</th>
-            <th colspan="2">Давление</th>
-
-            <th rowspan="2">Вода</th>
-            <th rowspan="2">Ночь</th>
-            <th rowspan="2">День</th>
-            <th rowspan="2">Примечания</th>
-        </tr>
-        <tr>
-            <th>Раб</th><th>Рез</th><th>Рем</th>
-            <th>Раб</th><th>Рез</th><th>Рем</th>
-            <th>Раб</th><th>Рез</th><th>Рем</th>
-
-            <th>Ул</th><th>Подача</th><th>Обратка</th>
-            <th>П</th><th>О</th>
-            <th>П</th><th>О</th>
-        </tr>
-    </thead>
-
-    <tbody>
-    {% for b in boilers %}
-        <tr class="section">
-            <td colspan="24">
-                {{ b.date }} — Котельная №{{ b.number }},
-                {{ b.location }}, {{ b.contact }}
-            </td>
-        </tr>
-
+    <table>
+        <thead>
+            <tr>
+                <th rowspan="2">Время</th>
+                <th colspan="2">Котлы</th>
+                <th colspan="2">Сетевые насосы</th>
+                <th colspan="2">Подпиточные насосы</th>
+                <th colspan="3">Температура</th>
+                <th colspan="2">Давление</th>
+            </tr>
+            <tr>
+                <th>Работа</th>
+                <th>Резерв</th>
+                <th>Работа</th>
+                <th>Резерв</th>
+                <th>Работа</th>
+                <th>Резерв</th>
+                <th>Наруж.</th>
+                <th>Подача</th>
+                <th>Обратка</th>
+                <th>Подача</th>
+                <th>Обратка</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for i in range(b.rows) %}
-        <tr>
-            {% if i == 0 %}
-                <td rowspan="{{ b.rows }}">{{ b.number }}</td>
-                <td rowspan="{{ b.rows }}" class="editable" data-field="boiler_model">
-                    {{ b.boiler_models[0] }}
-                </td>
-                <td rowspan="{{ b.rows }}" class="editable" data-field="equipment_year">
-                    {{ b.years[0].year if b.years }}
-                </td>
-            {% endif %}
+            <tr>
+                <td class="editable" data-field="time_interval" data-id="{{ b.row_ids[i] }}" contenteditable="true">{{ b.times[i] }}</td>
 
-            <td class="editable" data-field="time_interval">{{ b.times[i] }}</td>
+                <td class="editable" data-field="boilers_working" data-id="{{ b.row_ids[i] }}" contenteditable="true">{{ b.boilers.work[i] }}</td>
+                <td class="editable" data-field="boilers_reserve" data-id="{{ b.row_ids[i] }}" contenteditable="true">{{ b.boilers.reserve[i] }}</td>
 
-            <td class="editable" data-field="boilers_working">{{ b.boilers.work[i] }}</td>
-            <td class="editable" data-field="boilers_reserve">{{ b.boilers.reserve[i] }}</td>
-            {% if i == 0 %}
-                <td rowspan="{{ b.rows }}" class="editable" data-field="boilers_repair">
-                    {{ b.boilers.repair }}
-                </td>
-            {% endif %}
+                <td class="editable" data-field="pumps_working" data-id="{{ b.row_ids[i] }}" contenteditable="true">{{ b.network_pumps.work[i] }}</td>
+                <td class="editable" data-field="pumps_reserve" data-id="{{ b.row_ids[i] }}" contenteditable="true">{{ b.network_pumps.reserve[i] }}</td>
 
-            <td class="editable" data-field="pumps_working">{{ b.network_pumps.work[i] }}</td>
-            <td class="editable" data-field="pumps_reserve">{{ b.network_pumps.reserve[i] }}</td>
-            {% if i == 0 %}
-                <td rowspan="{{ b.rows }}" class="editable" data-field="pumps_repair">
-                    {{ b.network_pumps.repair }}
-                </td>
-            {% endif %}
+                <td class="editable" data-field="feed_pumps_working" data-id="{{ b.row_ids[i] }}" contenteditable="true">{{ b.feed_pumps.work[i] }}</td>
+                <td class="editable" data-field="feed_pumps_reserve" data-id="{{ b.row_ids[i] }}" contenteditable="true">{{ b.feed_pumps.reserve[i] }}</td>
 
-            <td class="editable" data-field="feed_pumps_working">{{ b.feed_pumps.work[i] }}</td>
-            <td class="editable" data-field="feed_pumps_reserve">{{ b.feed_pumps.reserve[i] }}</td>
-            {% if i == 0 %}
-                <td rowspan="{{ b.rows }}" class="editable" data-field="feed_pumps_repair">
-                    {{ b.feed_pumps.repair }}
-                </td>
-            {% endif %}
+                <td class="editable" data-field="temp_outdoor" data-id="{{ b.row_ids[i] }}" contenteditable="true">{{ b.temps[i][0] }}</td>
+                <td class="editable" data-field="temp_supply" data-id="{{ b.row_ids[i] }}" contenteditable="true">{{ b.temps[i][1] }}</td>
+                <td class="editable" data-field="temp_return" data-id="{{ b.row_ids[i] }}" contenteditable="true">{{ b.temps[i][2] }}</td>
 
-            <td class="editable" data-field="temp_outdoor">{{ b.temps[i][0] }}</td>
-            <td class="editable" data-field="temp_supply">{{ b.temps[i][1] }}</td>
-            <td class="editable" data-field="temp_return">{{ b.temps[i][2] }}</td>
-
-            <td class="editable" data-field="temp_graph_supply">{{ b.graph_temps[i][0] }}</td>
-            <td class="editable" data-field="temp_graph_return">{{ b.graph_temps[i][1] }}</td>
-
-            <td class="editable" data-field="pressure_supply">{{ b.pressure[i][0] }}</td>
-            <td class="editable" data-field="pressure_return">{{ b.pressure[i][1] }}</td>
-
-            {% if i == 0 %}
-                <td rowspan="{{ b.rows }}" class="editable" data-field="water_consumption_daily">
-                    {{ b.water_consumption }}
-                </td>
-                <td rowspan="{{ b.rows }}" class="editable" data-field="staff_night">
-                    {{ b.staff.night }}
-                </td>
-                <td rowspan="{{ b.rows }}" class="editable" data-field="staff_day">
-                    {{ b.staff.day }}
-                </td>
-                <td rowspan="{{ b.rows }}" class="editable" data-field="notes">
-                    {{ b.notes }}
-                </td>
-            {% endif %}
-        </tr>
+                <td class="editable" data-field="pressure_supply" data-id="{{ b.row_ids[i] }}" contenteditable="true">{{ b.pressure[i][0] }}</td>
+                <td class="editable" data-field="pressure_return" data-id="{{ b.row_ids[i] }}" contenteditable="true">{{ b.pressure[i][1] }}</td>
+            </tr>
         {% endfor %}
-    {% endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+    <table style="margin-top: 10px;">
+        <tr>
+            <th>Модель котла</th>
+            <td>{{ b.boiler_models[0] }}</td>
+            <th>Год оборудования</th>
+            <td>{{ b.equipment_year }}</td>
+            <th>Водопотребление</th>
+            <td>{{ b.water_consumption }}</td>
+        </tr>
+        <tr>
+            <th>Персонал (ночь)</th>
+            <td>{{ b.staff.night }}</td>
+            <th>Персонал (день)</th>
+            <td>{{ b.staff.day }}</td>
+            <th>Примечания</th>
+            <td>{{ b.notes }}</td>
+        </tr>
+    </table>
+
+</div>
+{% endfor %}
 
 <script>
-document.querySelectorAll('.editable').forEach(td => {
-    td.addEventListener('click', () => {
-        if (td.querySelector('input')) return;
-
-        const old = td.innerText;
-        const input = document.createElement('input');
-        input.value = old;
-        td.innerText = '';
-        td.appendChild(input);
-        input.focus();
-
-        input.addEventListener('blur', () => {
-            td.innerText = input.value || old;
+    document.querySelectorAll('.editable').forEach(cell => {
+        cell.addEventListener('blur', () => {
+            fetch('/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: cell.dataset.id,
+                    field: cell.dataset.field,
+                    value: cell.innerText.trim()
+                })
+            });
         });
     });
-});
-
-function addRow() {
-    fetch('/add', {method: 'POST'}).then(() => location.reload());
-}
-
-function archive() {
-    if (!confirm('Архивировать все записи?')) return;
-    fetch('/archive', {method: 'POST'})
-        .then(r => r.json())
-        .then(d => alert(d.message))
-        .then(() => location.reload());
-}
 </script>
 
 </body>
