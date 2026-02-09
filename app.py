@@ -201,7 +201,7 @@ def index():
     for r in records:
         key = r['id']  # Используем id записи как ключ для data-id
         data[key] = r
-    
+    print("Data keys:", list(data.keys()))
     return render_template('index.html', data=data, user=user)
 
 
