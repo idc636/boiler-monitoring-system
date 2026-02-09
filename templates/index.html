@@ -1,297 +1,258 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>Таблица данных</title>
-  <style>
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      font-family: Arial, sans-serif;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: center;
-    }
-    th {
-      background-color: #f2f2f2;
-      font-weight: bold;
-    }
-    .time-header {
-      background-color: #e0e0e0;
-      font-weight: bold;
-    }
-    .sub-header {
-      background-color: #d0d0d0;
-      font-style: italic;
-    }
-  </style>
-</head>
-<body>
-  <table>
-    <thead>
-      <tr>
-        <th>№</th>
-        <th>Марка котла / Марка горелки</th>
-        <th>Год оборудования</th>
-        <th>Время</th>
-        <th>Котлы</th>
-        <th>Сетевые насосы</th>
-        <th>Подпиточные насосы</th>
-        <th>t°C воды</th>
-        <th>t°C воды по температурному графику</th>
-        <th>Давление на подаче, кгс/см²</th>
-        <th>Давление на обратке, кгс/см²</th>
-        <th>Расход подпиточной воды за сутки, м³</th>
-        <th>Дежурные котельной</th>
-        <th>Примечание</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
-        <td>2007</td>
-        <td rowspan="5" class="time-header">00:00</td>
-        <td>1</td>
-        <td>3</td>
-        <td>2</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>-36</td>
-        <td>86</td>
-        <td>64</td>
-        <td>90</td>
-        <td>70</td>
-        <td>6,2</td>
-        <td>5,8</td>
-        <td>0</td>
-        <td>Виноградов</td>
-        <td>Набокин</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
-        <td>2007</td>
-        <td>1</td>
-        <td>3</td>
-        <td>2</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>-36</td>
-        <td>86</td>
-        <td>64</td>
-        <td>90</td>
-        <td>70</td>
-        <td>6,2</td>
-        <td>5,8</td>
-        <td>0</td>
-        <td>Виноградов</td>
-        <td>Набокин</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
-        <td>2007</td>
-        <td>1</td>
-        <td>3</td>
-        <td>2</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>-36</td>
-        <td>86</td>
-        <td>64</td>
-        <td>90</td>
-        <td>70</td>
-        <td>6,2</td>
-        <td>5,8</td>
-        <td>0</td>
-        <td>Виноградов</td>
-        <td>Набокин</td>
-      </tr>
-      <tr>
-        <td>4</td>
-        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
-        <td>2007</td>
-        <td>1</td>
-        <td>3</td>
-        <td>2</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>-36</td>
-        <td>86</td>
-        <td>64</td>
-        <td>90</td>
-        <td>70</td>
-        <td>6,2</td>
-        <td>5,8</td>
-        <td>0</td>
-        <td>Виноградов</td>
-        <td>Набокин</td>
-      </tr>
-      <tr>
-        <td>5</td>
-        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
-        <td>2007</td>
-        <td>1</td>
-        <td>3</td>
-        <td>2</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>-36</td>
-        <td>86</td>
-        <td>64</td>
-        <td>90</td>
-        <td>70</td>
-        <td>6,2</td>
-        <td>5,8</td>
-        <td>0</td>
-        <td>Виноградов</td>
-        <td>Набокин</td>
-      </tr>
-      <tr>
-        <td>6</td>
-        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
-        <td>2007</td>
-        <td rowspan="5" class="time-header">03:00</td>
-        <td>1</td>
-        <td>3</td>
-        <td>2</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>-36</td>
-        <td>86</td>
-        <td>64</td>
-        <td>90</td>
-        <td>70</td>
-        <td>6,2</td>
-        <td>5,8</td>
-        <td>0</td>
-        <td>Виноградов</td>
-        <td>Набокин</td>
-      </tr>
-      <tr>
-        <td>7</td>
-        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
-        <td>2007</td>
-        <td>1</td>
-        <td>3</td>
-        <td>2</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>-36</td>
-        <td>86</td>
-        <td>64</td>
-        <td>90</td>
-        <td>70</td>
-        <td>6,2</td>
-        <td>5,8</td>
-        <td>0</td>
-        <td>Виноградов</td>
-        <td>Набокин</td>
-      </tr>
-      <tr>
-        <td>8</td>
-        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
-        <td>2007</td>
-        <td>1</td>
-        <td>3</td>
-        <td>2</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>-36</td>
-        <td>86</td>
-        <td>64</td>
-        <td>90</td>
-        <td>70</td>
-        <td>6,2</td>
-        <td>5,8</td>
-        <td>0</td>
-        <td>Виноградов</td>
-        <td>Набокин</td>
-      </tr>
-      <tr>
-        <td>9</td>
-        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
-        <td>2007</td>
-        <td>1</td>
-        <td>3</td>
-        <td>2</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>-36</td>
-        <td>86</td>
-        <td>64</td>
-        <td>90</td>
-        <td>70</td>
-        <td>6,2</td>
-        <td>5,8</td>
-        <td>0</td>
-        <td>Виноградов</td>
-        <td>Набокин</td>
-      </tr>
-      <tr>
-        <td>10</td>
-        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
-        <td>2007</td>
-        <td>1</td>
-        <td>3</td>
-        <td>2</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>1</td>
-        <td>2</td>
-        <td>–</td>
-        <td>-36</td>
-        <<td>86</td>
-        <td>64</td>
-        <td>90</td>
-        <td>70</td>
-        <td>6,2</td>
-        <td>5,8</td>
-        <td>0</td>
-        <td>Виноградов</td>
-        <td>Набокин</td>
-      </tr>
-    </tbody>
-  </table>
-</body>
-</html>
+<table border="1">
+  <tr>
+    <th>№</th>
+    <th>Марка котла / Марка горелки</th>
+    <th>Год оборудования</th>
+    <th>Время</th>
+    <th>Котлы</th>
+    <th>Сетевые насосы</th>
+    <th>Подпиточные насосы</th>
+    <th>t°C воды</th>
+    <th>t°C воды по температурному графику</th>
+    <th>Давление на подаче, кгс/см²</th>
+    <th>Давление на обратке, кгс/см²</th>
+    <th>Расход подпиточной воды за сутки, м³</th>
+    <th>Дежурные котельной</th>
+    <th>Примечание</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+    <td>2007</td>
+    <td>00:00</td>
+    <td>1</td>
+    <td>3</td>
+    <td>2</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>-36</td>
+    <td>86</td>
+    <td>64</td>
+    <td>90</td>
+    <td>70</td>
+    <td>6,2</td>
+    <td>5,8</td>
+    <td>0</td>
+    <td>Виноградов</td>
+    <td>Набокин</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+    <td>2007</td>
+    <td>1</td>
+    <td>3</td>
+    <td>2</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>-36</td>
+    <td>86</td>
+    <td>64</td>
+    <td>90</td>
+    <td>70</td>
+    <td>6,2</td>
+    <td>5,8</td>
+    <td>0</td>
+    <td>Виноградов</td>
+    <td>Набокин</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+    <td>2007</td>
+    <td>1</td>
+    <td>3</td>
+    <td>2</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>-36</td>
+    <td>86</td>
+    <td>64</td>
+    <td>90</td>
+    <td>70</td>
+    <td>6,2</td>
+    <td>5,8</td>
+    <td>0</td>
+    <td>Виноградов</td>
+    <td>Набокин</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+    <td>2007</td>
+    <td>1</td>
+    <td>3</td>
+    <td>2</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>-36</td>
+    <td>86</td>
+    <td>64</td>
+    <td>90</td>
+    <td>70</td>
+    <td>6,2</td>
+    <td>5,8</td>
+    <td>0</td>
+    <td>Виноградов</td>
+    <td>Набокин</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+    <td>2007</td>
+    <td>1</td>
+    <td>3</td>
+    <td>2</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>-36</td>
+    <td>86</td>
+    <td>64</td>
+    <td>90</td>
+    <td>70</td>
+    <td>6,2</td>
+    <td>5,8</td>
+    <td>0</td>
+    <td>Виноградов</td>
+    <td>Набокин</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+    <td>2007</td>
+    <td>03:00</td>
+    <td>1</td>
+    <td>3</td>
+    <td>2</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>-36</td>
+    <td>86</td>
+    <td>64</td>
+    <td>90</td>
+    <td>70</td>
+    <td>6,2</td>
+    <td>5,8</td>
+    <td>0</td>
+    <td>Виноградов</td>
+    <td>Набокин</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+    <td>2007</td>
+    <td>1</td>
+    <td>3</td>
+    <td>2</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>-36</td>
+    <td>86</td>
+    <td>64</td>
+    <td>90</td>
+    <td>70</td>
+    <td>6,2</td>
+    <td>5,8</td>
+    <td>0</td>
+    <td>Виноградов</td>
+    <td>Набокин</td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+    <td>2007</td>
+    <td>1</td>
+    <td>3</td>
+    <td>2</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>-36</td>
+    <td>86</td>
+    <td>64</td>
+    <td>90</td>
+    <td>70</td>
+    <td>6,2</td>
+    <td>5,8</td>
+    <td>0</td>
+    <td>Виноградов</td>
+    <td>Набокин</td>
+  </tr>
+  <tr>
+    <td>9</td>
+    <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+    <td>2007</td>
+    <td>1</td>
+    <td>3</td>
+    <td>2</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>-36</td>
+    <td>86</td>
+    <td>64</td>
+    <td>90</td>
+    <td>70</td>
+    <td>6,2</td>
+    <td>5,8</td>
+    <td>0</td>
+    <td>Виноградов</td>
+    <td>Набокин</td>
+  </tr>
+  <tr>
+    <td>10</td>
+    <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+    <td>2007</td>
+    <td>1</td>
+    <td>3</td>
+    <td>2</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>1</td>
+    <td>2</td>
+    <td>–</td>
+    <td>-36</td>
+    <td>86</td>
+    <td>64</td>
+    <td>90</td>
+    <td>7</td>
+    <td>0</td>
+    <td>Виноградов</td>
+    <td>Набокин</td>
+  </tr>
+</table>
