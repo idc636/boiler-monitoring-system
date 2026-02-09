@@ -47,7 +47,12 @@
     </tr>
     </thead>
     <tbody>
-
+    {% for key, row in data.items() %}
+<tr>
+<td>{{ key }}</td>
+<td>{{ row.time_interval }}</td>
+</tr>
+{% endfor %}
     <!-- ============ КОТЕЛЬНАЯ №1 ============ -->
     <tr class="section">
     <td colspan="24">Котельная №1 Белоярск №1 ул. Набережная 8</td>
