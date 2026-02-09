@@ -410,7 +410,7 @@ def archive_data(date):
     c.connection.close()
     
     # Преобразуем в структуру для таблицы (как в index.html)
-    data = {r['id']: r for r in records}
+    data = {r['original_id']: r for r in records}
     return render_template('archive_table.html', data=data, selected_date=date)
 
 
