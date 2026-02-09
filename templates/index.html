@@ -2,150 +2,296 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Динамическая таблица</title>
+  <title>Таблица данных</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-
     table {
-      width: 100%;
       border-collapse: collapse;
-      margin-bottom: 20px;
+      width: 100%;
+      font-family: Arial, sans-serif;
     }
-
     th, td {
       border: 1px solid #ccc;
-      padding: 10px;
+      padding: 8px;
       text-align: center;
     }
-
     th {
-      background-color: #f4f4f4;
+      background-color: #f2f2f2;
+      font-weight: bold;
     }
-
-    .edit-input {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 5px;
-      font-size: 14px;
+    .time-header {
+      background-color: #e0e0e0;
+      font-weight: bold;
     }
-
-    .editable {
-      cursor: pointer;
-      user-select: none;
+    .sub-header {
+      background-color: #d0d0d0;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
-
   <table>
     <thead>
       <tr>
-        <th>Модель котла</th>
-        <th>Год установки</th>
-        <th>Температура подачи</th>
-        <th>Температура обратка</th>
-        <th>Интервал времени</th>
+        <th>№</th>
+        <th>Марка котла / Марка горелки</th>
+        <th>Год оборудования</th>
+        <th>Время</th>
+        <th>Котлы</th>
+        <th>Сетевые насосы</th>
+        <th>Подпиточные насосы</th>
+        <th>t°C воды</th>
+        <th>t°C воды по температурному графику</th>
+        <th>Давление на подаче, кгс/см²</th>
+        <th>Давление на обратке, кгс/см²</th>
+        <th>Расход подпиточной воды за сутки, м³</th>
+        <th>Дежурные котельной</th>
+        <th>Примечание</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td data-field="boiler_model" data-id="1" class="editable">Котел 1</td>
-        <td data-field="equipment_year" data-id="1" class="editable">2015</td>
-        <td data-field="temp_supply" data-id="1" class="editable">60°C</td>
-        <td data-field="temp_return" data-id="1" class="editable">45°C</td>
-        <td data-field="time_interval" data-id="1" class="editable">10:00</td>
+        <td>1</td>
+        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+        <td>2007</td>
+        <td rowspan="5" class="time-header">00:00</td>
+        <td>1</td>
+        <td>3</td>
+        <td>2</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>-36</td>
+        <td>86</td>
+        <td>64</td>
+        <td>90</td>
+        <td>70</td>
+        <td>6,2</td>
+        <td>5,8</td>
+        <td>0</td>
+        <td>Виноградов</td>
+        <td>Набокин</td>
       </tr>
       <tr>
-        <td data-field="boiler_model" data-id="2" class="editable">Котел 2</td>
-        <td data-field="equipment_year" data-id="2" class="editable">2018</td>
-        <td data-field="temp_supply" data-id="2" class="editable">65°C</td>
-        <td data-field="temp_return" data-id="2" class="editable">40°C</td>
-        <td data-field="time_interval" data-id="2" class="editable">15:30</td>
+        <td>2</td>
+        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+        <td>2007</td>
+        <td>1</td>
+        <td>3</td>
+        <td>2</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>-36</td>
+        <td>86</td>
+        <td>64</td>
+        <td>90</td>
+        <td>70</td>
+        <td>6,2</td>
+        <td>5,8</td>
+        <td>0</td>
+        <td>Виноградов</td>
+        <td>Набокин</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+        <td>2007</td>
+        <td>1</td>
+        <td>3</td>
+        <td>2</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>-36</td>
+        <td>86</td>
+        <td>64</td>
+        <td>90</td>
+        <td>70</td>
+        <td>6,2</td>
+        <td>5,8</td>
+        <td>0</td>
+        <td>Виноградов</td>
+        <td>Набокин</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+        <td>2007</td>
+        <td>1</td>
+        <td>3</td>
+        <td>2</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>-36</td>
+        <td>86</td>
+        <td>64</td>
+        <td>90</td>
+        <td>70</td>
+        <td>6,2</td>
+        <td>5,8</td>
+        <td>0</td>
+        <td>Виноградов</td>
+        <td>Набокин</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+        <td>2007</td>
+        <td>1</td>
+        <td>3</td>
+        <td>2</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>-36</td>
+        <td>86</td>
+        <td>64</td>
+        <td>90</td>
+        <td>70</td>
+        <td>6,2</td>
+        <td>5,8</td>
+        <td>0</td>
+        <td>Виноградов</td>
+        <td>Набокин</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+        <td>2007</td>
+        <td rowspan="5" class="time-header">03:00</td>
+        <td>1</td>
+        <td>3</td>
+        <td>2</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>-36</td>
+        <td>86</td>
+        <td>64</td>
+        <td>90</td>
+        <td>70</td>
+        <td>6,2</td>
+        <td>5,8</td>
+        <td>0</td>
+        <td>Виноградов</td>
+        <td>Набокин</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+        <td>2007</td>
+        <td>1</td>
+        <td>3</td>
+        <td>2</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>-36</td>
+        <td>86</td>
+        <td>64</td>
+        <td>90</td>
+        <td>70</td>
+        <td>6,2</td>
+        <td>5,8</td>
+        <td>0</td>
+        <td>Виноградов</td>
+        <td>Набокин</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+        <td>2007</td>
+        <td>1</td>
+        <td>3</td>
+        <td>2</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>-36</td>
+        <td>86</td>
+        <td>64</td>
+        <td>90</td>
+        <td>70</td>
+        <td>6,2</td>
+        <td>5,8</td>
+        <td>0</td>
+        <td>Виноградов</td>
+        <td>Набокин</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+        <td>2007</td>
+        <td>1</td>
+        <td>3</td>
+        <td>2</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>-36</td>
+        <td>86</td>
+        <td>64</td>
+        <td>90</td>
+        <td>70</td>
+        <td>6,2</td>
+        <td>5,8</td>
+        <td>0</td>
+        <td>Виноградов</td>
+        <td>Набокин</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>КСВ-3,0/PG93 "UNIGAS" №0805505</td>
+        <td>2007</td>
+        <td>1</td>
+        <td>3</td>
+        <td>2</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>1</td>
+        <td>2</td>
+        <td>–</td>
+        <td>-36</td>
+        <<td>86</td>
+        <td>64</td>
+        <td>90</td>
+        <td>70</td>
+        <td>6,2</td>
+        <td>5,8</td>
+        <td>0</td>
+        <td>Виноградов</td>
+        <td>Набокин</td>
       </tr>
     </tbody>
   </table>
-
-  <script>
-    const config = {
-      editableFields: ['temp_supply', 'temp_return', 'time_interval'],
-      readOnlyFields: ['boiler_model', 'equipment_year'],
-      validationRules: {
-        temp_supply: /^[0-9]{1,2}°C$/,
-        temp_return: /^[0-9]{1,2}°C$/,
-        time_interval: /^[0-9]{1,2}:\d{2}$/
-      }
-    };
-
-    function createInputCell(cell, field, id) {
-      const currentValue = cell.textContent.trim();
-      
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.value = currentValue;
-      input.classList.add('edit-input');
-      
-      // Валидация
-      input.addEventListener('input', function() {
-        const value = this.value;
-        if (config.validationRules[field] && !config.validationRules[field].test(value)) {
-          this.value = currentValue;
-        }
-      });
-      
-      // Сохранение
-      input.addEventListener('blur', function() {
-        const newValue = this.value.trim();
-        
-        if (!newValue) {
-          alert('Поле не может быть пустым');
-          return;
-        }
-        
-        fetch('/update', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ field, value: newValue, id })
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.status === 'ok') {
-            cell.textContent = newValue;
-          } else {
-            alert('Ошибка сохранения');
-          }
-        })
-        .catch(error => {
-          console.error('Ошибка:', error);
-          alert('Ошибка связи с сервером');
-        });
-      });
-      
-      // Enter для сохранения
-      input.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') this.blur();
-      });
-      
-      return input;
-    }
-
-    document.querySelectorAll('.editable').forEach(cell => {
-      const field = cell.getAttribute('data-field');
-      const id = cell.getAttribute('data-id');
-      
-      if (config.readOnlyFields.includes(field)) {
-        alert('Поле нельзя редактировать');
-        return;
-      }
-      
-      const input = createInputCell(cell, field, id);
-      cell.innerHTML = '';
-      cell.appendChild(input);
-      input.focus();
-    });
-  </script>
-
 </body>
 </html>
