@@ -293,7 +293,7 @@ def archive():
     c = get_conn().cursor()
     
     try:
-        # Копируем в архив
+        # Копируем в архив (включая burner_model)
         c.execute("""
             INSERT INTO records_archive (
                 original_id, date, boiler_number, boiler_location, boiler_contact,
