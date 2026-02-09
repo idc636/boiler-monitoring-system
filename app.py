@@ -402,17 +402,15 @@ def archive_data(date):
     conn = get_conn()
     c = conn.cursor()
 
-    # Сравниваем только дату, игнорируя время
     c.execute("""
-        SELECT *
-        FROM records_archive
-        WHERE archive_date::date = %s::date
+        SELECT * FROM records_archive 
+        WHERE archive_date::date = %s
         ORDER BY date, boiler_number, equipment_number, time_interval
     """, (date,))
 
     records = c.fetchall()
     conn.close()
-
+    
     data = {r['original_id']: r for r in records}
     return render_template('archive_table.html', data=data, selected_date=date)
 
