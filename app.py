@@ -410,7 +410,11 @@ def archive_data(date):
     records = c.fetchall()
     conn.close()
     
-    data = {r['id']: r for r in records}
+    data = {}
+    for r in records:
+        key = r['id']   # ← ВАЖНО
+        data[key] = r
+    
     return render_template('archive_table.html', data=data, selected_date=date)
 
 
