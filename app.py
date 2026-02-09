@@ -381,14 +381,37 @@ def view_archive():
         return redirect(url_for('login'))
     
     c = get_conn().cursor()
+    # Получаем уникальные даты архивации
     c.execute("""
-        SELECT * FROM records_archive
-        ORDER BY archive_date DESC, date DESC, boiler_number, time_interval
+        SELECT DISTINCT archive_date 
+        FROM records_archive 
+        ORDER BY archive_date DESC
     """)
+    dates = c.fetchall()
+    
+    c.connection.close()
+    
+    return render_template('archive_dates.html', dates=dates)
+
+
+@app.route('/archive/data/<date>')
+def archive_data(date):
+    if not admin():
+        return redirect(url_for('login'))
+    
+    c = get_conn().cursor()
+    # Получаем данные для выбранной даты архивации
+    c.execute("""
+        SELECT * FROM records_archive 
+        WHERE archive_date = %s 
+        ORDER BY date, boiler_number, equipment_number, time_interval
+    """, (date,))
     records = c.fetchall()
     c.connection.close()
     
-    return render_template('archive.html', records=records)
+    # Преобразуем в структуру для таблицы (как в index.html)
+    data = {r['original_id']: r for r in records}
+    return render_template('archive_table.html', data=data, selected_date=date)
 
 
 # ===================== START =====================
