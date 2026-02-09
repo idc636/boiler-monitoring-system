@@ -1,4 +1,3 @@
-app.py
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -15,107 +14,69 @@ DATABASE_URL = os.environ.get('DATABASE_URL') or \
 def init_db():
     conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
     cur = conn.cursor()
+
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id SERIAL PRIMARY KEY,
-            username VARCHAR(50) UNIQUE NOT NULL,
-            password VARCHAR(128) NOT NULL,
-            role VARCHAR(20) DEFAULT 'operator'
-        );
-        
-        CREATE TABLE IF NOT EXISTS records (
-            id SERIAL PRIMARY KEY,
-            date TEXT,
-            boiler_number INTEGER,
-            boiler_location TEXT,
-            boiler_contact TEXT,
-            equipment_number INTEGER,
-            boiler_model TEXT,
-            equipment_year TEXT,
-            time_interval TEXT,
-            boilers_working TEXT,
-            boilers_reserve TEXT,
-            boilers_repair TEXT,
-            pumps_working TEXT,
-            pumps_reserve TEXT,
-            pumps_repair TEXT,
-            feed_pumps_working TEXT,
-            feed_pumps_reserve TEXT,
-            feed_pumps_repair TEXT,
-            fuel_tanks_total TEXT,
-            fuel_tank_volume TEXT,
-            fuel_tanks_working TEXT,
-            fuel_tanks_reserve TEXT,
-            fuel_morning_balance TEXT,
-            fuel_daily_consumption TEXT,
-            fuel_tanks_repair TEXT,
-            water_tanks_total TEXT,
-            water_tank_volume TEXT,
-            water_tanks_working TEXT,
-            water_tanks_reserve TEXT,
-            water_tanks_repair TEXT,
-            temp_outdoor TEXT,
-            temp_supply TEXT,
-            temp_return TEXT,
-            temp_graph_supply TEXT,
-            temp_graph_return TEXT,
-            pressure_supply TEXT,
-            pressure_return TEXT,
-            water_consumption_daily TEXT,
-            staff_night TEXT,
-            staff_day TEXT,
-            notes TEXT
-        );
-        
-        -- ДОБАВЛЕНО: таблица архива
-        CREATE TABLE IF NOT EXISTS records_archive (
-            id SERIAL PRIMARY KEY,
-            archive_date DATE NOT NULL,
-            original_id INTEGER,
-            date TEXT,
-            boiler_number INTEGER,
-            boiler_location TEXT,
-            boiler_contact TEXT,
-            equipment_number INTEGER,
-            boiler_model TEXT,
-            equipment_year TEXT,
-            time_interval TEXT,
-            boilers_working TEXT,
-            boilers_reserve TEXT,
-            boilers_repair TEXT,
-            pumps_working TEXT,
-            pumps_reserve TEXT,
-            pumps_repair TEXT,
-            feed_pumps_working TEXT,
-            feed_pumps_reserve TEXT,
-            feed_pumps_repair TEXT,
-            fuel_tanks_total TEXT,
-            fuel_tank_volume TEXT,
-            fuel_tanks_working TEXT,
-            fuel_tanks_reserve TEXT,
-            fuel_morning_balance TEXT,
-            fuel_daily_consumption TEXT,
-            fuel_tanks_repair TEXT,
-            water_tanks_total TEXT,
-            water_tank_volume TEXT,
-            water_tanks_working TEXT,
-            water_tanks_reserve TEXT,
-            water_tanks_repair TEXT,
-            temp_outdoor TEXT,
-            temp_supply TEXT,
-            temp_return TEXT,
-            temp_graph_supply TEXT,
-            temp_graph_return TEXT,
-            pressure_supply TEXT,
-            pressure_return TEXT,
-            water_consumption_daily TEXT,
-            staff_night TEXT,
-            staff_day TEXT,
-            notes TEXT
-        );
-        
-        CREATE INDEX IF NOT EXISTS idx_records_archive_date ON records_archive(archive_date);
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        password VARCHAR(128) NOT NULL,
+        role VARCHAR(20) DEFAULT 'operator'
+    );
+
+    CREATE TABLE IF NOT EXISTS records (
+        id SERIAL PRIMARY KEY,
+        date TEXT,
+        boiler_number INTEGER,
+        boiler_location TEXT,
+        boiler_contact TEXT,
+
+        equipment_number INTEGER,
+        boiler_model TEXT,
+        equipment_year TEXT,
+        time_interval TEXT,
+
+        boilers_working TEXT,
+        boilers_reserve TEXT,
+        boilers_repair TEXT,
+
+        pumps_working TEXT,
+        pumps_reserve TEXT,
+        pumps_repair TEXT,
+
+        feed_pumps_working TEXT,
+        feed_pumps_reserve TEXT,
+        feed_pumps_repair TEXT,
+
+        fuel_tanks_total TEXT,
+        fuel_tank_volume TEXT,
+        fuel_tanks_working TEXT,
+        fuel_tanks_reserve TEXT,
+        fuel_morning_balance TEXT,
+        fuel_daily_consumption TEXT,
+        fuel_tanks_repair TEXT,
+
+        water_tanks_total TEXT,
+        water_tank_volume TEXT,
+        water_tanks_working TEXT,
+        water_tanks_reserve TEXT,
+        water_tanks_repair TEXT,
+
+        temp_outdoor TEXT,
+        temp_supply TEXT,
+        temp_return TEXT,
+        temp_graph_supply TEXT,
+        temp_graph_return TEXT,
+
+        pressure_supply TEXT,
+        pressure_return TEXT,
+
+        water_consumption_daily TEXT,
+        staff_night TEXT,
+        staff_day TEXT,
+        notes TEXT
+    );
     """)
+
     conn.commit()
     conn.close()
 
@@ -359,86 +320,54 @@ def add():
 
 
 # ===================== START =====================
-
 @app.route('/archive', methods=['POST'])
 def archive():
     if not admin():
-        return jsonify({'status': 'error', 'message': 'Нет прав'}), 403
+        return jsonify({'status': 'error', 'message': 'Нет прав'})
 
-    conn = get_conn()
-    c = conn.cursor()
-
-    try:
-        # Проверяем, есть ли данные
-        c.execute("SELECT COUNT(*) FROM records")
-        count_before = c.fetchone()['count']
-
-        if count_before == 0:
-            return jsonify({
-                'status': 'ok',
-                'message': 'Таблица уже пустая'
-            })
-
-        # Архивируем
-        c.execute("""
-            INSERT INTO records_archive (
-                archive_date,
-                original_id, date, boiler_number, boiler_location, boiler_contact,
-                equipment_number, boiler_model, equipment_year, time_interval,
-                boilers_working, boilers_reserve, boilers_repair,
-                pumps_working, pumps_reserve, pumps_repair,
-                feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
-                fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
-                fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
-                water_tanks_total, water_tank_volume, water_tanks_working,
-                water_tanks_reserve, water_tanks_repair,
-                temp_outdoor, temp_supply, temp_return,
-                temp_graph_supply, temp_graph_return,
-                pressure_supply, pressure_return,
-                water_consumption_daily, staff_night, staff_day, notes
-            )
-            SELECT
-                CURRENT_DATE,
-                id, date, boiler_number, boiler_location, boiler_contact,
-                equipment_number, boiler_model, equipment_year, time_interval,
-                boilers_working, boilers_reserve, boilers_repair,
-                pumps_working, pumps_reserve, pumps_repair,
-                feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
-                fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
-                fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
-                water_tanks_total, water_tank_volume, water_tanks_working,
-                water_tanks_reserve, water_tanks_repair,
-                temp_outdoor, temp_supply, temp_return,
-                temp_graph_supply, temp_graph_return,
-                pressure_supply, pressure_return,
-                water_consumption_daily, staff_night, staff_day, notes
-            FROM records
-        """)
-
-        # Очищаем
-        c.execute("DELETE FROM records")
-
-        conn.commit()
-
-        return jsonify({
-            'status': 'ok',
-            'message': f'Заархивировано и очищено записей: {count_before}'
-        })
-
-    except Exception as e:
-        conn.rollback()
-        return jsonify({
-            'status': 'error',
-            'message': str(e)
-        }), 500
-
-    finally:
-        conn.close()
-
+    c = get_conn().cursor()
     
-    return jsonify({'status': 'ok', 'message': 'Архивация выполнена'})
-# ⬆️ ДОБАВЬ ЭТОТ БЛОК СЮДА ⬆️
-
+    # Копируем все записи в архив
+    c.execute("""
+        INSERT INTO records_archive (
+            original_id, date, boiler_number, boiler_location, boiler_contact,
+            equipment_number, boiler_model, equipment_year, time_interval,
+            boilers_working, boilers_reserve, boilers_repair,
+            pumps_working, pumps_reserve, pumps_repair,
+            feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
+            fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
+            fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
+            water_tanks_total, water_tank_volume, water_tanks_working,
+            water_tanks_reserve, water_tanks_repair,
+            temp_outdoor, temp_supply, temp_return,
+            temp_graph_supply, temp_graph_return,
+            pressure_supply, pressure_return,
+            water_consumption_daily, staff_night, staff_day, notes
+        )
+        SELECT 
+            id, date, boiler_number, boiler_location, boiler_contact,
+            equipment_number, boiler_model, equipment_year, time_interval,
+            boilers_working, boilers_reserve, boilers_repair,
+            pumps_working, pumps_reserve, pumps_repair,
+            feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
+            fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
+            fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
+            water_tanks_total, water_tank_volume, water_tanks_working,
+            water_tanks_reserve, water_tanks_repair,
+            temp_outdoor, temp_supply, temp_return,
+            temp_graph_supply, temp_graph_return,
+            pressure_supply, pressure_return,
+            water_consumption_daily, staff_night, staff_day, notes
+        FROM records
+    """)
+    
+    # Очищаем основную таблицу
+    c.execute("DELETE FROM records")
+    
+    c.connection.commit()
+    c.connection.close()
+    
+    return jsonify({'status': 'ok', 'message': 'Данные успешно архивированы'})
 if __name__ == '__main__':
     init_db()
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
