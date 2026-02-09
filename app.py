@@ -344,6 +344,21 @@ def archive():
     c.connection.close()
     
     return jsonify({'status': 'ok', 'message': 'Данные успешно архивированы'})
+    
+    @app.route('/archive/view')
+def view_archive():
+    if not admin():
+        return redirect(url_for('login'))
+    
+    c = get_conn().cursor()
+    c.execute("""
+        SELECT * FROM records_archive
+        ORDER BY archive_date DESC, date DESC, boiler_number, time_interval
+    """)
+    records = c.fetchall()
+    c.connection.close()
+    
+    return render_template('archive.html', records=records)
 if __name__ == '__main__':
     init_db()
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
