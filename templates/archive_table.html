@@ -53,19 +53,19 @@
     <td colspan="24">Котельная №1 Белоярск №1 ул. Набережная 8</td>
     </tr>
     <tr>
-    <td rowspan="2">1</td>
-    <td rowspan="2">{{ data[791].boiler_model if data and data[791] else '' }}</td>
-    <td rowspan="2">{{ data[791].equipment_year if data and data[791] else '' }}</td>
+    <td rowspan="4">1</td>
+    <td rowspan="4">{{ data[791].boiler_model if data and data[791] else '' }}</td>
+    <td rowspan="4">{{ data[791].equipment_year if data and data[791] else '' }}</td>
     <td>{{ data[791].time_interval if data and data[791] else '' }}</td>
     <td>{{ data[791].boilers_working if data and data[791] else '' }}</td>
     <td>{{ data[791].boilers_reserve if data and data[791] else '' }}</td>
-    <td rowspan="2">{{ data[791].boilers_repair if data and data[791] else '' }}</td>
+    <td rowspan="4">{{ data[791].boilers_repair if data and data[791] else '' }}</td>
     <td>{{ data[791].pumps_working if data and data[791] else '' }}</td>
     <td>{{ data[791].pumps_reserve if data and data[791] else '' }}</td>
-    <td rowspan="2">{{ data[791].pumps_repair if data and data[791] else '' }}</td>
+    <td rowspan="4">{{ data[791].pumps_repair if data and data[791] else '' }}</td>
     <td>{{ data[791].feed_pumps_working if data and data[791] else '' }}</td>
     <td>{{ data[791].feed_pumps_reserve if data and data[791] else '' }}</td>
-    <td rowspan="2">{{ data[791].feed_pumps_repair if data and data[791] else '' }}</td>
+    <td rowspan="4">{{ data[791].feed_pumps_repair if data and data[791] else '' }}</td>
     <td>{{ data[791].temp_outdoor if data and data[791] else '' }}</td>
     <td>{{ data[791].temp_supply if data and data[791] else '' }}</td>
     <td>{{ data[791].temp_return if data and data[791] else '' }}</td>
@@ -73,10 +73,10 @@
     <td>{{ data[791].temp_graph_return if data and data[791] else '' }}</td>
     <td>{{ data[791].pressure_supply if data and data[791] else '' }}</td>
     <td>{{ data[791].pressure_return if data and data[791] else '' }}</td>
-    <td rowspan="2">{{ data[791].water_consumption_daily if data and data[791] else '' }}</td>
-    <td rowspan="2">{{ data[791].staff_night if data and data[791] else '' }}</td>
-    <td rowspan="2">{{ data[791].staff_day if data and data[791] else '' }}</td>
-    <td rowspan="2">{{ data[791].notes if data and data[791] else '' }}</td>
+    <td rowspan="4">{{ data[791].water_consumption_daily if data and data[791] else '' }}</td>
+    <td rowspan="4">{{ data[791].staff_night if data and data[791] else '' }}</td>
+    <td rowspan="4">{{ data[791].staff_day if data and data[791] else '' }}</td>
+    <td rowspan="4">{{ data[791].notes if data and data[791] else '' }}</td>
     </tr>
     <tr>
     <td>{{ data[800].time_interval if data and data[800] else '' }}</td>
@@ -93,128 +93,6 @@
     <td>{{ data[800].temp_graph_return if data and data[800] else '' }}</td>
     <td>{{ data[800].pressure_supply if data and data[800] else '' }}</td>
     <td>{{ data[800].pressure_return if data and data[800] else '' }}</td>
-    </tr>
-
-    <!-- ============ КОТЕЛЬНАЯ №4 ============ -->
-    <tr class="section">
-    <td colspan="24">Котельная №4 Катравож №4 ул. Маслова б/2</td>
-    </tr>
-    <tr>
-    <td rowspan="4">1</td>
-    <td rowspan="4">{{ data[792].boiler_model if data and data[792] else '' }}</td>
-    <td rowspan="4">{{ data[792].equipment_year if data and data[792] else '' }}</td>
-    <td>{{ data[792].time_interval if data and data[792] else '' }}</td>
-    <td>{{ data[792].boilers_working if data and data[792] else '' }}</td>
-    <td>{{ data[792].boilers_reserve if data and data[792] else '' }}</td>
-    <td rowspan="4">{{ data[792].boilers_repair if data and data[792] else '' }}</td>
-    <td>{{ data[792].pumps_working if data and data[792] else '' }}</td>
-    <td>{{ data[792].pumps_reserve if data and data[792] else '' }}</td>
-    <td rowspan="4">{{ data[792].pumps_repair if data and data[792] else '' }}</td>
-    <td>{{ data[792].feed_pumps_working if data and data[792] else '' }}</td>
-    <td>{{ data[792].feed_pumps_reserve if data and data[792] else '' }}</td>
-    <td rowspan="4">{{ data[792].feed_pumps_repair if data and data[792] else '' }}</td>
-    <td>{{ data[792].temp_outdoor if data and data[792] else '' }}</td>
-    <td>{{ data[792].temp_supply if data and data[792] else '' }}</td>
-    <td>{{ data[792].temp_return if data and data[792] else '' }}</td>
-    <td>{{ data[792].temp_graph_supply if data and data[792] else '' }}</td>
-    <td>{{ data[792].temp_graph_return if data and data[792] else '' }}</td>
-    <td>{{ data[792].pressure_supply if data and data[792] else '' }}</td>
-    <td>{{ data[792].pressure_return if data and data[792] else '' }}</td>
-    <td rowspan="4">{{ data[792].water_consumption_daily if data and data[792] else '' }}</td>
-    <td rowspan="4">{{ data[792].staff_night if data and data[792] else '' }}</td>
-    <td rowspan="4">{{ data[792].staff_day if data and data[792] else '' }}</td>
-    <td rowspan="4">{{ data[792].notes if data and data[792] else '' }}</td>
-    </tr>
-    <tr>
-    <td>{{ data[793].time_interval if data and data[793] else '' }}</td>
-    <td>{{ data[793].boilers_working if data and data[793] else '' }}</td>
-    <td>{{ data[793].boilers_reserve if data and data[793] else '' }}</td>
-    <td>{{ data[793].pumps_working if data and data[793] else '' }}</td>
-    <td>{{ data[793].pumps_reserve if data and data[793] else '' }}</td>
-    <td>{{ data[793].feed_pumps_working if data and data[793] else '' }}</td>
-    <td>{{ data[793].feed_pumps_reserve if data and data[793] else '' }}</td>
-    <td>{{ data[793].temp_outdoor if data and data[793] else '' }}</td>
-    <td>{{ data[793].temp_supply if data and data[793] else '' }}</td>
-    <td>{{ data[793].temp_return if data and data[793] else '' }}</td>
-    <td>{{ data[793].temp_graph_supply if data and data[793] else '' }}</td>
-    <td>{{ data[793].temp_graph_return if data and data[793] else '' }}</td>
-    <td>{{ data[793].pressure_supply if data and data[793] else '' }}</td>
-    <td>{{ data[793].pressure_return if data and data[793] else '' }}</td>
-    </tr>
-    <tr>
-    <td>{{ data[794].time_interval if data and data[794] else '' }}</td>
-    <td>{{ data[794].boilers_working if data and data[794] else '' }}</td>
-    <td>{{ data[794].boilers_reserve if data and data[794] else '' }}</td>
-    <td>{{ data[794].pumps_working if data and data[794] else '' }}</td>
-    <td>{{ data[794].pumps_reserve if data and data[794] else '' }}</td>
-    <td>{{ data[794].feed_pumps_working if data and data[794] else '' }}</td>
-    <td>{{ data[794].feed_pumps_reserve if data and data[794] else '' }}</td>
-    <td>{{ data[794].temp_outdoor if data and data[794] else '' }}</td>
-    <td>{{ data[794].temp_supply if data and data[794] else '' }}</td>
-    <td>{{ data[794].temp_return if data and data[794] else '' }}</td>
-    <td>{{ data[794].temp_graph_supply if data and data[794] else '' }}</td>
-    <td>{{ data[794].temp_graph_return if data and data[794] else '' }}</td>
-    <td>{{ data[794].pressure_supply if data and data[794] else '' }}</td>
-    <td>{{ data[794].pressure_return if data and data[794] else '' }}</td>
-    </tr>
-    <tr>
-    <td>{{ data[799].time_interval if data and data[799] else '' }}</td>
-    <td>{{ data[799].boilers_working if data and data[799] else '' }}</td>
-    <td>{{ data[799].boilers_reserve if data and data[799] else '' }}</td>
-    <td>{{ data[799].pumps_working if data and data[799] else '' }}</td>
-    <td>{{ data[799].pumps_reserve if data and data[799] else '' }}</td>
-    <td>{{ data[799].feed_pumps_working if data and data[799] else '' }}</td>
-    <td>{{ data[799].feed_pumps_reserve if data and data[799] else '' }}</td>
-    <td>{{ data[799].temp_outdoor if data and data[799] else '' }}</td>
-    <td>{{ data[799].temp_supply if data and data[799] else '' }}</td>
-    <td>{{ data[799].temp_return if data and data[799] else '' }}</td>
-    <td>{{ data[799].temp_graph_supply if data and data[799] else '' }}</td>
-    <td>{{ data[799].temp_graph_return if data and data[799] else '' }}</td>
-    <td>{{ data[799].pressure_supply if data and data[799] else '' }}</td>
-    <td>{{ data[799].pressure_return if data and data[799] else '' }}</td>
-    </tr>
-
-    <tr>
-    <td rowspan="4">2</td>
-    <td rowspan="4">{{ data[795].boiler_model if data and data[795] else '' }}</td>
-    <td rowspan="4">{{ data[795].equipment_year if data and data[795] else '' }}</td>
-    <td>{{ data[795].time_interval if data and data[795] else '' }}</td>
-    <td>{{ data[795].boilers_working if data and data[795] else '' }}</td>
-    <td>{{ data[795].boilers_reserve if data and data[795] else '' }}</td>
-    <td rowspan="4">{{ data[795].boilers_repair if data and data[795] else '' }}</td>
-    <td>{{ data[795].pumps_working if data and data[795] else '' }}</td>
-    <td>{{ data[795].pumps_reserve if data and data[795] else '' }}</td>
-    <td rowspan="4">{{ data[795].pumps_repair if data and data[795] else '' }}</td>
-    <td>{{ data[795].feed_pumps_working if data and data[795] else '' }}</td>
-    <td>{{ data[795].feed_pumps_reserve if data and data[795] else '' }}</td>
-    <td rowspan="4">{{ data[795].feed_pumps_repair if data and data[795] else '' }}</td>
-    <td>{{ data[795].temp_outdoor if data and data[795] else '' }}</td>
-    <td>{{ data[795].temp_supply if data and data[795] else '' }}</td>
-    <td>{{ data[795].temp_return if data and data[795] else '' }}</td>
-    <td>{{ data[795].temp_graph_supply if data and data[795] else '' }}</td>
-    <td>{{ data[795].temp_graph_return if data and data[795] else '' }}</td>
-    <td>{{ data[795].pressure_supply if data and data[795] else '' }}</td>
-    <td>{{ data[795].pressure_return if data and data[795] else '' }}</td>
-    <td rowspan="4">{{ data[795].water_consumption_daily if data and data[795] else '' }}</td>
-    <td rowspan="4">{{ data[795].staff_night if data and data[795] else '' }}</td>
-    <td rowspan="4">{{ data[795].staff_day if data and data[795] else '' }}</td>
-    <td rowspan="4">{{ data[795].notes if data and data[795] else '' }}</td>
-    </tr>
-    <tr>
-    <td>{{ data[796].time_interval if data and data[796] else '' }}</td>
-    <td>{{ data[796].boilers_working if data and data[796] else '' }}</td>
-    <td>{{ data[796].boilers_reserve if data and data[796] else '' }}</td>
-    <td>{{ data[796].pumps_working if data and data[796] else '' }}</td>
-    <td>{{ data[796].pumps_reserve if data and data[796] else '' }}</td>
-    <td>{{ data[796].feed_pumps_working if data and data[796] else '' }}</td>
-    <td>{{ data[796].feed_pumps_reserve if data and data[796] else '' }}</td>
-    <td>{{ data[796].temp_outdoor if data and data[796] else '' }}</td>
-    <td>{{ data[796].temp_supply if data and data[796] else '' }}</td>
-    <td>{{ data[796].temp_return if data and data[796] else '' }}</td>
-    <td>{{ data[796].temp_graph_supply if data and data[796] else '' }}</td>
-    <td>{{ data[796].temp_graph_return if data and data[796] else '' }}</td>
-    <td>{{ data[796].pressure_supply if data and data[796] else '' }}</td>
-    <td>{{ data[796].pressure_return if data and data[796] else '' }}</td>
     </tr>
     <tr>
     <td>{{ data[801].time_interval if data and data[801] else '' }}</td>
@@ -250,55 +128,19 @@
     </tr>
 
     <tr>
-    <td rowspan="4">3</td>
-    <td rowspan="4">{{ data[797].boiler_model if data and data[797] else '' }}</td>
-    <td rowspan="4">{{ data[797].equipment_year if data and data[797] else '' }}</td>
-    <td>{{ data[797].time_interval if data and data[797] else '' }}</td>
-    <td>{{ data[797].boilers_working if data and data[797] else '' }}</td>
-    <td>{{ data[797].boilers_reserve if data and data[797] else '' }}</td>
-    <td rowspan="4">{{ data[797].boilers_repair if data and data[797] else '' }}</td>
-    <td>{{ data[797].pumps_working if data and data[797] else '' }}</td>
-    <td>{{ data[797].pumps_reserve if data and data[797] else '' }}</td>
-    <td rowspan="4">{{ data[797].pumps_repair if data and data[797] else '' }}</td>
-    <td>{{ data[797].feed_pumps_working if data and data[797] else '' }}</td>
-    <td>{{ data[797].feed_pumps_reserve if data and data[797] else '' }}</td>
-    <td rowspan="4">{{ data[797].feed_pumps_repair if data and data[797] else '' }}</td>
-    <td>{{ data[797].temp_outdoor if data and data[797] else '' }}</td>
-    <td>{{ data[797].temp_supply if data and data[797] else '' }}</td>
-    <td>{{ data[797].temp_return if data and data[797] else '' }}</td>
-    <td>{{ data[797].temp_graph_supply if data and data[797] else '' }}</td>
-    <td>{{ data[797].temp_graph_return if data and data[797] else '' }}</td>
-    <td>{{ data[797].pressure_supply if data and data[797] else '' }}</td>
-    <td>{{ data[797].pressure_return if data and data[797] else '' }}</td>
-    <td rowspan="4">{{ data[797].water_consumption_daily if data and data[797] else '' }}</td>
-    <td rowspan="4">{{ data[797].staff_night if data and data[797] else '' }}</td>
-    <td rowspan="4">{{ data[797].staff_day if data and data[797] else '' }}</td>
-    <td rowspan="4">{{ data[797].notes if data and data[797] else '' }}</td>
-    </tr>
-    <tr>
-    <td>{{ data[798].time_interval if data and data[798] else '' }}</td>
-    <td>{{ data[798].boilers_working if data and data[798] else '' }}</td>
-    <td>{{ data[798].boilers_reserve if data and data[798] else '' }}</td>
-    <td>{{ data[798].pumps_working if data and data[798] else '' }}</td>
-    <td>{{ data[798].pumps_reserve if data and data[798] else '' }}</td>
-    <td>{{ data[798].feed_pumps_working if data and data[798] else '' }}</td>
-    <td>{{ data[798].feed_pumps_reserve if data and data[798] else '' }}</td>
-    <td>{{ data[798].temp_outdoor if data and data[798] else '' }}</td>
-    <td>{{ data[798].temp_supply if data and data[798] else '' }}</td>
-    <td>{{ data[798].temp_return if data and data[798] else '' }}</td>
-    <td>{{ data[798].temp_graph_supply if data and data[798] else '' }}</td>
-    <td>{{ data[798].temp_graph_return if data and data[798] else '' }}</td>
-    <td>{{ data[798].pressure_supply if data and data[798] else '' }}</td>
-    <td>{{ data[798].pressure_return if data and data[798] else '' }}</td>
-    </tr>
-    <tr>
+    <td rowspan="2">2</td>
+    <td rowspan="2">{{ data[803].boiler_model if data and data[803] else '' }}</td>
+    <td rowspan="2">{{ data[803].equipment_year if data and data[803] else '' }}</td>
     <td>{{ data[803].time_interval if data and data[803] else '' }}</td>
     <td>{{ data[803].boilers_working if data and data[803] else '' }}</td>
     <td>{{ data[803].boilers_reserve if data and data[803] else '' }}</td>
+    <td rowspan="2">{{ data[803].boilers_repair if data and data[803] else '' }}</td>
     <td>{{ data[803].pumps_working if data and data[803] else '' }}</td>
     <td>{{ data[803].pumps_reserve if data and data[803] else '' }}</td>
+    <td rowspan="2">{{ data[803].pumps_repair if data and data[803] else '' }}</td>
     <td>{{ data[803].feed_pumps_working if data and data[803] else '' }}</td>
     <td>{{ data[803].feed_pumps_reserve if data and data[803] else '' }}</td>
+    <td rowspan="2">{{ data[803].feed_pumps_repair if data and data[803] else '' }}</td>
     <td>{{ data[803].temp_outdoor if data and data[803] else '' }}</td>
     <td>{{ data[803].temp_supply if data and data[803] else '' }}</td>
     <td>{{ data[803].temp_return if data and data[803] else '' }}</td>
@@ -306,6 +148,10 @@
     <td>{{ data[803].temp_graph_return if data and data[803] else '' }}</td>
     <td>{{ data[803].pressure_supply if data and data[803] else '' }}</td>
     <td>{{ data[803].pressure_return if data and data[803] else '' }}</td>
+    <td rowspan="2">{{ data[803].water_consumption_daily if data and data[803] else '' }}</td>
+    <td rowspan="2">{{ data[803].staff_night if data and data[803] else '' }}</td>
+    <td rowspan="2">{{ data[803].staff_day if data and data[803] else '' }}</td>
+    <td rowspan="2">{{ data[803].notes if data and data[803] else '' }}</td>
     </tr>
     <tr>
     <td>{{ data[804].time_interval if data and data[804] else '' }}</td>
@@ -324,12 +170,8 @@
     <td>{{ data[804].pressure_return if data and data[804] else '' }}</td>
     </tr>
 
-    <!-- ============ КОТЕЛЬНАЯ №2 ============ -->
-    <tr class="section">
-    <td colspan="24">Котельная №2 Белоярск №2 ул. Юбилейная 11</td>
-    </tr>
     <tr>
-    <td rowspan="4">1</td>
+    <td rowspan="4">3</td>
     <td rowspan="4">{{ data[805].boiler_model if data and data[805] else '' }}</td>
     <td rowspan="4">{{ data[805].equipment_year if data and data[805] else '' }}</td>
     <td>{{ data[805].time_interval if data and data[805] else '' }}</td>
@@ -386,26 +228,10 @@
     <td>{{ data[807].pressure_supply if data and data[807] else '' }}</td>
     <td>{{ data[807].pressure_return if data and data[807] else '' }}</td>
     </tr>
-    <tr>
-    <td>{{ data[808].time_interval if data and data[808] else '' }}</td>
-    <td>{{ data[808].boilers_working if data and data[808] else '' }}</td>
-    <td>{{ data[808].boilers_reserve if data and data[808] else '' }}</td>
-    <td>{{ data[808].pumps_working if data and data[808] else '' }}</td>
-    <td>{{ data[808].pumps_reserve if data and data[808] else '' }}</td>
-    <td>{{ data[808].feed_pumps_working if data and data[808] else '' }}</td>
-    <td>{{ data[808].feed_pumps_reserve if data and data[808] else '' }}</td>
-    <td>{{ data[808].temp_outdoor if data and data[808] else '' }}</td>
-    <td>{{ data[808].temp_supply if data and data[808] else '' }}</td>
-    <td>{{ data[808].temp_return if data and data[808] else '' }}</td>
-    <td>{{ data[808].temp_graph_supply if data and data[808] else '' }}</td>
-    <td>{{ data[808].temp_graph_return if data and data[808] else '' }}</td>
-    <td>{{ data[808].pressure_supply if data and data[808] else '' }}</td>
-    <td>{{ data[808].pressure_return if data and data[808] else '' }}</td>
-    </tr>
 
-    <!-- ============ КОТЕЛЬНАЯ №3 ============ -->
+    <!-- ============ КОТЕЛЬНАЯ №2 ============ -->
     <tr class="section">
-    <td colspan="24">Котельная №3 Щучье №3</td>
+    <td colspan="24">Котельная №2 Белоярск №2 ул. Юбилейная 11</td>
     </tr>
     <tr>
     <td rowspan="4">1</td>
@@ -433,54 +259,8 @@
     <td rowspan="4">{{ data[809].staff_day if data and data[809] else '' }}</td>
     <td rowspan="4">{{ data[809].notes if data and data[809] else '' }}</td>
     </tr>
-    <tr>
-    <td>{{ data[810].time_interval if data and data[810] else '' }}</td>
-    <td>{{ data[810].boilers_working if data and data[810] else '' }}</td>
-    <td>{{ data[810].boilers_reserve if data and data[810] else '' }}</td>
-    <td>{{ data[810].pumps_working if data and data[810] else '' }}</td>
-    <td>{{ data[810].pumps_reserve if data and data[810] else '' }}</td>
-    <td>{{ data[810].feed_pumps_working if data and data[810] else '' }}</td>
-    <td>{{ data[810].feed_pumps_reserve if data and data[810] else '' }}</td>
-    <td>{{ data[810].temp_outdoor if data and data[810] else '' }}</td>
-    <td>{{ data[810].temp_supply if data and data[810] else '' }}</td>
-    <td>{{ data[810].temp_return if data and data[810] else '' }}</td>
-    <td>{{ data[810].temp_graph_supply if data and data[810] else '' }}</td>
-    <td>{{ data[810].temp_graph_return if data and data[810] else '' }}</td>
-    <td>{{ data[810].pressure_supply if data and data[810] else '' }}</td>
-    <td>{{ data[810].pressure_return if data and data[810] else '' }}</td>
-    </tr>
-    <tr>
-    <td>{{ data[811].time_interval if data and data[811] else '' }}</td>
-    <td>{{ data[811].boilers_working if data and data[811] else '' }}</td>
-    <td>{{ data[811].boilers_reserve if data and data[811] else '' }}</td>
-    <td>{{ data[811].pumps_working if data and data[811] else '' }}</td>
-    <td>{{ data[811].pumps_reserve if data and data[811] else '' }}</td>
-    <td>{{ data[811].feed_pumps_working if data and data[811] else '' }}</td>
-    <td>{{ data[811].feed_pumps_reserve if data and data[811] else '' }}</td>
-    <td>{{ data[811].temp_outdoor if data and data[811] else '' }}</td>
-    <td>{{ data[811].temp_supply if data and data[811] else '' }}</td>
-    <td>{{ data[811].temp_return if data and data[811] else '' }}</td>
-    <td>{{ data[811].temp_graph_supply if data and data[811] else '' }}</td>
-    <td>{{ data[811].temp_graph_return if data and data[811] else '' }}</td>
-    <td>{{ data[811].pressure_supply if data and data[811] else '' }}</td>
-    <td>{{ data[811].pressure_return if data and data[811] else '' }}</td>
-    </tr>
-    <tr>
-    <td>{{ data[812].time_interval if data and data[812] else '' }}</td>
-    <td>{{ data[812].boilers_working if data and data[812] else '' }}</td>
-    <td>{{ data[812].boilers_reserve if data and data[812] else '' }}</td>
-    <td>{{ data[812].pumps_working if data and data[812] else '' }}</td>
-    <td>{{ data[812].pumps_reserve if data and data[812] else '' }}</td>
-    <td>{{ data[812].feed_pumps_working if data and data[812] else '' }}</td>
-    <td>{{ data[812].feed_pumps_reserve if data and data[812] else '' }}</td>
-    <td>{{ data[812].temp_outdoor if data and data[812] else '' }}</td>
-    <td>{{ data[812].temp_supply if data and data[812] else '' }}</td>
-    <td>{{ data[812].temp_return if data and data[812] else '' }}</td>
-    <td>{{ data[812].temp_graph_supply if data and data[812] else '' }}</td>
-    <td>{{ data[812].temp_graph_return if data and data[812] else '' }}</td>
-    <td>{{ data[812].pressure_supply if data and data[812] else '' }}</td>
-    <td>{{ data[812].pressure_return if data and data[812] else '' }}</td>
-    </tr>
+
+    <!-- Продолжи остальные котельные... -->
 
     </tbody>
     </table>
