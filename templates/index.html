@@ -1,119 +1,157 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Журнал котлов</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js"></script>
-<style>
-table { width: 100%; border-collapse: collapse; }
-th, td { border: 1px solid #ccc; padding: 5px; text-align: center; font-size: 0.9rem; }
-th { background: #f0f0f0; }
-input.editable { width: 100%; border: none; background: none; text-align: center; }
-input.editable:focus { outline: 1px solid #00d1b2; background: #fefefe; }
-.buttons-top { margin-bottom: 10px; }
-</style>
+    <meta charset="UTF-8">
+    <title>Журнал котлов</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        table th, table td {
+            text-align: center;
+            vertical-align: middle;
+            min-width: 50px;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        .btn-group {
+            margin-bottom: 15px;
+        }
+        .editable {
+            cursor: pointer;
+        }
+        .editable:hover {
+            background-color: #e9ecef;
+        }
+        .nowrap {
+            white-space: nowrap;
+        }
+    </style>
 </head>
 <body>
-<section class="section">
-<div class="container">
-  <h1 class="title">Журнал котлов</h1>
-  <div class="buttons-top">
-    <span>Пользователь: {{ user.username }} ({{ user.role }})</span>
-    {% if user.role == 'admin' %}
-      <button class="button is-success" onclick="addRow()">Добавить</button>
-      <button class="button is-warning" onclick="archive()">Архивировать</button>
-    {% endif %}
-    <a href="{{ url_for('logout') }}" class="button is-danger">Выйти</a>
-  </div>
 
-  <table>
+<h2>Журнал котлов</h2>
+<p>Пользователь: {{ user.username }} ({{ user.role }})</p>
+
+<div class="btn-group">
+    <button id="archiveBtn" class="btn btn-warning">Архивировать</button>
+    <button id="addBtn" class="btn btn-success">Добавить</button>
+    <a href="{{ url_for('logout') }}" class="btn btn-danger">Выйти</a>
+</div>
+
+<table class="table table-bordered table-sm">
     <thead>
-      <tr>
-        <th>№</th>
-        <th>Модель</th>
-        <th>Год</th>
-        <th>Время</th>
-        <th>Котлы</th>
-        <th>Сетевые насосы</th>
-        <th>Подпиточные насосы</th>
-        <th>Температура</th>
-        <th>По графику</th>
-        <th>Давление</th>
-        <th>Вода</th>
-        <th>Ночь</th>
-        <th>День</th>
-        <th>Примечания</th>
-      </tr>
+        <tr>
+            <th>№</th>
+            <th>Модель</th>
+            <th>Год</th>
+            <th>Время</th>
+            <th>Котлы</th>
+            <th>Сетевые насосы</th>
+            <th>Подпиточные насосы</th>
+            <th>Температура</th>
+            <th>По графику</th>
+            <th>Давление</th>
+            <th>Вода</th>
+            <th>Ночь</th>
+            <th>День</th>
+            <th>Примечания</th>
+        </tr>
     </thead>
     <tbody>
-      {% for boiler in boilers %}
+    {% for boiler in boilers %}
         {% for i in range(boiler.rows) %}
-        <tr data-id="{{ boiler.number }}-{{ i }}">
-          <td>{{ i + 1 }}</td>
-          <td><input class="editable" data-field="boiler_model" value="{{ boiler.boiler_models[i] }}"></td>
-          <td>{{ boiler.years[0].year }}</td>
-          <td>{{ boiler.times[i] }}</td>
+        <tr>
+            {% if i == 0 %}
+            <td rowspan="{{ boiler.rows }}">{{ boiler.number }}</td>
+            {% endif %}
 
-          <td>
-            <input class="editable" data-field="boilers_working" value="{{ boiler.boilers.work[i] }}">
-          </td>
-          <td>
-            <input class="editable" data-field="pumps_working" value="{{ boiler.network_pumps.work[i] }}">
-          </td>
-          <td>
-            <input class="editable" data-field="feed_pumps_working" value="{{ boiler.feed_pumps.work[i] }}">
-          </td>
-          <td>
-            {{ boiler.temps[i][0] }}/{{ boiler.temps[i][1] }}/{{ boiler.temps[i][2] }}
-          </td>
-          <td>{{ boiler.graph_temps[i][0] }}/{{ boiler.graph_temps[i][1] }}</td>
-          <td>{{ boiler.pressure[i][0] }}/{{ boiler.pressure[i][1] }}</td>
-          <td>{{ boiler.water_consumption }}</td>
-          <td>{{ boiler.staff.night }}</td>
-          <td>{{ boiler.staff.day }}</td>
-          <td><input class="editable" data-field="notes" value="{{ boiler.notes }}"></td>
+            {% for year in boiler.years %}
+                {% if i == year.start %}
+                    <td rowspan="{{ year.span }}">{{ boiler.boiler_models[i] }}</td>
+                    <td rowspan="{{ year.span }}">{{ year.year }}</td>
+                {% endif %}
+            {% endfor %}
+
+            <td class="editable nowrap" data-id="{{ boiler.number }}_{{ i }}" data-field="time_interval">{{ boiler.times[i] }}</td>
+            
+            <td class="editable" data-id="{{ boiler.number }}_{{ i }}" data-field="boilers_working">{{ boiler.boilers.work[i] }}</td>
+            <td class="editable" data-id="{{ boiler.number }}_{{ i }}" data-field="pumps_working">{{ boiler.network_pumps.work[i] }}</td>
+            <td class="editable" data-id="{{ boiler.number }}_{{ i }}" data-field="feed_pumps_working">{{ boiler.feed_pumps.work[i] }}</td>
+
+            <td>
+                {{ boiler.temps[i][0] }} / {{ boiler.temps[i][1] }} / {{ boiler.temps[i][2] }}
+            </td>
+            <td>
+                {{ boiler.graph_temps[i][0] }} / {{ boiler.graph_temps[i][1] }}
+            </td>
+            <td>
+                {{ boiler.pressure[i][0] }} / {{ boiler.pressure[i][1] }}
+            </td>
+            
+            {% if i == 0 %}
+            <td rowspan="{{ boiler.rows }}">{{ boiler.water_consumption }}</td>
+            <td rowspan="{{ boiler.rows }}">{{ boiler.staff.night }}</td>
+            <td rowspan="{{ boiler.rows }}">{{ boiler.staff.day }}</td>
+            <td rowspan="{{ boiler.rows }}" class="editable" data-id="{{ boiler.number }}" data-field="notes">{{ boiler.notes }}</td>
+            {% endif %}
         </tr>
         {% endfor %}
-      {% endfor %}
+    {% endfor %}
     </tbody>
-  </table>
-</div>
-</section>
+</table>
 
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-document.querySelectorAll('input.editable').forEach(input => {
-  input.addEventListener('change', e => {
-    const tr = e.target.closest('tr');
-    const id = tr.getAttribute('data-id');
-    const field = e.target.getAttribute('data-field');
-    const value = e.target.value;
+document.querySelectorAll('.editable').forEach(cell => {
+    cell.addEventListener('click', () => {
+        if (!{{ 'true' if user.role=='admin' else 'false' }}) return;
 
-    axios.post('/update', {id, field, value})
-      .then(res => {
-        if(res.data.status !== 'ok') alert(res.data.message);
-      })
-      .catch(err => alert('Ошибка при сохранении'));
-  });
+        const oldValue = cell.innerText;
+        const input = document.createElement('input');
+        input.value = oldValue;
+        input.style.width = '100%';
+        cell.innerText = '';
+        cell.appendChild(input);
+        input.focus();
+
+        input.addEventListener('blur', () => {
+            const newValue = input.value;
+            cell.innerText = newValue;
+            if (newValue !== oldValue) {
+                axios.post('/update', {
+                    id: cell.dataset.id,
+                    field: cell.dataset.field,
+                    value: newValue
+                }).then(res => {
+                    if (res.data.status !== 'ok') {
+                        alert(res.data.message);
+                        cell.innerText = oldValue;
+                    }
+                }).catch(err => {
+                    alert('Ошибка при обновлении');
+                    cell.innerText = oldValue;
+                });
+            }
+        });
+    });
 });
 
-function addRow() {
-  axios.post('/add').then(res => {
-    if(res.data.status === 'ok') location.reload();
-    else alert(res.data.message);
-  });
-}
+document.getElementById('addBtn').addEventListener('click', () => {
+    axios.post('/add').then(res => location.reload());
+});
 
-function archive() {
-  if(!confirm('Вы уверены, что хотите архивировать и очистить таблицу?')) return;
-  axios.post('/archive').then(res => {
-    if(res.data.status === 'ok') {
-      alert(res.data.message);
-      location.reload();
-    } else alert(res.data.message);
-  });
-}
+document.getElementById('archiveBtn').addEventListener('click', () => {
+    if (!confirm('Вы уверены, что хотите архивировать все записи?')) return;
+    axios.post('/archive').then(res => {
+        alert(res.data.message);
+        location.reload();
+    }).catch(err => alert('Ошибка архивации'));
+});
 </script>
+
 </body>
 </html>
