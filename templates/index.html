@@ -3,106 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <title>Журнал котлов</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
-        h1 { margin-bottom: 10px; }
-        .user-info { margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; background: #fff; }
-        th, td { border: 1px solid #ccc; padding: 6px; text-align: center; font-size: 14px; }
-        th { background: #eee; }
-        tr:nth-child(even) { background: #fafafa; }
-        .btn { padding: 6px 12px; margin-right: 10px; background: #007bff; color: #fff; border: none; cursor: pointer; border-radius: 4px; }
-        .btn:hover { background: #0056b3; }
-        .status-work { background: #d4edda; }   /* зелёный для работы */
-        .status-reserve { background: #fff3cd; } /* жёлтый для резерва */
-        .status-repair { background: #f8d7da; }  /* красный для ремонта */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f2f5;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .user-info {
+            text-align: right;
+            margin-bottom: 15px;
+        }
+        .buttons {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+        .buttons button {
+            padding: 6px 12px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: center;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        td input {
+            width: 90%;
+            box-sizing: border-box;
+            text-align: center;
+            border: none;
+            background: transparent;
+        }
+        td input:focus {
+            outline: 1px solid #007bff;
+            background: #e7f1ff;
+        }
     </style>
 </head>
 <body>
-    <h1>Журнал котлов</h1>
-    <div class="user-info">
-        Пользователь: {{ user.username }} ({{ user.role }})<br>
-        <button class="btn" onclick="archive()">Архивировать</button>
-        <button class="btn" onclick="addRecord()">Добавить</button>
-        <a href="{{ url_for('logout') }}" class="btn">Выйти</a>
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>№</th>
-                <th>Модель</th>
-                <th>Год</th>
-                <th>Время</th>
-                <th>Котлы</th>
-                <th>Сетевые насосы</th>
-                <th>Подпиточные насосы</th>
-                <th>Температура</th>
-                <th>По графику</th>
-                <th>Давление</th>
-                <th>Вода</th>
-                <th>Ночь</th>
-                <th>День</th>
-                <th>Примечания</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for b in boilers %}
-            {% for i in range(b.rows) %}
-            <tr>
-                <td>{{ b.number }}</td>
-                <td>{{ b.boiler_models[i] }}</td>
-                <td>
-                    {% for y in b.years %}
-                        {% if i >= y.start and i < y.start + y.span %}
-                            {{ y.year }}
-                        {% endif %}
-                    {% endfor %}
-                </td>
-                <td>{{ b.times[i] }}</td>
 
-                <!-- Котлы -->
-                <td class="{% if b.boilers.repair %}status-repair{% elif b.boilers.work[i] %}status-work{% else %}status-reserve{% endif %}">
-                    {{ b.boilers.work[i] }} / {{ b.boilers.reserve[i] }}
-                </td>
+<h1>Журнал котлов</h1>
 
-                <!-- Сетевые насосы -->
-                <td class="{% if b.network_pumps.repair %}status-repair{% elif b.network_pumps.work[i] %}status-work{% else %}status-reserve{% endif %}">
-                    {{ b.network_pumps.work[i] }} / {{ b.network_pumps.reserve[i] }}
-                </td>
+<div class="user-info">
+    Пользователь: {{ user.username }} ({{ user.role }})
+</div>
 
-                <!-- Подпиточные насосы -->
-                <td class="{% if b.feed_pumps.repair %}status-repair{% elif b.feed_pumps.work[i] %}status-work{% else %}status-reserve{% endif %}">
-                    {{ b.feed_pumps.work[i] }} / {{ b.feed_pumps.reserve[i] }}
-                </td>
+<div class="buttons">
+    <button id="archiveBtn">Архивировать</button>
+    <button id="addBtn">Добавить</button>
+    <button onclick="window.location='/logout'">Выйти</button>
+</div>
 
-                <!-- Температуры -->
-                <td>{{ b.temps[i][0] }} / {{ b.temps[i][1] }} / {{ b.temps[i][2] }}</td>
-                <td>{{ b.graph_temps[i][0] }} / {{ b.graph_temps[i][1] }}</td>
-                <td>{{ b.pressure[i][0] }} / {{ b.pressure[i][1] }}</td>
-                <td>{{ b.water_consumption }}</td>
-                <td>{{ b.staff.night }}</td>
-                <td>{{ b.staff.day }}</td>
-                <td>{{ b.notes }}</td>
-            </tr>
-            {% endfor %}
+<table>
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>Модель</th>
+            <th>Год</th>
+            <th>Время</th>
+            <th>Котлы</th>
+            <th>Сетевые насосы</th>
+            <th>Подпиточные насосы</th>
+            <th>Температура</th>
+            <th>По графику</th>
+            <th>Давление</th>
+            <th>Вода</th>
+            <th>Ночь</th>
+            <th>День</th>
+            <th>Примечания</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for b in boilers %}
+        {% for i in range(b.rows) %}
+        <tr>
+            <td>{{ i + 1 }}</td>
+            <td><input type="text" value="{{ b.boiler_models[i] }}" data-id="{{ b.number }}" data-field="boiler_model"></td>
+            <td>
+                {% for y in b.years %}
+                    {% if y.start <= i < y.start + y.span %}
+                        <input type="text" value="{{ y.year }}" data-id="{{ b.number }}" data-field="equipment_year">
+                    {% endif %}
+                {% endfor %}
+            </td>
+            <td>{{ b.times[i] }}</td>
+            <td><input type="text" value="{{ b.boilers.work[i] }}" data-id="{{ b.number }}" data-field="boilers_working"></td>
+            <td><input type="text" value="{{ b.network_pumps.work[i] }}" data-id="{{ b.number }}" data-field="pumps_working"></td>
+            <td><input type="text" value="{{ b.feed_pumps.work[i] }}" data-id="{{ b.number }}" data-field="feed_pumps_working"></td>
+            <td>{{ b.temps[i][0] }} / {{ b.temps[i][1] }} / {{ b.temps[i][2] }}</td>
+            <td>{{ b.graph_temps[i][0] }} / {{ b.graph_temps[i][1] }}</td>
+            <td>{{ b.pressure[i][0] }} / {{ b.pressure[i][1] }}</td>
+            <td><input type="text" value="{{ b.water_consumption }}" data-id="{{ b.number }}" data-field="water_consumption_daily"></td>
+            <td><input type="text" value="{{ b.staff.night }}" data-id="{{ b.number }}" data-field="staff_night"></td>
+            <td><input type="text" value="{{ b.staff.day }}" data-id="{{ b.number }}" data-field="staff_day"></td>
+            <td><input type="text" value="{{ b.notes }}" data-id="{{ b.number }}" data-field="notes"></td>
+        </tr>
         {% endfor %}
-        </tbody>
-    </table>
+    {% endfor %}
+    </tbody>
+</table>
 
-    <script>
-        function archive() {
-            if(!confirm('Вы уверены, что хотите архивировать и очистить таблицу?')) return;
-            fetch('/archive', { method: 'POST' })
-                .then(res => res.json())
-                .then(data => alert(data.message))
-                .then(() => location.reload());
-        }
+<script>
+$(document).ready(function() {
+    // Обновление значения по blur
+    $('td input').on('blur', function() {
+        let input = $(this);
+        let id = input.data('id');
+        let field = input.data('field');
+        let value = input.val();
 
-        function addRecord() {
-            fetch('/add', { method: 'POST' })
-                .then(res => res.json())
-                .then(data => location.reload());
+        $.ajax({
+            url: '/update',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ id: id, field: field, value: value }),
+            success: function(res) {
+                if(res.status !== 'ok') {
+                    alert('Ошибка: ' + res.message);
+                }
+            }
+        });
+    });
+
+    // Добавить запись
+    $('#addBtn').click(function() {
+        $.post('/add', {}, function(res) {
+            if(res.status === 'ok') location.reload();
+            else alert('Ошибка: ' + res.message);
+        });
+    });
+
+    // Архивировать
+    $('#archiveBtn').click(function() {
+        if(confirm('Вы уверены, что хотите архивировать все записи?')) {
+            $.post('/archive', {}, function(res) {
+                alert(res.message);
+                if(res.status === 'ok') location.reload();
+            });
         }
-    </script>
+    });
+});
+</script>
+
 </body>
 </html>
