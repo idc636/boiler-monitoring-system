@@ -292,70 +292,50 @@ def archive():
 
     c = get_conn().cursor()
     
-    # Копируем все записи в архив
-    c.execute("""
-        INSERT INTO records_archive (
-            original_id, date, boiler_number, boiler_location, boiler_contact,
-            equipment_number, boiler_model, equipment_year, time_interval,
-            boilers_working, boilers_reserve, boilers_repair,
-            pumps_working, pumps_reserve, pumps_repair,
-            feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
-            fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
-            fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
-            water_tanks_total, water_tank_volume, water_tanks_working,
-            water_tanks_reserve, water_tanks_repair,
-            temp_outdoor, temp_supply, temp_return,
-            temp_graph_supply, temp_graph_return,
-            pressure_supply, pressure_return,
-            water_consumption_daily, staff_night, staff_day, notes
-        )
-        SELECT 
-            id, date, boiler_number, boiler_location, boiler_contact,
-            equipment_number, boiler_model, equipment_year, time_interval,
-            boilers_working, boilers_reserve, boilers_repair,
-            pumps_working, pumps_reserve, pumps_repair,
-            feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
-            fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
-            fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption, fuel_tanks_repair,
-            water_tanks_total, water_tank_volume, water_tanks_working,
-            water_tanks_reserve, water_tanks_repair,
-            temp_outdoor, temp_supply, temp_return,
-            temp_graph_supply, temp_graph_return,
-            pressure_supply, pressure_return,
-            water_consumption_daily, staff_night, staff_day, notes
-        FROM records
-    """)
+    # Копируем в архив
+    c.execute("INSERT INTO records_archive SELECT * FROM records")
     
-    # Очищаем значения в ячейках (оставляем структуру)
+    # Очищаем ВСЕ ячейки (все поля в кавычках!)
     c.execute("""
         UPDATE records SET
-            time_interval = '',
-            boilers_working = '',
-            boilers_reserve = '',
-            boilers_repair = '',
-            pumps_working = '',
-            pumps_reserve = '',
-            pumps_repair = '',
-            feed_pumps_working = '',
-            feed_pumps_reserve = '',
-            feed_pumps_repair = '',
-            temp_outdoor = '',
-            temp_supply = '',
-            temp_return = '',
-            temp_graph_supply = '',
-            temp_graph_return = '',
-            pressure_supply = '',
-            pressure_return = '',
-            water_consumption_daily = '',
-            staff_night = '',
-            staff_day = '',
-            notes = ''
+            "time_interval" = '',
+            "boilers_working" = '',
+            "boilers_reserve" = '',
+            "boilers_repair" = '',
+            "pumps_working" = '',
+            "pumps_reserve" = '',
+            "pumps_repair" = '',
+            "feed_pumps_working" = '',
+            "feed_pumps_reserve" = '',
+            "feed_pumps_repair" = '',
+            "temp_outdoor" = '',
+            "temp_supply" = '',
+            "temp_return" = '',
+            "temp_graph_supply" = '',
+            "temp_graph_return" = '',
+            "pressure_supply" = '',
+            "pressure_return" = '',
+            "water_consumption_daily" = '',
+            "staff_night" = '',
+            "staff_day" = '',
+            "notes" = '',
+            "fuel_tanks_total" = '',
+            "fuel_tank_volume" = '',
+            "fuel_tanks_working" = '',
+            "fuel_tanks_reserve" = '',
+            "fuel_morning_balance" = '',
+            "fuel_daily_consumption" = '',
+            "fuel_tanks_repair" = '',
+            "water_tanks_total" = '',
+            "water_tank_volume" = '',
+            "water_tanks_working" = '',
+            "water_tanks_reserve" = '',
+            "water_tanks_repair" = ''
     """)
     
     c.connection.commit()
     c.connection.close()
-    
-    return jsonify({'status': 'ok', 'message': 'Данные успешно архивированы'})
+    return jsonify({'status': 'ok', 'message': 'Данные архивированы'})
 
 
 @app.route('/archive/view')
