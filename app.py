@@ -274,11 +274,10 @@ def add():
     new_id = (c.fetchone()['m'] or 0) + 1
 
     c.execute("""
-        INSERT INTO records (
-            date, boiler_number, boiler_location, boiler_contact,
-            equipment_number, boiler_model, equipment_year, time_interval
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-    """, ('30.01.2026', 1, 'Белоярск', '83499323373', 1, '', '', '00:00'))
+    INSERT INTO records_archive
+    SELECT *, NOW()
+    FROM records
+""")
 
     c.connection.commit()
     c.connection.close()
@@ -411,7 +410,7 @@ def archive_data(date):
     records = c.fetchall()
     conn.close()
     
-    data = {r['original_id']: r for r in records}
+    data = {r['id']: r for r in records}
     return render_template('archive_table.html', data=data, selected_date=date)
 
 
