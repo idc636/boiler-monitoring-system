@@ -1,3 +1,4 @@
+app.py
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -142,7 +143,6 @@ def admin():
 def build_boilers_view(records):
     groups = {}
 
-    
     for r in records:
         key = (r['date'], r['boiler_number'])
         groups.setdefault(key, []).append(r)
@@ -253,27 +253,6 @@ def build_boilers_view(records):
         })
 
     return boilers
-    def build_records_hierarchy(records):
-    """Группировка записей по котельной и котлу, сортировка по времени"""
-    hierarchy = {}
-
-    for r in records:
-        plant_key = f"Котельная №{r['boiler_number']} {r['boiler_location']}"
-        boiler_key = r['boiler_model'] or f"Оборудование {r['equipment_number']}"
-
-        if plant_key not in hierarchy:
-            hierarchy[plant_key] = {}
-        if boiler_key not in hierarchy[plant_key]:
-            hierarchy[plant_key][boiler_key] = []
-
-        hierarchy[plant_key][boiler_key].append(r)
-
-    # сортируем по времени
-    for plant in hierarchy:
-        for boiler in hierarchy[plant]:
-            hierarchy[plant][boiler].sort(key=lambda x: x['time_interval'] or '00:00')
-
-    return hierarchy
 
 
 # ===================== ROUTES =====================
@@ -294,8 +273,9 @@ def index():
     user = c.fetchone()
     c.connection.close()
 
-hierarchy = build_records_hierarchy(records)
-return render_template('index.html', hierarchy=hierarchy, user=user)
+    boilers = build_boilers_view(records)
+
+    return render_template('index.html', boilers=boilers, user=user)
 
 
 @app.route('/login', methods=['GET', 'POST'])
