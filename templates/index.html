@@ -739,6 +739,27 @@ thead th { background:#d9d9d9; }
 </table>
 </div>
 <script>
+    function archiveRecords() {
+    if (!confirm('Архивировать все данные? После этого ячейки будут очищены.')) {
+        return;
+    }
+    
+    fetch('/archive', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'ok') {
+            alert('Данные успешно архивированы! Ячейки очищены.');
+            location.reload();
+        } else {
+            alert('Ошибка: ' + (data.message || 'неизвестная ошибка'));
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert('Ошибка связи с сервером');
+    });
+}
+    
 document.querySelectorAll('.editable').forEach(cell => {
     cell.addEventListener('click', function() {
 
