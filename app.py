@@ -568,12 +568,13 @@ def view_archive():
 
 import os
 from flask import request, jsonify
-from archive_job import archive_records  # убедись, что импортируешь
+
 
 @app.route('/cron/archive', methods=['GET'])
 def trigger_archive():
     token = request.args.get('token')
-    if token != os.environ.get('CRON_SECRET_TOKEN'):
+    expected_token = os.environ.get('CRON_SECRET_TOKEN')
+    if not expected_token or token != expected_token:
         return jsonify({'status': 'error', 'message': 'Unauthorized'}), 403
     
     try:
