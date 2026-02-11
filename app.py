@@ -344,34 +344,7 @@ def logout():
     return redirect(url_for('login'))
 
 
-def can_edit_record(user_id, boiler_number):
-    """Проверяет, может ли пользователь редактировать запись с указанной котельной."""
-    conn = get_conn()
-    cur = conn.cursor()
-    cur.execute("SELECT username, role FROM users WHERE id = % s", (user_id,))
-    user = cur.fetchone()
-    conn.close()
 
-    if not user:
-        return False
-
-    if user['role'] == 'admin':
-        return True
-
-    if user['role'] == 'operator':
-        username = user['username']
-        if username.startswith('user'):
-            try:
-                user_num = int(username[4:])  # 'user1' → 1
-                if 1 <= user_num <= 4 and user_num == boiler_number:
-                    return True
-            except (ValueError, IndexError):
-                pass
-    return False
-
-
-# ===== ОСНОВНОЙ МАРШРУТ /update =====
-# ===== ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ =====
 def can_edit_record(user_id, boiler_number):
     conn = get_conn()
     cur = conn.cursor()
