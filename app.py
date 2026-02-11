@@ -400,6 +400,13 @@ def can_edit_record(user_id, boiler_number):
 def update():
     if not auth():
         return jsonify({'status': 'error', 'message': 'Не авторизован'}), 401
+            from db import get_conn  # или используй твой get_conn
+    debug_cur = get_conn().cursor()
+    debug_cur.execute("SELECT username, role FROM users WHERE id = %s", (session['user_id'],))
+    debug_user = debug_cur.fetchone()
+    debug_cur.connection.close()
+    print(f"🔧 Запрос на обновление от: {debug_user['username']} (роль: {debug_user['role']})")
+    # ==================
 
     d = request.get_json()
     if not d:
