@@ -566,6 +566,22 @@ def view_archive():
     
     return render_template('archive_dates.html', dates=dates)
 
+import os
+from flask import request, jsonify
+from archive_job import archive_records  # убедись, что импортируешь
+
+@app.route('/cron/archive', methods=['GET'])
+def trigger_archive():
+    token = request.args.get('token')
+    if token != os.environ.get('CRON_SECRET_TOKEN'):
+        return jsonify({'status': 'error', 'message': 'Unauthorized'}), 403
+    
+    try:
+        archive_records()
+        return jsonify({'status': 'ok', 'message': 'Архивация выполнена'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 
 @app.route('/archive/data/<date>')
 def archive_data(date):
@@ -596,10 +612,5 @@ def archive_data(date):
 if __name__ == '__main__':
     init_db()
 
-    from apscheduler.schedulers.background import BackgroundScheduler
-
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(archive_records, 'cron', hour=0, minute=5)
-    scheduler.start()
 
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
