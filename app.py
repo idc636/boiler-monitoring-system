@@ -412,7 +412,6 @@ def update():
     if record_id is None or field is None or value is None:
         return jsonify({'status': 'error', 'message': 'Отсутствуют обязательные поля: id, field, value'}), 400
 
-    # Безопасный список полей
     allowed_fields = [
         'boiler_model', 'equipment_year', 'time_interval',
         'boilers_working', 'boilers_reserve', 'boilers_repair',
@@ -431,7 +430,7 @@ def update():
     if field not in allowed_fields:
         return jsonify({'status': 'error', 'message': 'Недопустимое поле'}), 400
 
-    # Получаем номер котельной для записи
+    # Получаем номер котельной
     conn = get_conn()
     cur = conn.cursor()
     cur.execute("SELECT boiler_number FROM records WHERE id = %s", (record_id,))
@@ -443,11 +442,11 @@ def update():
 
     boiler_number = record['boiler_number']
 
-    # Проверка прав доступа
+    # Проверка прав
     if not can_edit_record(session['user_id'], boiler_number):
         return jsonify({'status': 'error', 'message': 'Нет прав на редактирование этой котельной'}), 403
 
-    # Выполняем обновление
+    # Обновление данных
     cur = get_conn().cursor()
     cur.execute(f"UPDATE records SET {field} = %s WHERE id = %s", (value, record_id))
     cur.connection.commit()
