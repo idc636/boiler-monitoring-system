@@ -367,6 +367,22 @@ def can_edit_record(user_id, boiler_number):
 
 
 # ===== МАРШРУТ /update =====
+# Глобальный список разрешённых полей (можно вынести вверх файла)
+ALLOWED_FIELDS = {
+    'boiler_model', 'equipment_year', 'time_interval',
+    'boilers_working', 'boilers_reserve', 'boilers_repair',
+    'pumps_working', 'pumps_reserve', 'pumps_repair',
+    'feed_pumps_working', 'feed_pumps_reserve', 'feed_pumps_repair',
+    'fuel_tanks_total', 'fuel_tank_volume', 'fuel_tanks_working',
+    'fuel_tanks_reserve', 'fuel_morning_balance', 'fuel_daily_consumption',
+    'fuel_tanks_repair', 'water_tanks_total', 'water_tank_volume',
+    'water_tanks_working', 'water_tanks_reserve', 'water_tanks_repair',
+    'temp_outdoor', 'temp_supply', 'temp_return',
+    'temp_graph_supply', 'temp_graph_return',
+    'pressure_supply', 'pressure_return',
+    'water_consumption_daily', 'staff_night', 'staff_day', 'notes'
+}
+
 @app.route('/update', methods=['POST'])
 def update():
     if not auth():
@@ -383,44 +399,58 @@ def update():
     if record_id is None or field is None or value is None:
         return jsonify({'status': 'error', 'message': 'Отсутствуют обязательные поля: id, field, value'}), 400
 
-    allowed_fields = [
-        'boiler_model', 'equipment_year', 'time_interval',
-        'boilers_working', 'boilers_reserve', 'boilers_repair',
-        'pumps_working', 'pumps_reserve', 'pumps_repair',
-        'feed_pumps_working', 'feed_pumps_reserve', 'feed_pumps_repair',
-        'fuel_tanks_total', 'fuel_tank_volume', 'fuel_tanks_working',
-        'fuel_tanks_reserve', 'fuel_morning_balance', 'fuel_daily_consumption',
-        'fuel_tanks_repair', 'water_tanks_total', 'water_tank_volume',
-        'water_tanks_working', 'water_tanks_reserve', 'water_tanks_repair',
-        'temp_outdoor', 'temp_supply', 'temp_return',
-        'temp_graph_supply', 'temp_graph_return',
-        'pressure_supply', 'pressure_return',
-        'water_consumption_daily', 'staff_night', 'staff_day', 'notes'
-    ]
-
-    if field not in allowed_fields:
+    if field not in ALLOWED_FIELDS:
         return jsonify({'status': 'error', 'message': 'Недопустимое поле'}), 400
 
+    # === ЕДИНСТВЕННОЕ ПОДКЛЮЧЕНИЕ К БД ===
     conn = get_conn()
-    cur = conn.cursor()
-    cur.execute("SELECT boiler_number FROM records WHERE id = %s", (record_id,))
-    record = cur.fetchone()
-    conn.close()
+    try:
+        cur = conn.cursor()
 
-    if not record:
-        return jsonify({'status': 'error', 'message': 'Запись не найдена'}), 404
+        # Получаем boiler_number записи И данные пользователя за один запрос
+        cur.execute("""
+            SELECT r.boiler_number, u.username, u.role
+            FROM records r
+            JOIN users u ON u.id = %s
+            WHERE r.id = %s
+        """, (session['user_id'], record_id))
 
-    boiler_number = record['boiler_number']
+        row = cur.fetchone()
+        if not row:
+            return jsonify({'status': 'error', 'message': 'Запись не найдена или доступ запрещён'}), 404
 
-    if not can_edit_record(session['user_id'], boiler_number):
-        return jsonify({'status': 'error', 'message': 'Нет прав на редактирование этой котельной'}), 403
+        boiler_number = row['boiler_number']
+        username = row['username']
+        role = row['role']
 
-    cur = get_conn().cursor()
-    cur.execute(f"UPDATE records SET {field} = %s WHERE id = %s", (value, record_id))
-    cur.connection.commit()
-    cur.connection.close()
+        # === Проверка прав (без нового запроса) ===
+        has_access = False
+        if role == 'admin':
+            has_access = True
+        elif role == 'operator' and username.startswith('user'):
+            try:
+                user_num = int(username[4:])
+                if 1 <= user_num <= 4 and user_num == boiler_number:
+                    has_access = True
+            except (ValueError, IndexError):
+                has_access = False
 
-    return jsonify({'status': 'ok'})
+        if not has_access:
+            return jsonify({'status': 'error', 'message': 'Нет прав на редактирование этой котельной'}), 403
+
+        # === Выполняем обновление ===
+        cur.execute(f"UPDATE records SET {field} = %s WHERE id = %s", (value, record_id))
+        conn.commit()
+
+        return jsonify({'status': 'ok'})
+
+    except Exception as e:
+        conn.rollback()
+        print("❌ Ошибка в /update:", e)
+        return jsonify({'status': 'error', 'message': 'Внутренняя ошибка сервера'}), 500
+    finally:
+        conn.close()
+        
 @app.route('/add', methods=['POST'])
 def add():
     if not admin():
