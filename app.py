@@ -283,7 +283,8 @@ def archive_records():
                 water_consumption_daily = '',
                 staff_night = '',
                 staff_day = '',
-                notes = ''
+                notes = '',
+                downtime_today = 0
         """)
 
         conn.commit()
@@ -382,7 +383,7 @@ ALLOWED_FIELDS = {
     'temp_outdoor', 'temp_supply', 'temp_return',
     'temp_graph_supply', 'temp_graph_return',
     'pressure_supply', 'pressure_return',
-    'water_consumption_daily', 'staff_night', 'staff_day', 'notes'
+    'water_consumption_daily', 'staff_night', 'staff_day', 'notes','downtime_today'
 }
 
 @app.route('/update', methods=['POST'])
