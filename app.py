@@ -227,6 +227,8 @@ def archive_records():
                 staff_night,
                 staff_day,
                 notes,
+                downtime_today,
+                downtime_total,
                 archive_date
             )
             SELECT
@@ -243,7 +245,7 @@ def archive_records():
                 temp_graph_supply, temp_graph_return,
                 pressure_supply, pressure_return,
                 water_consumption_daily, staff_night, staff_day,
-                notes, NOW() AT TIME ZONE 'Asia/Omsk'
+                notes, downtime_today, downtime_total,NOW() AT TIME ZONE 'Asia/Omsk'
             FROM records
         """)
 
