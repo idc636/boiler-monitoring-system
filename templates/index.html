@@ -714,78 +714,79 @@ thead th { background:#d9d9d9; }
 </table>
 </div>
 <script>
+// Обработчик редактирования ячеек
 document.querySelectorAll('.editable').forEach(cell => {
-cell.addEventListener('click', function() {
-const field = this.getAttribute('data-field');
-const id = this.getAttribute('data-id');
-const currentValue = this.textContent;
-const input = document.createElement('input');
-input.type = 'text';
-input.value = currentValue;
-input.addEventListener('blur', function() {
-const newValue = this.value;
-console.log('📤 Отправка запроса:', { field: field, value: newValue, id: id }); // ← Добавьте это
-fetch('/update', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ field: field, value: newValue, id: id })
-})
-.then(response => {
-    console.log('📥 Ответ сервера:', response.status); // ← Добавьте это
-    return response.json();
-})
-.then(data => {
-    console.log('📥 Данные ответа:', data); // ← Добавьте это
-    if (data.status === 'ok') {
-        cell.textContent = newValue;
-    } else {
-        alert('Ошибка сохранения: ' + data.message);
-    }
-})
-.catch(error => {
-    console.error('❌ Ошибка запроса:', error); // ← Добавьте это
-    alert('Ошибка связи с сервером: ' + error.message);
+    cell.addEventListener('click', function() {
+        const field = this.getAttribute('data-field');
+        const id = this.getAttribute('data-id');
+        const currentValue = this.textContent;
+        
+        console.log('✏️ Клик по ячейке:', { field, id, currentValue });
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = currentValue;
+        
+        input.addEventListener('blur', function() {
+            const newValue = this.value;
+            
+            console.log('📤 Отправка запроса:', { field, value: newValue, id });
+            
+            fetch('/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ field: field, value: newValue, id: id })
+            })
+            .then(response => {
+                console.log('📥 Статус ответа:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('📥 Данные ответа:', data);
+                
+                if (data.status === 'ok') {
+                    cell.textContent = newValue;
+                    console.log('✅ Успешно обновлено:', newValue);
+                } else {
+                    alert('Ошибка сохранения: ' + (data.message || 'неизвестная ошибка'));
+                }
+            })
+            .catch(error => {
+                console.error('❌ Ошибка запроса:', error);
+                alert('Ошибка связи с сервером: ' + error.message);
+            });
+        });
+        
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') this.blur();
+        });
+        
+        this.innerHTML = '';
+        this.appendChild(input);
+        input.focus();
+    });
 });
-})
-.then(response => response.json())
-.then(data => {
-if (data.status === 'ok') {
-cell.textContent = newValue;
-} else {
-alert('Ошибка сохранения');
-}
-})
-.catch(error => {
-console.error('Ошибка:', error);
-alert('Ошибка связи с сервером');
-});
-});
-input.addEventListener('keypress', function(e) {
-if (e.key === 'Enter') this.blur();
-});
-this.innerHTML = '';
-this.appendChild(input);
-input.focus();
-});
-});
+
+// Обработчик архивации
 function archiveRecords() {
-if (!confirm('Архивировать все данные? После этого ячейки будут очищены.')) {
-return;
-}
-fetch('/archive', { method: 'POST' })
-.then(response => response.json())
-.then(data => {
-if (data.status === 'ok') {
-alert('Данные успешно архивированы! Ячейки очищены.');
-location.reload();
-} else {
-alert('Ошибка: ' + (data.message || 'неизвестная ошибка'));
-}
-})
-.catch(error => {
-console.error('Ошибка:', error);
-alert('Ошибка связи с сервером');
-});
+    if (!confirm('Архивировать все данные? После этого ячейки будут очищены.')) {
+        return;
+    }
+    
+    fetch('/archive', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'ok') {
+            alert('Данные успешно архивированы! Ячейки очищены.');
+            location.reload();
+        } else {
+            alert('Ошибка: ' + (data.message || 'неизвестная ошибка'));
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert('Ошибка связи с сервером');
+    });
 }
 </script>
 </body>
