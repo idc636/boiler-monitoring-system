@@ -555,194 +555,183 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="pressure_return" data-id="823">{{ data[823].pressure_return if data and data[823] else '3,0' }}</td>
 </tr>
 <!-- ============ КОТЕЛЬНАЯ №4 (8 строк) ============ -->
+<!-- ============ КОТЕЛЬНАЯ №4 ============ -->
 <tr class="section">
-<td colspan="26">Котельная №4 Катравож №4 ул. Маслова б/2</td>
+  <td colspan="26">Котельная №4 Катравож №4 ул. Маслова б/2</td>
 </tr>
-<tr>
-<td rowspan="4">1</td>
-<td rowspan="4">{{ data[792].boiler_model if data and data[792] else 'KСВ-3,0 PG93"UNIGAS"№0904745' }}</td>
-<td rowspan="4">{{ data[792].equipment_year if data and data[792] else '2022' }}</td>
-<td class="editable" data-field="time_interval" data-id="792">{{ data[792].time_interval if data and data[792] else '00:00' }}</td>
-<td class="editable" data-field="boilers_working" data-id="792">{{ data[792].boilers_working if data and data[792] else '2' }}</td>
-<td class="editable" data-field="boilers_reserve" data-id="792">{{ data[792].boilers_reserve if data and data[792] else '3' }}</td>
-<td rowspan="4" class="editable" data-field="boilers_repair" data-id="792">{{ data[792].boilers_repair if data and data[792] else '1' }}</td>
-<td class="editable" data-field="pumps_working" data-id="792">{{ data[792].pumps_working if data and data[792] else '1' }}</td>
-<td class="editable" data-field="pumps_reserve" data-id="792">{{ data[792].pumps_reserve if data and data[792] else '2' }}</td>
-<td rowspan="4" class="editable" data-field="pumps_repair" data-id="792">{{ data[792].pumps_repair if data and data[792] else '-' }}</td>
-<td class="editable" data-field="feed_pumps_working" data-id="792">{{ data[792].feed_pumps_working if data and data[792] else '1' }}</td>
-<td class="editable" data-field="feed_pumps_reserve" data-id="792">{{ data[792].feed_pumps_reserve if data and data[792] else '2' }}</td>
-<td rowspan="4" class="editable" data-field="feed_pumps_repair" data-id="792">{{ data[792].feed_pumps_repair if data and data[792] else '-' }}</td>
-<td class="editable" data-field="temp_outdoor" data-id="792">{{ data[792].temp_outdoor if data and data[792] else '-36' }}</td>
-<td class="editable" data-field="temp_supply" data-id="792">{{ data[792].temp_supply if data and data[792] else '88' }}</td>
-<td class="editable" data-field="temp_return" data-id="792">{{ data[792].temp_return if data and data[792] else '65' }}</td>
-<td class="editable" data-field="temp_graph_supply" data-id="792">{{ data[792].temp_graph_supply if data and data[792] else '88' }}</td>
-<td class="editable" data-field="temp_graph_return" data-id="792">{{ data[792].temp_graph_return if data and data[792] else '66' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="792">{{ data[792].pressure_supply if data and data[792] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="792">{{ data[792].pressure_return if data and data[792] else '2,8' }}</td>
-<td rowspan="4" class="editable" data-field="water_consumption_daily" data-id="792">{{ data[792].water_consumption_daily if data and data[792] else '-' }}</td>
-<td rowspan="4" class="editable" data-field="staff_night" data-id="792">{{ data[792].staff_night if data and data[792] else 'Ковшин' }}</td>
-<td rowspan="4" class="editable" data-field="staff_day" data-id="792">{{ data[792].staff_day if data and data[792] else 'Терентьев' }}</td>
-<td rowspan="4" class="editable" data-field="notes" data-id="792">{{ data[792].notes if data and data[792] else 'Серасхов Конев' }}</td>
-<td rowspan="4" class="editable" data-field="downtime_today" data-id="792">{{ "%.1f"|format(data[792].downtime_today|float) if data[792] and data[792].downtime_today else '' }}</td>
-<td rowspan="4">{{ "%.1f"|format(data[792].downtime_total|float) if data[792] and data[792].downtime_total else '' }}</td>
-</tr>
-<tr>
-<td class="editable" data-field="time_interval" data-id="824">{{ data[824].time_interval if data and data[824] else '03:00' }}</td>
-<td class="editable" data-field="boilers_working" data-id="824">{{ data[824].boilers_working if data and data[824] else '2' }}</td>
-<td class="editable" data-field="boilers_reserve" data-id="824">{{ data[824].boilers_reserve if data and data[824] else '3' }}</td>
-<td class="editable" data-field="pumps_working" data-id="824">{{ data[824].pumps_working if data and data[824] else '1' }}</td>
-<td class="editable" data-field="pumps_reserve" data-id="824">{{ data[824].pumps_reserve if data and data[824] else '2' }}</td>
-<td class="editable" data-field="feed_pumps_working" data-id="824">{{ data[824].feed_pumps_working if data and data[824] else '1' }}</td>
-<td class="editable" data-field="feed_pumps_reserve" data-id="824">{{ data[824].feed_pumps_reserve if data and data[824] else '2' }}</td>
-<td class="editable" data-field="temp_outdoor" data-id="824">{{ data[824].temp_outdoor if data and data[824] else '-38' }}</td>
-<td class="editable" data-field="temp_supply" data-id="824">{{ data[824].temp_supply if data and data[824] else '90' }}</td>
-<td class="editable" data-field="temp_return" data-id="824">{{ data[824].temp_return if data and data[824] else '67' }}</td>
-<td class="editable" data-field="temp_graph_supply" data-id="824">{{ data[824].temp_graph_supply if data and data[824] else '90' }}</td>
-<td class="editable" data-field="temp_graph_return" data-id="824">{{ data[824].temp_graph_return if data and data[824] else '67' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="824">{{ data[824].pressure_supply if data and data[824] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="824">{{ data[824].pressure_return if data and data[824] else '2,8' }}</td>
-</tr>
-<tr>
-<td class="editable" data-field="time_interval" data-id="825">{{ data[825].time_interval if data and data[825] else '06:00' }}</td>
-<td class="editable" data-field="boilers_working" data-id="825">{{ data[825].boilers_working if data and data[825] else '2' }}</td>
-<td class="editable" data-field="boilers_reserve" data-id="825">{{ data[825].boilers_reserve if data and data[825] else '3' }}</td>
-<td class="editable" data-field="pumps_working" data-id="825">{{ data[825].pumps_working if data and data[825] else '1' }}</td>
-<td class="editable" data-field="pumps_reserve" data-id="825">{{ data[825].pumps_reserve if data and data[825] else '2' }}</td>
-<td class="editable" data-field="feed_pumps_working" data-id="825">{{ data[825].feed_pumps_working if data and data[825] else '1' }}</td>
-<td class="editable" data-field="feed_pumps_reserve" data-id="825">{{ data[825].feed_pumps_reserve if data and data[825] else '2' }}</td>
-<td class="editable" data-field="temp_outdoor" data-id="825">{{ data[825].temp_outdoor if data and data[825] else '-39' }}</td>
-<td class="editable" data-field="temp_supply" data-id="825">{{ data[825].temp_supply if data and data[825] else '91' }}</td>
-<td class="editable" data-field="temp_return" data-id="825">{{ data[825].temp_return if data and data[825] else '67' }}</td>
-<td class="editable" data-field="temp_graph_supply" data-id="825">{{ data[825].temp_graph_supply if data and data[825] else '91' }}</td>
-<td class="editable" data-field="temp_graph_return" data-id="825">{{ data[825].temp_graph_return if data and data[825] else '68' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="825">{{ data[825].pressure_supply if data and data[825] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="825">{{ data[825].pressure_return if data and data[825] else '2,8' }}</td>
-</tr>
-<tr>
-<td class="editable" data-field="time_interval" data-id="826">{{ data[826].time_interval if data and data[826] else '09:00' }}</td>
-<td class="editable" data-field="boilers_working" data-id="826">{{ data[826].boilers_working if data and data[826] else '2' }}</td>
-<td class="editable" data-field="boilers_reserve" data-id="826">{{ data[826].boilers_reserve if data and data[826] else '3' }}</td>
-<td class="editable" data-field="pumps_working" data-id="826">{{ data[826].pumps_working if data and data[826] else '1' }}</td>
-<td class="editable" data-field="pumps_reserve" data-id="826">{{ data[826].pumps_reserve if data and data[826] else '2' }}</td>
-<td class="editable" data-field="feed_pumps_working" data-id="826">{{ data[826].feed_pumps_working if data and data[826] else '1' }}</td>
-<td class="editable" data-field="feed_pumps_reserve" data-id="826">{{ data[826].feed_pumps_reserve if data and data[826] else '2' }}</td>
-<td class="editable" data-field="temp_outdoor" data-id="826">{{ data[826].temp_outdoor if data and data[826] else '-40' }}</td>
-<td class="editable" data-field="temp_supply" data-id="826">{{ data[826].temp_supply if data and data[826] else '92' }}</td>
-<td class="editable" data-field="temp_return" data-id="826">{{ data[826].temp_return if data and data[826] else '68' }}</td>
-<td class="editable" data-field="temp_graph_supply" data-id="826">{{ data[826].temp_graph_supply if data and data[826] else '92' }}</td>
-<td class="editable" data-field="temp_graph_return" data-id="826">{{ data[826].temp_graph_return if data and data[826] else '68' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="826">{{ data[826].pressure_supply if data and data[826] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="826">{{ data[826].pressure_return if data and data[826] else '2,8' }}</td>
-</tr>
-<tr>
-<td rowspan="4">2</td>
-<td rowspan="4">{{ data[795].boiler_model if data and data[795] else 'КСВ -3,0/RG93R"UNIGAS"№0901048' }}</td>
-<td rowspan="4">{{ data[795].equipment_year if data and data[795] else '2014' }}</td>
-<td class="editable" data-field="time_interval" data-id="795">{{ data[795].time_interval if data and data[795] else '12:00' }}</td>
-<td class="editable" data-field="boilers_working" data-id="795">{{ data[795].boilers_working if data and data[795] else '2' }}</td>
-<td class="editable" data-field="boilers_reserve" data-id="795">{{ data[795].boilers_reserve if data and data[795] else '3' }}</td>
-<td rowspan="4" class="editable" data-field="boilers_repair" data-id="795">{{ data[795].boilers_repair if data and data[795] else '1' }}</td>
-<td class="editable" data-field="pumps_working" data-id="795">{{ data[795].pumps_working if data and data[795] else '1' }}</td>
-<td class="editable" data-field="pumps_reserve" data-id="795">{{ data[795].pumps_reserve if data and data[795] else '2' }}</td>
-<td rowspan="4" class="editable" data-field="pumps_repair" data-id="795">{{ data[795].pumps_repair if data and data[795] else '-' }}</td>
-<td class="editable" data-field="feed_pumps_working" data-id="795">{{ data[795].feed_pumps_working if data and data[795] else '1' }}</td>
-<td class="editable" data-field="feed_pumps_reserve" data-id="795">{{ data[795].feed_pumps_reserve if data and data[795] else '2' }}</td>
-<td rowspan="4" class="editable" data-field="feed_pumps_repair" data-id="795">{{ data[795].feed_pumps_repair if data and data[795] else '-' }}</td>
-<td class="editable" data-field="temp_outdoor" data-id="795">{{ data[795].temp_outdoor if data and data[795] else '-37' }}</td>
-<td class="editable" data-field="temp_supply" data-id="795">{{ data[795].temp_supply if data and data[795] else '89' }}</td>
-<td class="editable" data-field="temp_return" data-id="795">{{ data[795].temp_return if data and data[795] else '66' }}</td>
-<td class="editable" data-field="temp_graph_supply" data-id="795">{{ data[795].temp_graph_supply if data and data[795] else '89' }}</td>
-<td class="editable" data-field="temp_graph_return" data-id="795">{{ data[795].temp_graph_return if data and data[795] else '66' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="795">{{ data[795].pressure_supply if data and data[795] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="795">{{ data[795].pressure_return if data and data[795] else '2,8' }}</td>
-<td rowspan="4" class="editable" data-field="water_consumption_daily" data-id="795">{{ data[795].water_consumption_daily if data and data[795] else '-' }}</td>
-<td rowspan="4" class="editable" data-field="staff_night" data-id="795">{{ data[795].staff_night if data and data[795] else 'Ковшин' }}</td>
-<td rowspan="4" class="editable" data-field="staff_day" data-id="795">{{ data[795].staff_day if data and data[795] else 'Терентьев' }}</td>
-<td rowspan="4" class="editable" data-field="notes" data-id="795">{{ data[795].notes if data and data[795] else 'Серасхов Конев' }}</td>
-<td rowspan="4" class="editable" data-field="downtime_today" data-id="795">{{ "%.1f"|format(data[795].downtime_today|float) if data[795] and data[795].downtime_today else '' }}</td>
-<td rowspan="4">{{ "%.1f"|format(data[795].downtime_total|float) if data[795] and data[795].downtime_total else '' }}</td>
-</tr>
-<tr>
-<td class="editable" data-field="time_interval" data-id="827">{{ data[827].time_interval if data and data[827] else '15:00' }}</td>
-<td class="editable" data-field="boilers_working" data-id="827">{{ data[827].boilers_working if data and data[827] else '2' }}</td>
-<td class="editable" data-field="boilers_reserve" data-id="827">{{ data[827].boilers_reserve if data and data[827] else '3' }}</td>
-<td class="editable" data-field="pumps_working" data-id="827">{{ data[827].pumps_working if data and data[827] else '1' }}</td>
-<td class="editable" data-field="pumps_reserve" data-id="827">{{ data[827].pumps_reserve if data and data[827] else '2' }}</td>
-<td class="editable" data-field="feed_pumps_working" data-id="827">{{ data[827].feed_pumps_working if data and data[827] else '1' }}</td>
-<td class="editable" data-field="feed_pumps_reserve" data-id="827">{{ data[827].feed_pumps_reserve if data and data[827] else '2' }}</td>
-<td class="editable" data-field="temp_outdoor" data-id="827">{{ data[827].temp_outdoor if data and data[827] else '-35' }}</td>
-<td class="editable" data-field="temp_supply" data-id="827">{{ data[827].temp_supply if data and data[827] else '87' }}</td>
-<td class="editable" data-field="temp_return" data-id="827">{{ data[827].temp_return if data and data[827] else '65' }}</td>
-<td class="editable" data-field="temp_graph_supply" data-id="827">{{ data[827].temp_graph_supply if data and data[827] else '87' }}</td>
-<td class="editable" data-field="temp_graph_return" data-id="827">{{ data[827].temp_graph_return if data and data[827] else '65' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="827">{{ data[827].pressure_supply if data and data[827] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="827">{{ data[827].pressure_return if data and data[827] else '2,8' }}</td>
-</tr>
-<tr>
-<td class="editable" data-field="time_interval" data-id="828">{{ data[828].time_interval if data and data[828] else '18:00' }}</td>
-<td class="editable" data-field="boilers_working" data-id="828">{{ data[828].boilers_working if data and data[828] else '2' }}</td>
-<td class="editable" data-field="boilers_reserve" data-id="828">{{ data[828].boilers_reserve if data and data[828] else '3' }}</td>
-<td class="editable" data-field="pumps_working" data-id="828">{{ data[828].pumps_working if data and data[828] else '1' }}</td>
-<td class="editable" data-field="pumps_reserve" data-id="828">{{ data[828].pumps_reserve if data and data[828] else '2' }}</td>
-<td class="editable" data-field="feed_pumps_working" data-id="828">{{ data[828].feed_pumps_working if data and data[828] else '1' }}</td>
-<td class="editable" data-field="feed_pumps_reserve" data-id="828">{{ data[828].feed_pumps_reserve if data and data[828] else '2' }}</td>
-<td class="editable" data-field="temp_outdoor" data-id="828">{{ data[828].temp_outdoor if data and data[828] else '-36' }}</td>
-<td class="editable" data-field="temp_supply" data-id="828">{{ data[828].temp_supply if data and data[828] else '88' }}</td>
-<td class="editable" data-field="temp_return" data-id="828">{{ data[828].temp_return if data and data[828] else '65' }}</td>
-<td class="editable" data-field="temp_graph_supply" data-id="828">{{ data[828].temp_graph_supply if data and data[828] else '88' }}</td>
-<td class="editable" data-field="temp_graph_return" data-id="828">{{ data[828].temp_graph_return if data and data[828] else '66' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="828">{{ data[828].pressure_supply if data and data[828] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="828">{{ data[828].pressure_return if data and data[828] else '2,8' }}</td>
-</tr>
-<tr>
-<td class="editable" data-field="time_interval" data-id="829">{{ data[829].time_interval if data and data[829] else '21:00' }}</td>
-<td class="editable" data-field="boilers_working" data-id="829">{{ data[829].boilers_working if data and data[829] else '2' }}</td>
-<td class="editable" data-field="boilers_reserve" data-id="829">{{ data[829].boilers_reserve if data and data[829] else '3' }}</td>
-<td class="editable" data-field="pumps_working" data-id="829">{{ data[829].pumps_working if data and data[829] else '1' }}</td>
-<td class="editable" data-field="pumps_reserve" data-id="829">{{ data[829].pumps_reserve if data and data[829] else '2' }}</td>
-<td class="editable" data-field="feed_pumps_working" data-id="829">{{ data[829].feed_pumps_working if data and data[829] else '1' }}</td>
-<td class="editable" data-field="feed_pumps_reserve" data-id="829">{{ data[829].feed_pumps_reserve if data and data[829] else '2' }}</td>
-<td class="editable" data-field="temp_outdoor" data-id="829">{{ data[829].temp_outdoor if data and data[829] else '-36' }}</td>
-<td class="editable" data-field="temp_supply" data-id="829">{{ data[829].temp_supply if data and data[829] else '88' }}</td>
-<td class="editable" data-field="temp_return" data-id="829">{{ data[829].temp_return if data and data[829] else '65' }}</td>
-<td class="editable" data-field="temp_graph_supply" data-id="829">{{ data[829].temp_graph_supply if data and data[829] else '88' }}</td>
-<td class="editable" data-field="temp_graph_return" data-id="829">{{ data[829].temp_graph_return if data and data[829] else '66' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="829">{{ data[829].pressure_supply if data and data[829] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="829">{{ data[829].pressure_return if data and data[829] else '2,8' }}</td>
-</tr>
-<tr>
-<td rowspan="4">3</td>
-<td rowspan="4">{{ data[830].boiler_model if data and data[830] else 'КСВ-3,0 PG93 "UNIGAS" №XXXXXXX' }}</td>
-<td rowspan="4">{{ data[830].equipment_year if data and data[830] else '2015' }}</td>
 
-<td class="editable" data-field="time_interval" data-id="830">00:00</td>
-<td class="editable" data-field="boilers_working" data-id="830">2</td>
-<td class="editable" data-field="boilers_reserve" data-id="830">3</td>
-<td rowspan="4" class="editable" data-field="boilers_repair" data-id="830">1</td>
+<!-- ===== КОТЁЛ №1 ===== -->
+<tr>
+  <td rowspan="4">1</td>
+  <td rowspan="4">{{ data[792].boiler_model if data and data[792] else 'КСВ-3,0 PG93 "UNIGAS" №0904745' }}</td>
+  <td rowspan="4">{{ data[792].equipment_year if data and data[792] else '2022' }}</td>
 
-<td class="editable" data-field="pumps_working" data-id="830">1</td>
-<td class="editable" data-field="pumps_reserve" data-id="830">2</td>
-<td rowspan="4" class="editable" data-field="pumps_repair" data-id="830">-</td>
+  <td class="editable" data-id="792">00:00</td>
+  <td class="editable" data-id="792">2</td>
+  <td class="editable" data-id="792">3</td>
+  <td rowspan="4" class="editable" data-id="792">1</td>
 
-<td class="editable" data-field="feed_pumps_working" data-id="830">1</td>
-<td class="editable" data-field="feed_pumps_reserve" data-id="830">2</td>
-<td rowspan="4" class="editable" data-field="feed_pumps_repair" data-id="830">-</td>
+  <td class="editable" data-id="792">1</td>
+  <td class="editable" data-id="792">2</td>
+  <td rowspan="4" class="editable" data-id="792">-</td>
 
-<td class="editable" data-field="temp_outdoor" data-id="830">-36</td>
-<td class="editable" data-field="temp_supply" data-id="830">88</td>
-<td class="editable" data-field="temp_return" data-id="830">65</td>
-<td class="editable" data-field="temp_graph_supply" data-id="830">88</td>
-<td class="editable" data-field="temp_graph_return" data-id="830">66</td>
-<td class="editable" data-field="pressure_supply" data-id="830">3,8</td>
-<td class="editable" data-field="pressure_return" data-id="830">2,8</td>
+  <td class="editable" data-id="792">1</td>
+  <td class="editable" data-id="792">2</td>
+  <td rowspan="4" class="editable" data-id="792">-</td>
 
-<td rowspan="4" class="editable" data-field="water_consumption_daily" data-id="830">-</td>
-<td rowspan="4" class="editable" data-field="staff_night" data-id="830">Ковшин</td>
-<td rowspan="4" class="editable" data-field="staff_day" data-id="830">Терентьев</td>
-<td rowspan="4" class="editable" data-field="notes" data-id="830"></td>
-<td rowspan="4" class="editable" data-field="downtime_today" data-id="830"></td>
-<td rowspan="4"></td>
+  <td class="editable" data-id="792">-36</td>
+  <td class="editable" data-id="792">88</td>
+  <td class="editable" data-id="792">65</td>
+  <td class="editable" data-id="792">88</td>
+  <td class="editable" data-id="792">66</td>
+  <td class="editable" data-id="792">3,8</td>
+  <td class="editable" data-id="792">2,8</td>
+
+  <td rowspan="4" class="editable" data-id="792">-</td>
+  <td rowspan="4" class="editable" data-id="792">Ковшин</td>
+  <td rowspan="4" class="editable" data-id="792">Терентьев</td>
+  <td rowspan="4" class="editable" data-id="792">Серасхов Конев</td>
+  <td rowspan="4"></td>
+  <td rowspan="4"></td>
 </tr>
+
+<tr>
+  <td class="editable" data-id="824">03:00</td>
+  <td class="editable" data-id="824">2</td>
+  <td class="editable" data-id="824">3</td>
+  <td class="editable" data-id="824">1</td>
+  <td class="editable" data-id="824">2</td>
+  <td class="editable" data-id="824">1</td>
+  <td class="editable" data-id="824">2</td>
+  <td class="editable" data-id="824">-38</td>
+  <td class="editable" data-id="824">90</td>
+  <td class="editable" data-id="824">67</td>
+  <td class="editable" data-id="824">90</td>
+  <td class="editable" data-id="824">67</td>
+  <td class="editable" data-id="824">3,8</td>
+  <td class="editable" data-id="824">2,8</td>
+</tr>
+
+<tr>
+  <td class="editable" data-id="825">06:00</td>
+  <td class="editable" data-id="825">2</td>
+  <td class="editable" data-id="825">3</td>
+  <td class="editable" data-id="825">1</td>
+  <td class="editable" data-id="825">2</td>
+  <td class="editable" data-id="825">1</td>
+  <td class="editable" data-id="825">2</td>
+  <td class="editable" data-id="825">-39</td>
+  <td class="editable" data-id="825">91</td>
+  <td class="editable" data-id="825">67</td>
+  <td class="editable" data-id="825">91</td>
+  <td class="editable" data-id="825">68</td>
+  <td class="editable" data-id="825">3,8</td>
+  <td class="editable" data-id="825">2,8</td>
+</tr>
+
+<tr>
+  <td class="editable" data-id="826">09:00</td>
+  <td class="editable" data-id="826">2</td>
+  <td class="editable" data-id="826">3</td>
+  <td class="editable" data-id="826">1</td>
+  <td class="editable" data-id="826">2</td>
+  <td class="editable" data-id="826">1</td>
+  <td class="editable" data-id="826">2</td>
+  <td class="editable" data-id="826">-40</td>
+  <td class="editable" data-id="826">92</td>
+  <td class="editable" data-id="826">68</td>
+  <td class="editable" data-id="826">92</td>
+  <td class="editable" data-id="826">68</td>
+  <td class="editable" data-id="826">3,8</td>
+  <td class="editable" data-id="826">2,8</td>
+</tr>
+
+<!-- ===== КОТЁЛ №2 ===== -->
+<tr>
+  <td rowspan="4">2</td>
+  <td rowspan="4">{{ data[795].boiler_model if data and data[795] else 'КСВ-3,0/RG93R "UNIGAS" №0901048' }}</td>
+  <td rowspan="4">{{ data[795].equipment_year if data and data[795] else '2014' }}</td>
+
+  <td class="editable" data-id="795">12:00</td>
+  <td class="editable" data-id="795">2</td>
+  <td class="editable" data-id="795">3</td>
+  <td rowspan="4" class="editable" data-id="795">1</td>
+
+  <td class="editable" data-id="795">1</td>
+  <td class="editable" data-id="795">2</td>
+  <td rowspan="4" class="editable" data-id="795">-</td>
+
+  <td class="editable" data-id="795">1</td>
+  <td class="editable" data-id="795">2</td>
+  <td rowspan="4" class="editable" data-id="795">-</td>
+
+  <td class="editable" data-id="795">-37</td>
+  <td class="editable" data-id="795">89</td>
+  <td class="editable" data-id="795">66</td>
+  <td class="editable" data-id="795">89</td>
+  <td class="editable" data-id="795">66</td>
+  <td class="editable" data-id="795">3,8</td>
+  <td class="editable" data-id="795">2,8</td>
+
+  <td rowspan="4" class="editable" data-id="795">-</td>
+  <td rowspan="4" class="editable" data-id="795">Ковшин</td>
+  <td rowspan="4" class="editable" data-id="795">Терентьев</td>
+  <td rowspan="4" class="editable" data-id="795">Серасхов Конев</td>
+  <td rowspan="4"></td>
+  <td rowspan="4"></td>
+</tr>
+
+<tr>
+  <td class="editable" data-id="827">15:00</td>
+  <td class="editable" data-id="827">2</td>
+  <td class="editable" data-id="827">3</td>
+  <td class="editable" data-id="827">1</td>
+  <td class="editable" data-id="827">2</td>
+  <td class="editable" data-id="827">1</td>
+  <td class="editable" data-id="827">2</td>
+  <td class="editable" data-id="827">-35</td>
+  <td class="editable" data-id="827">87</td>
+  <td class="editable" data-id="827">65</td>
+  <td class="editable" data-id="827">87</td>
+  <td class="editable" data-id="827">65</td>
+  <td class="editable" data-id="827">3,8</td>
+  <td class="editable" data-id="827">2,8</td>
+</tr>
+
+<tr>
+  <td class="editable" data-id="828">18:00</td>
+  <td class="editable" data-id="828">2</td>
+  <td class="editable" data-id="828">3</td>
+  <td class="editable" data-id="828">1</td>
+  <td class="editable" data-id="828">2</td>
+  <td class="editable" data-id="828">1</td>
+  <td class="editable" data-id="828">2</td>
+  <td class="editable" data-id="828">-36</td>
+  <td class="editable" data-id="828">88</td>
+  <td class="editable" data-id="828">65</td>
+  <td class="editable" data-id="828">88</td>
+  <td class="editable" data-id="828">66</td>
+  <td class="editable" data-id="828">3,8</td>
+  <td class="editable" data-id="828">2,8</td>
+</tr>
+
+<tr>
+  <td class="editable" data-id="829">21:00</td>
+  <td class="editable" data-id="829">2</td>
+  <td class="editable" data-id="829">3</td>
+  <td class="editable" data-id="829">1</td>
+  <td class="editable" data-id="829">2</td>
+  <td class="editable" data-id="829">1</td>
+  <td class="editable" data-id="829">2</td>
+  <td class="editable" data-id="829">-36</td>
+  <td class="editable" data-id="829">88</td>
+  <td class="editable" data-id="829">65</td>
+  <td class="editable" data-id="829">88</td>
+  <td class="editable" data-id="829">66</td>
+  <td class="editable" data-id="829">3,8</td>
+  <td class="editable" data-id="829">2,8</td>
+</tr>
+
 
 <tr><td colspan="14"></td></tr>
 <tr><td colspan="14"></td></tr>
