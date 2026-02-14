@@ -563,140 +563,175 @@ thead th { background:#d9d9d9; }
 <!-- ===== КОТЁЛ №1 ===== -->
 <tr>
   <td rowspan="4">1</td>
-  <td rowspan="4">КСВ-3,0 PG93 "UNIGAS" №0904745</td>
-  <td rowspan="4">2022</td>
+  <td rowspan="4">{{ data[792].boiler_model if data and data[792] else 'КСВ-3,0 PG93 "UNIGAS" №0904745' }}</td>
+  <td rowspan="4">{{ data[792].equipment_year if data and data[792] else '2022' }}</td>
 
   <td class="time-cell" data-field="time_interval" data-id="792">00:00</td>
-  <td class="editable" data-field="boilers_working" data-id="792"></td>
-  <td class="editable" data-field="boilers_reserve" data-id="792"></td>
-  <td rowspan="4" class="editable" data-field="boilers_repair" data-id="792"></td>
+  <td class="editable" data-field="boilers_working" data-id="792">2</td>
+  <td class="editable" data-field="boilers_reserve" data-id="792">3</td>
+  <td rowspan="4" class="editable" data-field="boilers_repair" data-id="792">1</td>
 
-  <td class="editable" data-field="pumps_working" data-id="792"></td>
-  <td class="editable" data-field="pumps_reserve" data-id="792"></td>
-  <td rowspan="4" class="editable" data-field="pumps_repair" data-id="792"></td>
+  <td class="editable" data-field="pumps_working" data-id="792">1</td>
+  <td class="editable" data-field="pumps_reserve" data-id="792">2</td>
+  <td rowspan="4" class="editable" data-field="pumps_repair" data-id="792">-</td>
 
-  <td class="editable" data-field="feed_pumps_working" data-id="792"></td>
-  <td class="editable" data-field="feed_pumps_reserve" data-id="792"></td>
-  <td rowspan="4" class="editable" data-field="feed_pumps_repair" data-id="792"></td>
+  <td class="editable" data-field="feed_pumps_working" data-id="792">1</td>
+  <td class="editable" data-field="feed_pumps_reserve" data-id="792">2</td>
+  <td rowspan="4" class="editable" data-field="feed_pumps_repair" data-id="792">-</td>
 
-  <td class="editable" data-field="temp_outdoor" data-id="792"></td>
-  <td class="editable" data-field="temp_supply" data-id="792"></td>
-  <td class="editable" data-field="temp_return" data-id="792"></td>
-  <td class="editable" data-field="temp_graph_supply" data-id="792"></td>
-  <td class="editable" data-field="temp_graph_return" data-id="792"></td>
-  <td class="editable" data-field="pressure_supply" data-id="792"></td>
-  <td class="editable" data-field="pressure_return" data-id="792"></td>
+  <td class="editable" data-field="temp_outdoor" data-id="792">-36</td>
+  <td class="editable" data-field="temp_supply" data-id="792">88</td>
+  <td class="editable" data-field="temp_return" data-id="792">65</td>
+  <td class="editable" data-field="temp_graph_supply" data-id="792">88</td>
+  <td class="editable" data-field="temp_graph_return" data-id="792">66</td>
+  <td class="editable" data-field="pressure_supply" data-id="792">3,8</td>
+  <td class="editable" data-field="pressure_return" data-id="792">2,8</td>
 
-  <td rowspan="4" class="editable" data-field="water_consumption_daily" data-id="792"></td>
-  <td rowspan="4" class="editable" data-field="staff_night" data-id="792"></td>
-  <td rowspan="4" class="editable" data-field="staff_day" data-id="792"></td>
-  <td rowspan="4" class="editable" data-field="notes" data-id="792"></td>
+  <td rowspan="4" class="editable" data-field="water_consumption_daily" data-id="792">-</td>
+  <td rowspan="4" class="editable" data-field="staff_night" data-id="792">Ковшин</td>
+  <td rowspan="4" class="editable" data-field="staff_day" data-id="792">Терентьев</td>
+  <td rowspan="4" class="editable" data-field="notes" data-id="792">Серасхов Конев</td>
   <td rowspan="4" class="editable" data-field="downtime_today" data-id="792"></td>
   <td rowspan="4" class="editable" data-field="downtime_total" data-id="792"></td>
 </tr>
 
 <tr>
   <td class="time-cell" data-field="time_interval" data-id="824">03:00</td>
+  <td class="editable" data-field="boilers_working" data-id="824">2</td>
+  <td class="editable" data-field="boilers_reserve" data-id="824">3</td>
+  <td class="editable" data-field="pumps_working" data-id="824">1</td>
+  <td class="editable" data-field="pumps_reserve" data-id="824">2</td>
+  <td class="editable" data-field="feed_pumps_working" data-id="824">1</td>
+  <td class="editable" data-field="feed_pumps_reserve" data-id="824">2</td>
+  <td class="editable" data-field="temp_outdoor" data-id="824">-38</td>
+  <td class="editable" data-field="temp_supply" data-id="824">90</td>
+  <td class="editable" data-field="temp_return" data-id="824">67</td>
+  <td class="editable" data-field="temp_graph_supply" data-id="824">90</td>
+  <td class="editable" data-field="temp_graph_return" data-id="824">67</td>
+  <td class="editable" data-field="pressure_supply" data-id="824">3,8</td>
+  <td class="editable" data-field="pressure_return" data-id="824">2,8</td>
 </tr>
+
 <tr>
   <td class="time-cell" data-field="time_interval" data-id="825">06:00</td>
+  <td class="editable" data-field="boilers_working" data-id="825">2</td>
+  <td class="editable" data-field="boilers_reserve" data-id="825">3</td>
+  <td class="editable" data-field="pumps_working" data-id="825">1</td>
+  <td class="editable" data-field="pumps_reserve" data-id="825">2</td>
+  <td class="editable" data-field="feed_pumps_working" data-id="825">1</td>
+  <td class="editable" data-field="feed_pumps_reserve" data-id="825">2</td>
+  <td class="editable" data-field="temp_outdoor" data-id="825">-39</td>
+  <td class="editable" data-field="temp_supply" data-id="825">91</td>
+  <td class="editable" data-field="temp_return" data-id="825">67</td>
+  <td class="editable" data-field="temp_graph_supply" data-id="825">91</td>
+  <td class="editable" data-field="temp_graph_return" data-id="825">68</td>
+  <td class="editable" data-field="pressure_supply" data-id="825">3,8</td>
+  <td class="editable" data-field="pressure_return" data-id="825">2,8</td>
 </tr>
+
 <tr>
   <td class="time-cell" data-field="time_interval" data-id="826">09:00</td>
+  <td class="editable" data-field="boilers_working" data-id="826">2</td>
+  <td class="editable" data-field="boilers_reserve" data-id="826">3</td>
+  <td class="editable" data-field="pumps_working" data-id="826">1</td>
+  <td class="editable" data-field="pumps_reserve" data-id="826">2</td>
+  <td class="editable" data-field="feed_pumps_working" data-id="826">1</td>
+  <td class="editable" data-field="feed_pumps_reserve" data-id="826">2</td>
+  <td class="editable" data-field="temp_outdoor" data-id="826">-40</td>
+  <td class="editable" data-field="temp_supply" data-id="826">92</td>
+  <td class="editable" data-field="temp_return" data-id="826">68</td>
+  <td class="editable" data-field="temp_graph_supply" data-id="826">92</td>
+  <td class="editable" data-field="temp_graph_return" data-id="826">68</td>
+  <td class="editable" data-field="pressure_supply" data-id="826">3,8</td>
+  <td class="editable" data-field="pressure_return" data-id="826">2,8</td>
 </tr>
 
 <!-- ===== КОТЁЛ №2 ===== -->
 <tr>
   <td rowspan="4">2</td>
-  <td rowspan="4">КСВ-3,0/RG93R "UNIGAS" №0901048</td>
-  <td rowspan="4">2014</td>
+  <td rowspan="4">{{ data[795].boiler_model if data and data[795] else 'КСВ-3,0/RG93R "UNIGAS" №0901048' }}</td>
+  <td rowspan="4">{{ data[795].equipment_year if data and data[795] else '2014' }}</td>
 
   <td class="time-cell" data-field="time_interval" data-id="795">12:00</td>
-  <td class="editable" data-field="boilers_working" data-id="795"></td>
-  <td class="editable" data-field="boilers_reserve" data-id="795"></td>
-  <td rowspan="4" class="editable" data-field="boilers_repair" data-id="795"></td>
+  <td class="editable" data-field="boilers_working" data-id="795">2</td>
+  <td class="editable" data-field="boilers_reserve" data-id="795">3</td>
+  <td rowspan="4" class="editable" data-field="boilers_repair" data-id="795">1</td>
 
-  <td class="editable" data-field="pumps_working" data-id="795"></td>
-  <td class="editable" data-field="pumps_reserve" data-id="795"></td>
-  <td rowspan="4" class="editable" data-field="pumps_repair" data-id="795"></td>
+  <td class="editable" data-field="pumps_working" data-id="795">1</td>
+  <td class="editable" data-field="pumps_reserve" data-id="795">2</td>
+  <td rowspan="4" class="editable" data-field="pumps_repair" data-id="795">-</td>
 
-  <td class="editable" data-field="feed_pumps_working" data-id="795"></td>
-  <td class="editable" data-field="feed_pumps_reserve" data-id="795"></td>
-  <td rowspan="4" class="editable" data-field="feed_pumps_repair" data-id="795"></td>
+  <td class="editable" data-field="feed_pumps_working" data-id="795">1</td>
+  <td class="editable" data-field="feed_pumps_reserve" data-id="795">2</td>
+  <td rowspan="4" class="editable" data-field="feed_pumps_repair" data-id="795">-</td>
 
-  <td class="editable" data-field="temp_outdoor" data-id="795"></td>
-  <td class="editable" data-field="temp_supply" data-id="795"></td>
-  <td class="editable" data-field="temp_return" data-id="795"></td>
-  <td class="editable" data-field="temp_graph_supply" data-id="795"></td>
-  <td class="editable" data-field="temp_graph_return" data-id="795"></td>
-  <td class="editable" data-field="pressure_supply" data-id="795"></td>
-  <td class="editable" data-field="pressure_return" data-id="795"></td>
+  <td class="editable" data-field="temp_outdoor" data-id="795">-37</td>
+  <td class="editable" data-field="temp_supply" data-id="795">89</td>
+  <td class="editable" data-field="temp_return" data-id="795">66</td>
+  <td class="editable" data-field="temp_graph_supply" data-id="795">89</td>
+  <td class="editable" data-field="temp_graph_return" data-id="795">66</td>
+  <td class="editable" data-field="pressure_supply" data-id="795">3,8</td>
+  <td class="editable" data-field="pressure_return" data-id="795">2,8</td>
 
-  <td rowspan="4" class="editable" data-field="water_consumption_daily" data-id="795"></td>
-  <td rowspan="4" class="editable" data-field="staff_night" data-id="795"></td>
-  <td rowspan="4" class="editable" data-field="staff_day" data-id="795"></td>
-  <td rowspan="4" class="editable" data-field="notes" data-id="795"></td>
+  <td rowspan="4" class="editable" data-field="water_consumption_daily" data-id="795">-</td>
+  <td rowspan="4" class="editable" data-field="staff_night" data-id="795">Ковшин</td>
+  <td rowspan="4" class="editable" data-field="staff_day" data-id="795">Терентьев</td>
+  <td rowspan="4" class="editable" data-field="notes" data-id="795">Серасхов Конев</td>
   <td rowspan="4" class="editable" data-field="downtime_today" data-id="795"></td>
   <td rowspan="4" class="editable" data-field="downtime_total" data-id="795"></td>
 </tr>
 
 <tr>
   <td class="time-cell" data-field="time_interval" data-id="827">15:00</td>
+  <td class="editable" data-field="boilers_working" data-id="827">2</td>
+  <td class="editable" data-field="boilers_reserve" data-id="827">3</td>
+  <td class="editable" data-field="pumps_working" data-id="827">1</td>
+  <td class="editable" data-field="pumps_reserve" data-id="827">2</td>
+  <td class="editable" data-field="feed_pumps_working" data-id="827">1</td>
+  <td class="editable" data-field="feed_pumps_reserve" data-id="827">2</td>
+  <td class="editable" data-field="temp_outdoor" data-id="827">-35</td>
+  <td class="editable" data-field="temp_supply" data-id="827">87</td>
+  <td class="editable" data-field="temp_return" data-id="827">65</td>
+  <td class="editable" data-field="temp_graph_supply" data-id="827">87</td>
+  <td class="editable" data-field="temp_graph_return" data-id="827">65</td>
+  <td class="editable" data-field="pressure_supply" data-id="827">3,8</td>
+  <td class="editable" data-field="pressure_return" data-id="827">2,8</td>
 </tr>
+
 <tr>
   <td class="time-cell" data-field="time_interval" data-id="828">18:00</td>
+  <td class="editable" data-field="boilers_working" data-id="828">2</td>
+  <td class="editable" data-field="boilers_reserve" data-id="828">3</td>
+  <td class="editable" data-field="pumps_working" data-id="828">1</td>
+  <td class="editable" data-field="pumps_reserve" data-id="828">2</td>
+  <td class="editable" data-field="feed_pumps_working" data-id="828">1</td>
+  <td class="editable" data-field="feed_pumps_reserve" data-id="828">2</td>
+  <td class="editable" data-field="temp_outdoor" data-id="828">-36</td>
+  <td class="editable" data-field="temp_supply" data-id="828">88</td>
+  <td class="editable" data-field="temp_return" data-id="828">65</td>
+  <td class="editable" data-field="temp_graph_supply" data-id="828">88</td>
+  <td class="editable" data-field="temp_graph_return" data-id="828">66</td>
+  <td class="editable" data-field="pressure_supply" data-id="828">3,8</td>
+  <td class="editable" data-field="pressure_return" data-id="828">2,8</td>
 </tr>
+
 <tr>
   <td class="time-cell" data-field="time_interval" data-id="829">21:00</td>
+  <td class="editable" data-field="boilers_working" data-id="829">2</td>
+  <td class="editable" data-field="boilers_reserve" data-id="829">3</td>
+  <td class="editable" data-field="pumps_working" data-id="829">1</td>
+  <td class="editable" data-field="pumps_reserve" data-id="829">2</td>
+  <td class="editable" data-field="feed_pumps_working" data-id="829">1</td>
+  <td class="editable" data-field="feed_pumps_reserve" data-id="829">2</td>
+  <td class="editable" data-field="temp_outdoor" data-id="829">-36</td>
+  <td class="editable" data-field="temp_supply" data-id="829">88</td>
+  <td class="editable" data-field="temp_return" data-id="829">65</td>
+  <td class="editable" data-field="temp_graph_supply" data-id="829">88</td>
+  <td class="editable" data-field="temp_graph_return" data-id="829">66</td>
+  <td class="editable" data-field="pressure_supply" data-id="829">3,8</td>
+  <td class="editable" data-field="pressure_return" data-id="829">2,8</td>
 </tr>
 
-<!-- ===== КОТЁЛ №3 ===== -->
-<tr>
-  <td rowspan="4">2</td>
-  <td rowspan="4">КСВ-3,0/RG93R "UNIGAS" №0901048</td>
-  <td rowspan="4">2014</td>
-
-  <td class="time-cell" data-field="time_interval" data-id="798">12:00</td>
-  <td class="editable" data-field="boilers_working" data-id="798"></td>
-  <td class="editable" data-field="boilers_reserve" data-id="798"></td>
-  <td rowspan="4" class="editable" data-field="boilers_repair" data-id="798"></td>
-
-  <td class="editable" data-field="pumps_working" data-id="798"></td>
-  <td class="editable" data-field="pumps_reserve" data-id="798"></td>
-  <td rowspan="4" class="editable" data-field="pumps_repair" data-id="798"></td>
-
-  <td class="editable" data-field="feed_pumps_working" data-id="798"></td>
-  <td class="editable" data-field="feed_pumps_reserve" data-id="798"></td>
-  <td rowspan="4" class="editable" data-field="feed_pumps_repair" data-id="798"></td>
-
-  <td class="editable" data-field="temp_outdoor" data-id="798"></td>
-  <td class="editable" data-field="temp_supply" data-id="798"></td>
-  <td class="editable" data-field="temp_return" data-id="798"></td>
-  <td class="editable" data-field="temp_graph_supply" data-id="798"></td>
-  <td class="editable" data-field="temp_graph_return" data-id="798"></td>
-  <td class="editable" data-field="pressure_supply" data-id="798"></td>
-  <td class="editable" data-field="pressure_return" data-id="798"></td>
-
-  <td rowspan="4" class="editable" data-field="water_consumption_daily" data-id="798"></td>
-  <td rowspan="4" class="editable" data-field="staff_night" data-id="798"></td>
-  <td rowspan="4" class="editable" data-field="staff_day" data-id="798"></td>
-  <td rowspan="4" class="editable" data-field="notes" data-id="798"></td>
-  <td rowspan="4" class="editable" data-field="downtime_today" data-id="798"></td>
-  <td rowspan="4" class="editable" data-field="downtime_total" data-id="798"></td>
-</tr>
-
-<tr>
-  <td class="time-cell" data-field="time_interval" data-id="827">15:00</td>
-</tr>
-<tr>
-  <td class="time-cell" data-field="time_interval" data-id="828">18:00</td>
-</tr>
-<tr>
-  <td class="time-cell" data-field="time_interval" data-id="829">21:00</td>
-</tr>
-
-  
-</tr>
 </tbody>
 </table>
 </div>
