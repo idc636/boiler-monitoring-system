@@ -724,10 +724,28 @@ input.type = 'text';
 input.value = currentValue;
 input.addEventListener('blur', function() {
 const newValue = this.value;
+console.log('📤 Отправка запроса:', { field: field, value: newValue, id: id }); // ← Добавьте это
 fetch('/update', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ field: field, value: newValue, id: id })
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ field: field, value: newValue, id: id })
+})
+.then(response => {
+    console.log('📥 Ответ сервера:', response.status); // ← Добавьте это
+    return response.json();
+})
+.then(data => {
+    console.log('📥 Данные ответа:', data); // ← Добавьте это
+    if (data.status === 'ok') {
+        cell.textContent = newValue;
+    } else {
+        alert('Ошибка сохранения: ' + data.message);
+    }
+})
+.catch(error => {
+    console.error('❌ Ошибка запроса:', error); // ← Добавьте это
+    alert('Ошибка связи с сервером: ' + error.message);
+});
 })
 .then(response => response.json())
 .then(data => {
