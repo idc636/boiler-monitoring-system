@@ -1,25 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>Суточный журнал</title>
-<style>
-body { font-family: Arial, sans-serif; background:#f2f2f2; margin:10px; }
-h3 { text-align:center; margin-bottom:10px; }
-table { border-collapse:collapse; background:#fff; font-size:12px; min-width:2600px; }
-th, td { border:1px solid #000; padding:4px 6px; text-align:center; white-space:nowrap; }
-thead th { background:#d9d9d9; }
-.section { background:#b7d78a; font-weight:bold; text-align:left; }
-.wrap { overflow-x:auto; }
-.editable { cursor:pointer; }
-.editable:hover { background:#e3f2fd; }
-</style>
-</head>
-<body>
-<h3>АО «Ямалкомунэнерго» — Суточный журнал</h3>
-<button onclick="archiveRecords()" style="background:#ffc107;color:black;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;margin-bottom:15px;font-weight:bold;">🗄️ Архивировать данные</button>
-<a href="/archive/view" style="display:block; text-align:center; margin-top:15px; color:blue; text-decoration:none; font-weight:bold;">📁 Просмотр архива</a>
-<div class="wrap">
 <table>
 <thead>
 <tr>
@@ -73,8 +51,8 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="791">{{ data[791].temp_return if data and data[791] else '64' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="791">{{ data[791].temp_graph_supply if data and data[791] else '90' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="791">{{ data[791].temp_graph_return if data and data[791] else '70' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="791">{{ data[791].pressure_supply if data and data[791] else '6,2' }}</td>
-<td class="editable" data-field="pressure_return" data-id="791">{{ data[791].pressure_return if data and data[791] else '5,8' }}</td>
+<td rowspan="2" class="editable" data-field="pressure_supply" data-id="791">{{ data[791].pressure_supply if data and data[791] else '6,2' }}</td>
+<td rowspan="2" class="editable" data-field="pressure_return" data-id="791">{{ data[791].pressure_return if data and data[791] else '5,8' }}</td>
 <td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="791">{{ data[791].water_consumption_daily if data and data[791] else '0' }}</td>
 <td rowspan="2" class="editable" data-field="staff_night" data-id="791">{{ data[791].staff_night if data and data[791] else 'Виноградов' }}</td>
 <td rowspan="2" class="editable" data-field="staff_day" data-id="791">{{ data[791].staff_day if data and data[791] else 'Набокин' }}</td>
@@ -95,8 +73,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="800">{{ data[800].temp_return if data and data[800] else '67' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="800">{{ data[800].temp_graph_supply if data and data[800] else '92' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="800">{{ data[800].temp_graph_return if data and data[800] else '72' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="800">{{ data[800].pressure_supply if data and data[800] else '6,3' }}</td>
-<td class="editable" data-field="pressure_return" data-id="800">{{ data[800].pressure_return if data and data[800] else '5,9' }}</td>
 </tr>
 <tr>
 <td rowspan="2">2</td>
@@ -117,8 +93,8 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="802">{{ data[802].temp_return if data and data[802] else '68' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="802">{{ data[802].temp_graph_supply if data and data[802] else '94' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="802">{{ data[802].temp_graph_return if data and data[802] else '74' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="802">{{ data[802].pressure_supply if data and data[802] else '6,4' }}</td>
-<td class="editable" data-field="pressure_return" data-id="802">{{ data[802].pressure_return if data and data[802] else '6,0' }}</td>
+<td rowspan="2" class="editable" data-field="pressure_supply" data-id="802">{{ data[802].pressure_supply if data and data[802] else '6,4' }}</td>
+<td rowspan="2" class="editable" data-field="pressure_return" data-id="802">{{ data[802].pressure_return if data and data[802] else '6,0' }}</td>
 <td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="802">{{ data[802].water_consumption_daily if data and data[802] else '0' }}</td>
 <td rowspan="2" class="editable" data-field="staff_night" data-id="802">{{ data[802].staff_night if data and data[802] else 'Виноградов' }}</td>
 <td rowspan="2" class="editable" data-field="staff_day" data-id="802">{{ data[802].staff_day if data and data[802] else 'Набокин' }}</td>
@@ -139,8 +115,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="803">{{ data[803].temp_return if data and data[803] else '65' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="803">{{ data[803].temp_graph_supply if data and data[803] else '92' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="803">{{ data[803].temp_graph_return if data and data[803] else '72' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="803">{{ data[803].pressure_supply if data and data[803] else '6,3' }}</td>
-<td class="editable" data-field="pressure_return" data-id="803">{{ data[803].pressure_return if data and data[803] else '5,9' }}</td>
 </tr>
 <tr>
 <td rowspan="4">3</td>
@@ -161,8 +135,8 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="804">{{ data[804].temp_return if data and data[804] else '65' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="804">{{ data[804].temp_graph_supply if data and data[804] else '92' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="804">{{ data[804].temp_graph_return if data and data[804] else '72' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="804">{{ data[804].pressure_supply if data and data[804] else '6,3' }}</td>
-<td class="editable" data-field="pressure_return" data-id="804">{{ data[804].pressure_return if data and data[804] else '5,9' }}</td>
+<td rowspan="4" class="editable" data-field="pressure_supply" data-id="804">{{ data[804].pressure_supply if data and data[804] else '6,3' }}</td>
+<td rowspan="4" class="editable" data-field="pressure_return" data-id="804">{{ data[804].pressure_return if data and data[804] else '5,9' }}</td>
 <td rowspan="4" class="editable" data-field="water_consumption_daily" data-id="804">{{ data[804].water_consumption_daily if data and data[804] else '0' }}</td>
 <td rowspan="4" class="editable" data-field="staff_night" data-id="804">{{ data[804].staff_night if data and data[804] else 'Виноградов' }}</td>
 <td rowspan="4" class="editable" data-field="staff_day" data-id="804">{{ data[804].staff_day if data and data[804] else 'Набокин' }}</td>
@@ -183,8 +157,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="805">{{ data[805].temp_return if data and data[805] else '65' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="805">{{ data[805].temp_graph_supply if data and data[805] else '90' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="805">{{ data[805].temp_graph_return if data and data[805] else '70' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="805">{{ data[805].pressure_supply if data and data[805] else '6,2' }}</td>
-<td class="editable" data-field="pressure_return" data-id="805">{{ data[805].pressure_return if data and data[805] else '5,8' }}</td>
 </tr>
 <tr>
 <td class="editable" data-field="time_interval" data-id="806">{{ data[806].time_interval if data and data[806] else '18:00' }}</td>
@@ -199,8 +171,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="806">{{ data[806].temp_return if data and data[806] else '65' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="806">{{ data[806].temp_graph_supply if data and data[806] else '90' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="806">{{ data[806].temp_graph_return if data and data[806] else '70' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="806">{{ data[806].pressure_supply if data and data[806] else '6,2' }}</td>
-<td class="editable" data-field="pressure_return" data-id="806">{{ data[806].pressure_return if data and data[806] else '5,8' }}</td>
 </tr>
 <tr>
 <td class="editable" data-field="time_interval" data-id="807">{{ data[807].time_interval if data and data[807] else '21:00' }}</td>
@@ -215,8 +185,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="807">{{ data[807].temp_return if data and data[807] else '65' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="807">{{ data[807].temp_graph_supply if data and data[807] else '90' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="807">{{ data[807].temp_graph_return if data and data[807] else '70' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="807">{{ data[807].pressure_supply if data and data[807] else '6,2' }}</td>
-<td class="editable" data-field="pressure_return" data-id="807">{{ data[807].pressure_return if data and data[807] else '5,8' }}</td>
 </tr>
 <!-- ============ КОТЕЛЬНАЯ №2 (8 строк) ============ -->
 <tr class="section">
@@ -241,8 +209,8 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="808">{{ data[808].temp_return if data and data[808] else '65' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="808">{{ data[808].temp_graph_supply if data and data[808] else '87' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="808">{{ data[808].temp_graph_return if data and data[808] else '65' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="808">{{ data[808].pressure_supply if data and data[808] else '5,5' }}</td>
-<td class="editable" data-field="pressure_return" data-id="808">{{ data[808].pressure_return if data and data[808] else '4,5' }}</td>
+<td rowspan="2" class="editable" data-field="pressure_supply" data-id="808">{{ data[808].pressure_supply if data and data[808] else '5,5' }}</td>
+<td rowspan="2" class="editable" data-field="pressure_return" data-id="808">{{ data[808].pressure_return if data and data[808] else '4,5' }}</td>
 <td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="808">{{ data[808].water_consumption_daily if data and data[808] else '10' }}</td>
 <td rowspan="2" class="editable" data-field="staff_night" data-id="808">{{ data[808].staff_night if data and data[808] else 'Витязев' }}</td>
 <td rowspan="2" class="editable" data-field="staff_day" data-id="808">{{ data[808].staff_day if data and data[808] else 'Лаптандер' }}</td>
@@ -263,8 +231,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="809">{{ data[809].temp_return if data and data[809] else '66' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="809">{{ data[809].temp_graph_supply if data and data[809] else '88' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="809">{{ data[809].temp_graph_return if data and data[809] else '66' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="809">{{ data[809].pressure_supply if data and data[809] else '5,5' }}</td>
-<td class="editable" data-field="pressure_return" data-id="809">{{ data[809].pressure_return if data and data[809] else '4,5' }}</td>
 </tr>
 <tr>
 <td rowspan="2">2</td>
@@ -285,8 +251,8 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="810">{{ data[810].temp_return if data and data[810] else '66' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="810">{{ data[810].temp_graph_supply if data and data[810] else '87' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="810">{{ data[810].temp_graph_return if data and data[810] else '65' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="810">{{ data[810].pressure_supply if data and data[810] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="810">{{ data[810].pressure_return if data and data[810] else '4,5' }}</td>
+<td rowspan="2" class="editable" data-field="pressure_supply" data-id="810">{{ data[810].pressure_supply if data and data[810] else '3,8' }}</td>
+<td rowspan="2" class="editable" data-field="pressure_return" data-id="810">{{ data[810].pressure_return if data and data[810] else '4,5' }}</td>
 <td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="810">{{ data[810].water_consumption_daily if data and data[810] else '10' }}</td>
 <td rowspan="2" class="editable" data-field="staff_night" data-id="810">{{ data[810].staff_night if data and data[810] else 'Витязев' }}</td>
 <td rowspan="2" class="editable" data-field="staff_day" data-id="810">{{ data[810].staff_day if data and data[810] else 'Лаптандер' }}</td>
@@ -307,8 +273,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="811">{{ data[811].temp_return if data and data[811] else '67' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="811">{{ data[811].temp_graph_supply if data and data[811] else '89' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="811">{{ data[811].temp_graph_return if data and data[811] else '66' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="811">{{ data[811].pressure_supply if data and data[811] else '5,5' }}</td>
-<td class="editable" data-field="pressure_return" data-id="811">{{ data[811].pressure_return if data and data[811] else '4,5' }}</td>
 </tr>
 <tr>
 <td rowspan="2">3</td>
@@ -329,8 +293,8 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="812">{{ data[812].temp_return if data and data[812] else '65' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="812">{{ data[812].temp_graph_supply if data and data[812] else '86' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="812">{{ data[812].temp_graph_return if data and data[812] else '65' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="812">{{ data[812].pressure_supply if data and data[812] else '5,5' }}</td>
-<td class="editable" data-field="pressure_return" data-id="812">{{ data[812].pressure_return if data and data[812] else '4,5' }}</td>
+<td rowspan="2" class="editable" data-field="pressure_supply" data-id="812">{{ data[812].pressure_supply if data and data[812] else '5,5' }}</td>
+<td rowspan="2" class="editable" data-field="pressure_return" data-id="812">{{ data[812].pressure_return if data and data[812] else '4,5' }}</td>
 <td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="812">{{ data[812].water_consumption_daily if data and data[812] else '10' }}</td>
 <td rowspan="2" class="editable" data-field="staff_night" data-id="812">{{ data[812].staff_night if data and data[812] else 'Витязев' }}</td>
 <td rowspan="2" class="editable" data-field="staff_day" data-id="812">{{ data[812].staff_day if data and data[812] else 'Лаптандер' }}</td>
@@ -351,8 +315,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="813">{{ data[813].temp_return if data and data[813] else '65' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="813">{{ data[813].temp_graph_supply if data and data[813] else '86' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="813">{{ data[813].temp_graph_return if data and data[813] else '65' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="813">{{ data[813].pressure_supply if data and data[813] else '5,5' }}</td>
-<td class="editable" data-field="pressure_return" data-id="813">{{ data[813].pressure_return if data and data[813] else '4,5' }}</td>
 </tr>
 <tr>
 <td rowspan="2">4</td>
@@ -373,8 +335,8 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="814">{{ data[814].temp_return if data and data[814] else '65' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="814">{{ data[814].temp_graph_supply if data and data[814] else '88' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="814">{{ data[814].temp_graph_return if data and data[814] else '65' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="814">{{ data[814].pressure_supply if data and data[814] else '5,5' }}</td>
-<td class="editable" data-field="pressure_return" data-id="814">{{ data[814].pressure_return if data and data[814] else '4,5' }}</td>
+<td rowspan="2" class="editable" data-field="pressure_supply" data-id="814">{{ data[814].pressure_supply if data and data[814] else '5,5' }}</td>
+<td rowspan="2" class="editable" data-field="pressure_return" data-id="814">{{ data[814].pressure_return if data and data[814] else '4,5' }}</td>
 <td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="814">{{ data[814].water_consumption_daily if data and data[814] else '10' }}</td>
 <td rowspan="2" class="editable" data-field="staff_night" data-id="814">{{ data[814].staff_night if data and data[814] else 'Витязев' }}</td>
 <td rowspan="2" class="editable" data-field="staff_day" data-id="814">{{ data[814].staff_day if data and data[814] else 'Лаптандер' }}</td>
@@ -395,8 +357,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="815">{{ data[815].temp_return if data and data[815] else '65' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="815">{{ data[815].temp_graph_supply if data and data[815] else '88' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="815">{{ data[815].temp_graph_return if data and data[815] else '65' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="815">{{ data[815].pressure_supply if data and data[815] else '5,5' }}</td>
-<td class="editable" data-field="pressure_return" data-id="815">{{ data[815].pressure_return if data and data[815] else '4,5' }}</td>
 </tr>
 <!-- ============ КОТЕЛЬНАЯ №3 (8 строк) ============ -->
 <tr class="section">
@@ -421,8 +381,8 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="816">{{ data[816].temp_return if data and data[816] else '70' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="816">{{ data[816].temp_graph_supply if data and data[816] else '94' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="816">{{ data[816].temp_graph_return if data and data[816] else '69' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="816">{{ data[816].pressure_supply if data and data[816] else '4,2' }}</td>
-<td class="editable" data-field="pressure_return" data-id="816">{{ data[816].pressure_return if data and data[816] else '3,0' }}</td>
+<td rowspan="4" class="editable" data-field="pressure_supply" data-id="816">{{ data[816].pressure_supply if data and data[816] else '4,2' }}</td>
+<td rowspan="4" class="editable" data-field="pressure_return" data-id="816">{{ data[816].pressure_return if data and data[816] else '3,0' }}</td>
 <td rowspan="4" class="editable" data-field="water_consumption_daily" data-id="816">{{ data[816].water_consumption_daily if data and data[816] else '0,1' }}</td>
 <td rowspan="4" class="editable" data-field="staff_night" data-id="816">{{ data[816].staff_night if data and data[816] else 'Варцапов' }}</td>
 <td rowspan="4" class="editable" data-field="staff_day" data-id="816">{{ data[816].staff_day if data and data[816] else 'Худи' }}</td>
@@ -443,8 +403,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="817">{{ data[817].temp_return if data and data[817] else '70' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="817">{{ data[817].temp_graph_supply if data and data[817] else '94' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="817">{{ data[817].temp_graph_return if data and data[817] else '69' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="817">{{ data[817].pressure_supply if data and data[817] else '4,2' }}</td>
-<td class="editable" data-field="pressure_return" data-id="817">{{ data[817].pressure_return if data and data[817] else '3,0' }}</td>
 </tr>
 <tr>
 <td class="editable" data-field="time_interval" data-id="818">{{ data[818].time_interval if data and data[818] else '06:00' }}</td>
@@ -459,8 +417,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="818">{{ data[818].temp_return if data and data[818] else '70' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="818">{{ data[818].temp_graph_supply if data and data[818] else '95' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="818">{{ data[818].temp_graph_return if data and data[818] else '70' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="818">{{ data[818].pressure_supply if data and data[818] else '4,2' }}</td>
-<td class="editable" data-field="pressure_return" data-id="818">{{ data[818].pressure_return if data and data[818] else '3,0' }}</td>
 </tr>
 <tr>
 <td class="editable" data-field="time_interval" data-id="819">{{ data[819].time_interval if data and data[819] else '09:00' }}</td>
@@ -475,8 +431,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="819">{{ data[819].temp_return if data and data[819] else '70' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="819">{{ data[819].temp_graph_supply if data and data[819] else '95' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="819">{{ data[819].temp_graph_return if data and data[819] else '70' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="819">{{ data[819].pressure_supply if data and data[819] else '4,2' }}</td>
-<td class="editable" data-field="pressure_return" data-id="819">{{ data[819].pressure_return if data and data[819] else '3,0' }}</td>
 </tr>
 <tr>
 <td rowspan="4">2</td>
@@ -497,8 +451,8 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="820">{{ data[820].temp_return if data and data[820] else '70' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="820">{{ data[820].temp_graph_supply if data and data[820] else '94' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="820">{{ data[820].temp_graph_return if data and data[820] else '69' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="820">{{ data[820].pressure_supply if data and data[820] else '4,2' }}</td>
-<td class="editable" data-field="pressure_return" data-id="820">{{ data[820].pressure_return if data and data[820] else '3,0' }}</td>
+<td rowspan="4" class="editable" data-field="pressure_supply" data-id="820">{{ data[820].pressure_supply if data and data[820] else '4,2' }}</td>
+<td rowspan="4" class="editable" data-field="pressure_return" data-id="820">{{ data[820].pressure_return if data and data[820] else '3,0' }}</td>
 <td rowspan="4" class="editable" data-field="water_consumption_daily" data-id="820">{{ data[820].water_consumption_daily if data and data[820] else '0,1' }}</td>
 <td rowspan="4" class="editable" data-field="staff_night" data-id="820">{{ data[820].staff_night if data and data[820] else 'Варцапов' }}</td>
 <td rowspan="4" class="editable" data-field="staff_day" data-id="820">{{ data[820].staff_day if data and data[820] else 'Худи' }}</td>
@@ -519,8 +473,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="821">{{ data[821].temp_return if data and data[821] else '69' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="821">{{ data[821].temp_graph_supply if data and data[821] else '92' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="821">{{ data[821].temp_graph_return if data and data[821] else '68' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="821">{{ data[821].pressure_supply if data and data[821] else '4,2' }}</td>
-<td class="editable" data-field="pressure_return" data-id="821">{{ data[821].pressure_return if data and data[821] else '3,0' }}</td>
 </tr>
 <tr>
 <td class="editable" data-field="time_interval" data-id="822">{{ data[822].time_interval if data and data[822] else '18:00' }}</td>
@@ -535,8 +487,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="822">{{ data[822].temp_return if data and data[822] else '70' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="822">{{ data[822].temp_graph_supply if data and data[822] else '94' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="822">{{ data[822].temp_graph_return if data and data[822] else '69' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="822">{{ data[822].pressure_supply if data and data[822] else '4,2' }}</td>
-<td class="editable" data-field="pressure_return" data-id="822">{{ data[822].pressure_return if data and data[822] else '3,0' }}</td>
 </tr>
 <tr>
 <td class="editable" data-field="time_interval" data-id="823">{{ data[823].time_interval if data and data[823] else '21:00' }}</td>
@@ -551,8 +501,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="823">{{ data[823].temp_return if data and data[823] else '70' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="823">{{ data[823].temp_graph_supply if data and data[823] else '94' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="823">{{ data[823].temp_graph_return if data and data[823] else '69' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="823">{{ data[823].pressure_supply if data and data[823] else '4,2' }}</td>
-<td class="editable" data-field="pressure_return" data-id="823">{{ data[823].pressure_return if data and data[823] else '3,0' }}</td>
 </tr>
 <!-- ============ КОТЕЛЬНАЯ №4 (8 строк) ============ -->
 <tr class="section">
@@ -577,8 +525,8 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="792">{{ data[792].temp_return if data and data[792] else '65' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="792">{{ data[792].temp_graph_supply if data and data[792] else '88' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="792">{{ data[792].temp_graph_return if data and data[792] else '66' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="792">{{ data[792].pressure_supply if data and data[792] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="792">{{ data[792].pressure_return if data and data[792] else '2,8' }}</td>
+<td rowspan="4" class="editable" data-field="pressure_supply" data-id="792">{{ data[792].pressure_supply if data and data[792] else '3,8' }}</td>
+<td rowspan="4" class="editable" data-field="pressure_return" data-id="792">{{ data[792].pressure_return if data and data[792] else '2,8' }}</td>
 <td rowspan="4" class="editable" data-field="water_consumption_daily" data-id="792">{{ data[792].water_consumption_daily if data and data[792] else '-' }}</td>
 <td rowspan="4" class="editable" data-field="staff_night" data-id="792">{{ data[792].staff_night if data and data[792] else 'Ковшин' }}</td>
 <td rowspan="4" class="editable" data-field="staff_day" data-id="792">{{ data[792].staff_day if data and data[792] else 'Терентьев' }}</td>
@@ -599,8 +547,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="824">{{ data[824].temp_return if data and data[824] else '67' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="824">{{ data[824].temp_graph_supply if data and data[824] else '90' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="824">{{ data[824].temp_graph_return if data and data[824] else '67' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="824">{{ data[824].pressure_supply if data and data[824] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="824">{{ data[824].pressure_return if data and data[824] else '2,8' }}</td>
 </tr>
 <tr>
 <td class="editable" data-field="time_interval" data-id="825">{{ data[825].time_interval if data and data[825] else '06:00' }}</td>
@@ -615,8 +561,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="825">{{ data[825].temp_return if data and data[825] else '67' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="825">{{ data[825].temp_graph_supply if data and data[825] else '91' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="825">{{ data[825].temp_graph_return if data and data[825] else '68' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="825">{{ data[825].pressure_supply if data and data[825] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="825">{{ data[825].pressure_return if data and data[825] else '2,8' }}</td>
 </tr>
 <tr>
 <td class="editable" data-field="time_interval" data-id="826">{{ data[826].time_interval if data and data[826] else '09:00' }}</td>
@@ -631,8 +575,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="826">{{ data[826].temp_return if data and data[826] else '68' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="826">{{ data[826].temp_graph_supply if data and data[826] else '92' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="826">{{ data[826].temp_graph_return if data and data[826] else '68' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="826">{{ data[826].pressure_supply if data and data[826] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="826">{{ data[826].pressure_return if data and data[826] else '2,8' }}</td>
 </tr>
 <tr>
 <td rowspan="4">2</td>
@@ -653,8 +595,8 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="795">{{ data[795].temp_return if data and data[795] else '66' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="795">{{ data[795].temp_graph_supply if data and data[795] else '89' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="795">{{ data[795].temp_graph_return if data and data[795] else '66' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="795">{{ data[795].pressure_supply if data and data[795] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="795">{{ data[795].pressure_return if data and data[795] else '2,8' }}</td>
+<td rowspan="4" class="editable" data-field="pressure_supply" data-id="795">{{ data[795].pressure_supply if data and data[795] else '3,8' }}</td>
+<td rowspan="4" class="editable" data-field="pressure_return" data-id="795">{{ data[795].pressure_return if data and data[795] else '2,8' }}</td>
 <td rowspan="4" class="editable" data-field="water_consumption_daily" data-id="795">{{ data[795].water_consumption_daily if data and data[795] else '-' }}</td>
 <td rowspan="4" class="editable" data-field="staff_night" data-id="795">{{ data[795].staff_night if data and data[795] else 'Ковшин' }}</td>
 <td rowspan="4" class="editable" data-field="staff_day" data-id="795">{{ data[795].staff_day if data and data[795] else 'Терентьев' }}</td>
@@ -675,8 +617,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="827">{{ data[827].temp_return if data and data[827] else '65' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="827">{{ data[827].temp_graph_supply if data and data[827] else '87' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="827">{{ data[827].temp_graph_return if data and data[827] else '65' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="827">{{ data[827].pressure_supply if data and data[827] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="827">{{ data[827].pressure_return if data and data[827] else '2,8' }}</td>
 </tr>
 <tr>
 <td class="editable" data-field="time_interval" data-id="828">{{ data[828].time_interval if data and data[828] else '18:00' }}</td>
@@ -691,8 +631,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="828">{{ data[828].temp_return if data and data[828] else '65' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="828">{{ data[828].temp_graph_supply if data and data[828] else '88' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="828">{{ data[828].temp_graph_return if data and data[828] else '66' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="828">{{ data[828].pressure_supply if data and data[828] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="828">{{ data[828].pressure_return if data and data[828] else '2,8' }}</td>
 </tr>
 <tr>
 <td class="editable" data-field="time_interval" data-id="829">{{ data[829].time_interval if data and data[829] else '21:00' }}</td>
@@ -707,68 +645,6 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="temp_return" data-id="829">{{ data[829].temp_return if data and data[829] else '65' }}</td>
 <td class="editable" data-field="temp_graph_supply" data-id="829">{{ data[829].temp_graph_supply if data and data[829] else '88' }}</td>
 <td class="editable" data-field="temp_graph_return" data-id="829">{{ data[829].temp_graph_return if data and data[829] else '66' }}</td>
-<td class="editable" data-field="pressure_supply" data-id="829">{{ data[829].pressure_supply if data and data[829] else '3,8' }}</td>
-<td class="editable" data-field="pressure_return" data-id="829">{{ data[829].pressure_return if data and data[829] else '2,8' }}</td>
 </tr>
 </tbody>
 </table>
-</div>
-<script>
-document.querySelectorAll('.editable').forEach(cell => {
-cell.addEventListener('click', function() {
-const field = this.getAttribute('data-field');
-const id = this.getAttribute('data-id');
-const currentValue = this.textContent;
-const input = document.createElement('input');
-input.type = 'text';
-input.value = currentValue;
-input.addEventListener('blur', function() {
-const newValue = this.value;
-fetch('/update', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ field: field, value: newValue, id: id })
-})
-.then(response => response.json())
-.then(data => {
-if (data.status === 'ok') {
-cell.textContent = newValue;
-} else {
-alert('Ошибка сохранения');
-}
-})
-.catch(error => {
-console.error('Ошибка:', error);
-alert('Ошибка связи с сервером');
-});
-});
-input.addEventListener('keypress', function(e) {
-if (e.key === 'Enter') this.blur();
-});
-this.innerHTML = '';
-this.appendChild(input);
-input.focus();
-});
-});
-function archiveRecords() {
-if (!confirm('Архивировать все данные? После этого ячейки будут очищены.')) {
-return;
-}
-fetch('/archive', { method: 'POST' })
-.then(response => response.json())
-.then(data => {
-if (data.status === 'ok') {
-alert('Данные успешно архивированы! Ячейки очищены.');
-location.reload();
-} else {
-alert('Ошибка: ' + (data.message || 'неизвестная ошибка'));
-}
-})
-.catch(error => {
-console.error('Ошибка:', error);
-alert('Ошибка связи с сервером');
-});
-}
-</script>
-</body>
-</html>
