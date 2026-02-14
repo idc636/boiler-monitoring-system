@@ -731,7 +731,100 @@ thead th { background:#d9d9d9; }
   <td class="editable" data-field="pressure_supply" data-id="829">3,8</td>
   <td class="editable" data-field="pressure_return" data-id="829">2,8</td>
 </tr>
+<!-- ===== КОТЁЛ №3 ===== -->
+<tr>
+  <td rowspan="4">3</td>
+  <td rowspan="4">
+    {{ data.get(830, {}).get('boiler_model', '') }}
+  </td>
+  <td rowspan="4">
+    {{ data.get(830, {}).get('equipment_year', '') }}
+  </td>
 
+  <td class="time-cell" data-field="time_interval" data-id="830">00:00</td>
+  <td class="editable" data-field="boilers_working" data-id="830">
+    {{ data.get(830, {}).get('boilers_working', '') }}
+  </td>
+  <td class="editable" data-field="boilers_reserve" data-id="830">
+    {{ data.get(830, {}).get('boilers_reserve', '') }}
+  </td>
+  <td rowspan="4" class="editable" data-field="boilers_repair" data-id="830">
+    {{ data.get(830, {}).get('boilers_repair', '') }}
+  </td>
+
+  <td class="editable" data-field="pumps_working" data-id="830">
+    {{ data.get(830, {}).get('pumps_working', '') }}
+  </td>
+  <td class="editable" data-field="pumps_reserve" data-id="830">
+    {{ data.get(830, {}).get('pumps_reserve', '') }}
+  </td>
+  <td rowspan="4" class="editable" data-field="pumps_repair" data-id="830">
+    {{ data.get(830, {}).get('pumps_repair', '') }}
+  </td>
+
+  <td class="editable" data-field="feed_pumps_working" data-id="830">
+    {{ data.get(830, {}).get('feed_pumps_working', '') }}
+  </td>
+  <td class="editable" data-field="feed_pumps_reserve" data-id="830">
+    {{ data.get(830, {}).get('feed_pumps_reserve', '') }}
+  </td>
+  <td rowspan="4" class="editable" data-field="feed_pumps_repair" data-id="830">
+    {{ data.get(830, {}).get('feed_pumps_repair', '') }}
+  </td>
+
+  <td class="editable" data-field="temp_outdoor" data-id="830">
+    {{ data.get(830, {}).get('temp_outdoor', '') }}
+  </td>
+  <td class="editable" data-field="temp_supply" data-id="830">
+    {{ data.get(830, {}).get('temp_supply', '') }}
+  </td>
+  <td class="editable" data-field="temp_return" data-id="830">
+    {{ data.get(830, {}).get('temp_return', '') }}
+  </td>
+  <td class="editable" data-field="temp_graph_supply" data-id="830">
+    {{ data.get(830, {}).get('temp_graph_supply', '') }}
+  </td>
+  <td class="editable" data-field="temp_graph_return" data-id="830">
+    {{ data.get(830, {}).get('temp_graph_return', '') }}
+  </td>
+  <td class="editable" data-field="pressure_supply" data-id="830">
+    {{ data.get(830, {}).get('pressure_supply', '') }}
+  </td>
+  <td class="editable" data-field="pressure_return" data-id="830">
+    {{ data.get(830, {}).get('pressure_return', '') }}
+  </td>
+
+  <td rowspan="4" class="editable" data-field="water_consumption_daily" data-id="830">
+    {{ data.get(830, {}).get('water_consumption_daily', '') }}
+  </td>
+  <td rowspan="4" class="editable" data-field="staff_night" data-id="830">
+    {{ data.get(830, {}).get('staff_night', '') }}
+  </td>
+  <td rowspan="4" class="editable" data-field="staff_day" data-id="830">
+    {{ data.get(830, {}).get('staff_day', '') }}
+  </td>
+  <td rowspan="4" class="editable" data-field="notes" data-id="830">
+    {{ data.get(830, {}).get('notes', '') }}
+  </td>
+  <td rowspan="4" class="editable" data-field="downtime_today" data-id="830">
+    {{ data.get(830, {}).get('downtime_today', '') }}
+  </td>
+  <td rowspan="4" class="editable" data-field="downtime_total" data-id="830">
+    {{ data.get(830, {}).get('downtime_total', '') }}
+  </td>
+</tr>
+
+<tr>
+  <td class="time-cell" data-field="time_interval" data-id="831">03:00</td>
+</tr>
+
+<tr>
+  <td class="time-cell" data-field="time_interval" data-id="832">06:00</td>
+</tr>
+
+<tr>
+  <td class="time-cell" data-field="time_interval" data-id="833">09:00</td>
+</tr>
 </tbody>
 </table>
 </div>
