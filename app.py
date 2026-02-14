@@ -392,21 +392,38 @@ def update():
         return jsonify({'status': 'error', 'message': 'Не авторизован'}), 401
 
     d = request.get_json()
-    if not d:
-        return jsonify({'status': 'error', 'message': 'Пустой запрос'}), 400
-
     record_id = d.get('id')
     field = d.get('field')
     value = d.get('value')
 
-    if record_id is None or field is None or value is None:
-        return jsonify({'status': 'error', 'message': 'Отсутствуют обязательные поля: id, field, value'}), 400
-
+    if not all([record_id, field, value]):
+        return jsonify({'status': 'error', 'message': 'Отсутствуют обязательные поля'}), 400
     if field not in ALLOWED_FIELDS:
         return jsonify({'status': 'error', 'message': 'Недопустимое поле'}), 400
 
-    # === ЕДИНСТВЕННОЕ ПОДКЛЮЧЕНИЕ К БД ===
     conn = get_conn()
+    try:
+        cur = conn.cursor()
+
+        # Проверяем, есть ли запись
+        cur.execute("SELECT * FROM records WHERE id = %s", (record_id,))
+        row = cur.fetchone()
+
+        if not row:
+            # Если нет — создаём пустую запись с id
+            cur.execute("INSERT INTO records (id) VALUES (%s)", (record_id,))
+            conn.commit()
+
+        # Обновляем поле
+        cur.execute(f"UPDATE records SET {field} = %s WHERE id = %s", (value, record_id))
+        conn.commit()
+        return jsonify({'status': 'ok'})
+    except Exception as e:
+        conn.rollback()
+        print("Ошибка /update:", e)
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+    finally:
+        conn.close()
     try:
         cur = conn.cursor()
 
