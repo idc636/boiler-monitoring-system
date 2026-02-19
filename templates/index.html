@@ -120,7 +120,8 @@ thead th { background:#d9d9d9; }
 <td class="editable" data-field="pumps_repair" data-id="802">{{ data[802].pumps_repair if data and data[802] else '-------------' }}</td>
 <td class="editable" data-field="feed_pumps_working" data-id="802">{{ data[802].feed_pumps_working if data and data[802] else '1' }}</td>
 <td class="editable" data-field="feed_pumps_reserve" data-id="802">{{ data[802].feed_pumps_reserve if data and data[802] else '2' }}</td>
-<td rowspan="2" class="editable" data-field="feed_pumps_repair" data-id="802">{{ data[802].feed_pumps_repair if data and data[802] else '-ааааа' }}</td>
+<!-- ЗАМЕНИТЕ ЭТУ СТРОКУ: -->
+<td class="editable" data-field="feed_pumps_repair" data-id="804">{{ data[804].feed_pumps_repair if data and data[804] else '-' }}</td>
 <td class="editable" data-field="temp_outdoor" data-id="802">{{ data[802].temp_outdoor if data and data[802] else '-36' }}</td>
 <td class="editable" data-field="temp_supply" data-id="802">{{ data[802].temp_supply if data and data[802] else '89' }}</td>
 <td class="editable" data-field="temp_return" data-id="802">{{ data[802].temp_return if data and data[802] else '68' }}</td>
