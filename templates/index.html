@@ -55,17 +55,119 @@ thead th { background:#d9d9d9; }
 <td colspan="27">Котельная №1 Белоярск №1 ул. Набережная 8</td>
 </tr>
 <tr>
+<td rowspan="2">1</td>
+<td rowspan="2">{{ data[791].boiler_model if data and data[791] else 'КСВ-3,0/PG93 "UNIGAS" №0805505' }}</td>
+<td rowspan="2">{{ data[791].equipment_year if data and data[791] else '2007' }}</td>
+<td class="editablel" data-field="time_interval" data-id="816">00:00</td>
+<td class="editable" data-field="boilers_working" data-id="791">{{ data[791].boilers_working if data and data[791] else '1' }}</td>
+<td class="editable" data-field="boilers_reserve" data-id="791">{{ data[791].boilers_reserve if data and data[791] else '3' }}</td>
+<td rowspan="8"
+    class="editable"
+    data-field="boilers_repair"
+    data-id="791">
+</td>
+<td class="editable" data-field="pumps_working" data-id="791">{{ data[791].pumps_working if data and data[791] else '1' }}</td>
+<td class="editable" data-field="pumps_reserve" data-id="791">{{ data[791].pumps_reserve if data and data[791] else '2' }}</td>
+<td rowspan="8"
+    class="editable"
+    data-field="pumps_repair"
+    data-id="791">
+</td>
+<td class="editable" data-field="feed_pumps_working" data-id="791">{{ data[791].feed_pumps_working if data and data[791] else '1' }}</td>
+<td class="editable" data-field="feed_pumps_reserve" data-id="791">{{ data[791].feed_pumps_reserve if data and data[791] else '2' }}</td>
+<td class="editable" data-field="feed_pumps_repair" data-id="791">{{ data[791].feed_pumps_repair if data and data[791] else '-' }}</td>
+<td class="editable" data-field="temp_outdoor" data-id="791">{{ data[791].temp_outdoor if data and data[791] else '-36' }}</td>
+<td class="editable" data-field="temp_supply" data-id="791">{{ data[791].temp_supply if data and data[791] else '86' }}</td>
+<td class="editable" data-field="temp_return" data-id="791">{{ data[791].temp_return if data and data[791] else '64' }}</td>
+<td class="editable" data-field="temp_graph_supply" data-id="791">{{ data[791].temp_graph_supply if data and data[791] else '90' }}</td>
+<td class="editable" data-field="temp_graph_return" data-id="791">{{ data[791].temp_graph_return if data and data[791] else '70' }}</td>
+<td class="editable" data-field="pressure_supply" data-id="791">{{ data[791].pressure_supply if data and data[791] else '6,2' }}</td>
+<td class="editable" data-field="pressure_return" data-id="791">{{ data[791].pressure_return if data and data[791] else '5,8' }}</td>
+<td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="791">{{ data[791].water_consumption_daily if data and data[791] else '0' }}</td>
+<td rowspan="2" class="editable" data-field="staff_night" data-id="791">{{ data[791].staff_night if data and data[791] else 'Виноградов' }}</td>
+<td rowspan="2" class="editable" data-field="staff_day" data-id="791">{{ data[791].staff_day if data and data[791] else 'Набокин' }}</td>
+<td rowspan="2" class="editable" data-field="notes" data-id="791">{{ data[791].notes if data and data[791] else '' }}</td>
+<td rowspan="2" class="editable" data-field="downtime_today" data-id="791">{{ "%.1f"|format(data[791].downtime_today|float) if data[791] and data[791].downtime_today else '' }}</td>
+<td rowspan="2">{{ "%.1f"|format(data[791].downtime_total|float) if data[791] and data[791].downtime_total else '' }}</td>
+</td>
+</tr>
+<tr>
+<td class="editablel" data-field="time_interval" data-id="816">03:00</td>
+<td class="editable" data-field="boilers_working" data-id="800">{{ data[800].boilers_working if data and data[800] else '1' }}</td>
+<td class="editable" data-field="boilers_reserve" data-id="800">{{ data[800].boilers_reserve if data and data[800] else '3' }}</td>
+<td class="editable" data-field="pumps_working" data-id="800">{{ data[800].pumps_working if data and data[800] else '1' }}</td>
+<td class="editable" data-field="pumps_reserve" data-id="800">{{ data[800].pumps_reserve if data and data[800] else '2' }}</td>
+<td class="editable" data-field="feed_pumps_working" data-id="800">{{ data[800].feed_pumps_working if data and data[800] else '1' }}</td>
+<td class="editable" data-field="feed_pumps_reserve" data-id="800">{{ data[800].feed_pumps_reserve if data and data[800] else '2' }}</td>
+<td class="editable" data-field="temp_outdoor" data-id="800">{{ data[800].temp_outdoor if data and data[800] else '-36' }}</td>
+<td class="editable" data-field="temp_supply" data-id="800">{{ data[800].temp_supply if data and data[800] else '88' }}</td>
+<td class="editable" data-field="temp_return" data-id="800">{{ data[800].temp_return if data and data[800] else '67' }}</td>
+<td class="editable" data-field="temp_graph_supply" data-id="800">{{ data[800].temp_graph_supply if data and data[800] else '92' }}</td>
+<td class="editable" data-field="temp_graph_return" data-id="800">{{ data[800].temp_graph_return if data and data[800] else '72' }}</td>
+<td class="editable" data-field="pressure_supply" data-id="800">{{ data[800].pressure_supply if data and data[800] else '6,3' }}</td>
+<td class="editable" data-field="pressure_return" data-id="800">{{ data[800].pressure_return if data and data[800] else '5,9' }}</td>
+</tr>
+<tr>
+<td rowspan="2">2</td>
+<td rowspan="2">{{ data[802].boiler_model if data and data[802] else '"КИМАП-ИПАК" -3,5/"WEUSHAUPT"' }}</td>
+<td rowspan="2">{{ data[802].equipment_year if data and data[802] else '2016' }}</td>
+<td class="editablel" data-field="time_interval" data-id="816">06:00</td>
+<td class="editable" data-field="boilers_working" data-id="802">{{ data[802].boilers_working if data and data[802] else '1' }}</td>
+<td class="editable" data-field="boilers_reserve" data-id="802">{{ data[802].boilers_reserve if data and data[802] else '3' }}</td>
+<td class="editable" data-field="boilers_repair" data-id="802"></td>
+<td class="editable" data-field="pumps_working" data-id="802">{{ data[802].pumps_working if data and data[802] else '1' }}</td>
+<td class="editable" data-field="pumps_reserve" data-id="802">{{ data[802].pumps_reserve if data and data[802] else '2' }}</td>
+<td class="editable" data-field="pumps_repair" data-id="802">{{ data[802].pumps_repair if data and data[802] else '-------------' }}</td>
+<td class="editable" data-field="feed_pumps_working" data-id="802">{{ data[802].feed_pumps_working if data and data[802] else '1' }}</td>
+<td class="editable" data-field="feed_pumps_reserve" data-id="802">{{ data[802].feed_pumps_reserve if data and data[802] else '2' }}</td>
+<td rowspan="2" class="editable" data-field="feed_pumps_repair" data-id="802">{{ data[802].feed_pumps_repair if data and data[802] else '-ааааа' }}</td>
+<td class="editable" data-field="temp_outdoor" data-id="802">{{ data[802].temp_outdoor if data and data[802] else '-36' }}</td>
+<td class="editable" data-field="temp_supply" data-id="802">{{ data[802].temp_supply if data and data[802] else '89' }}</td>
+<td class="editable" data-field="temp_return" data-id="802">{{ data[802].temp_return if data and data[802] else '68' }}</td>
+<td class="editable" data-field="temp_graph_supply" data-id="802">{{ data[802].temp_graph_supply if data and data[802] else '94' }}</td>
+<td class="editable" data-field="temp_graph_return" data-id="802">{{ data[802].temp_graph_return if data and data[802] else '74' }}</td>
+<td class="editable" data-field="pressure_supply" data-id="802">{{ data[802].pressure_supply if data and data[802] else '6,4' }}</td>
+<td class="editable" data-field="pressure_return" data-id="802">{{ data[802].pressure_return if data and data[802] else '6,0' }}</td>
+<td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="802">{{ data[802].water_consumption_daily if data and data[802] else '0' }}</td>
+<td rowspan="2" class="editable" data-field="staff_night" data-id="802">{{ data[802].staff_night if data and data[802] else 'Виноградов' }}</td>
+<td rowspan="2" class="editable" data-field="staff_day" data-id="802">{{ data[802].staff_day if data and data[802] else 'Набокин' }}</td>
+<td rowspan="2" class="editable" data-field="notes" data-id="802">{{ data[802].notes if data and data[802] else '' }}</td>
+<td rowspan="2" class="editable" data-field="downtime_today" data-id="802">{{ "%.1f"|format(data[802].downtime_today|float) if data[802] and data[802].downtime_today else '' }}</td>
+<td rowspan="2">{{ "%.1f"|format(data[802].downtime_total|float) if data[802] and data[802].downtime_total else '' }}</td>
+</tr>
+<tr>
+  <td class="editablel" data-field="time_interval" data-id="816">09:00</td>
+  <td class="editable" data-field="boilers_working" data-id="803">{{ data[803].boilers_working if data and data[803] else '1' }}</td>
+  <td class="editable" data-field="boilers_reserve" data-id="803">{{ data[803].boilers_reserve if data and data[803] else '3' }}</td>
+  <td class="editable" data-field="boilers_repair" data-id="803"></td>
+  <!-- ИСПРАВЛЕНО: pumps_working ПЕРЕД pumps_reserve -->
+  <td class="editable" data-field="pumps_working" data-id="803">{{ data[803].pumps_working if data and data[803] else '1' }}</td>
+  <td class="editable" data-field="pumps_reserve" data-id="803">{{ data[803].pumps_reserve if data and data[803] else '2' }}</td>
+  <!-- pumps_repair ТОЛЬКО ПОСЛЕ pumps_reserve -->
+  <td class="editable" data-field="pumps_repair" data-id="803">{{ data[803].pumps_repair if data and data[803] else '-ббббббббббббб' }}</td>
+  <td class="editable" data-field="feed_pumps_working" data-id="803">{{ data[803].feed_pumps_working if data and data[803] else '1' }}</td>
+  <td class="editable" data-field="feed_pumps_reserve" data-id="803">{{ data[803].feed_pumps_reserve if data and data[803] else '2' }}</td>
+  <td class="editable" data-field="feed_pumps_repair" data-id="803">{{ data[803].feed_pumps_repair if data and data[803] else '-' }}</td>
+  <td class="editable" data-field="temp_outdoor" data-id="803">{{ data[803].temp_outdoor if data and data[803] else '-36' }}</td>
+  <td class="editable" data-field="temp_supply" data-id="803">{{ data[803].temp_supply if data and data[803] else '88' }}</td>
+  <td class="editable" data-field="temp_return" data-id="803">{{ data[803].temp_return if data and data[803] else '65' }}</td>
+  <td class="editable" data-field="temp_graph_supply" data-id="803">{{ data[803].temp_graph_supply if data and data[803] else '92' }}</td>
+  <td class="editable" data-field="temp_graph_return" data-id="803">{{ data[803].temp_graph_return if data and data[803] else '72' }}</td>
+  <td class="editable" data-field="pressure_supply" data-id="803">{{ data[803].pressure_supply if data and data[803] else '6,3' }}</td>
+  <td class="editable" data-field="pressure_return" data-id="803">{{ data[803].pressure_return if data and data[803] else '5,9' }}</td>
+</tr>
+<tr>
   <td rowspan="4">3</td>
   <td rowspan="4">{{ data[804].boiler_model if data and data[804] else 'КВА 3,2/PG93"UNIGAS"№06140440' }}</td>
   <td rowspan="4">{{ data[804].equipment_year if data and data[804] else '2010' }}</td>
   <td class="editablel" data-field="time_interval" data-id="816">12:00</td>
   <td class="editable" data-field="boilers_working" data-id="804">{{ data[804].boilers_working if data and data[804] else '1' }}</td>
   <td class="editable" data-field="boilers_reserve" data-id="804">{{ data[804].boilers_reserve if data and data[804] else '3' }}</td>
+  <!-- ДОБАВЛЕНО: boilers_repair (обязательно!) -->
   <td class="editable" data-field="boilers_repair" data-id="804">{{ data[804].boilers_repair if data and data[804] else '-' }}</td>
   <td class="editable" data-field="pumps_working" data-id="804">{{ data[804].pumps_working if data and data[804] else '1' }}</td>
   <td class="editable" data-field="pumps_reserve" data-id="804">{{ data[804].pumps_reserve if data and data[804] else '2' }}</td>
-  <!-- УБРАНО rowspan="4" -->
-  <td class="editable" data-field="pumps_repair" data-id="804">{{ data[804].pumps_repair if data and data[804] else '-' }}</td>
+  <td rowspan="4" class="editable" data-field="pumps_repair" data-id="804">{{ data[804].pumps_repair if data and data[804] else '-' }}</td>
   <td class="editable" data-field="feed_pumps_working" data-id="804">{{ data[804].feed_pumps_working if data and data[804] else '1' }}</td>
   <td class="editable" data-field="feed_pumps_reserve" data-id="804">{{ data[804].feed_pumps_reserve if data and data[804] else '2' }}</td>
   <td class="editable" data-field="feed_pumps_repair" data-id="804">{{ data[804].feed_pumps_repair if data and data[804] else '-' }}</td>
@@ -84,64 +186,55 @@ thead th { background:#d9d9d9; }
   <td rowspan="4">{{ "%.1f"|format(data[804].downtime_total|float) if data[804] and data[804].downtime_total else '' }}</td>
 </tr>
 <tr>
-  <td class="editablel" data-field="time_interval" data-id="816">15:00</td>
-  <td class="editable" data-field="boilers_working" data-id="805">{{ data[805].boilers_working if data and data[805] else '1' }}</td>
-  <td class="editable" data-field="boilers_reserve" data-id="805">{{ data[805].boilers_reserve if data and data[805] else '3' }}</td>
-  <td class="editable" data-field="boilers_repair" data-id="805">{{ data[805].boilers_repair if data and data[805] else '-' }}</td>
-  <td class="editable" data-field="pumps_working" data-id="805">{{ data[805].pumps_working if data and data[805] else '1' }}</td>
-  <td class="editable" data-field="pumps_reserve" data-id="805">{{ data[805].pumps_reserve if data and data[805] else '2' }}</td>
-  <!-- ДОБАВЛЕНО pumps_repair -->
-  <td class="editable" data-field="pumps_repair" data-id="805">{{ data[805].pumps_repair if data and data[805] else '-' }}</td>
-  <td class="editable" data-field="feed_pumps_working" data-id="805">{{ data[805].feed_pumps_working if data and data[805] else '1' }}</td>
-  <td class="editable" data-field="feed_pumps_reserve" data-id="805">{{ data[805].feed_pumps_reserve if data and data[805] else '2' }}</td>
-  <td class="editable" data-field="feed_pumps_repair" data-id="805">{{ data[805].feed_pumps_repair if data and data[805] else '-' }}</td>
-  <td class="editable" data-field="temp_outdoor" data-id="805">{{ data[805].temp_outdoor if data and data[805] else '-36' }}</td>
-  <td class="editable" data-field="temp_supply" data-id="805">{{ data[805].temp_supply if data and data[805] else '88' }}</td>
-  <td class="editable" data-field="temp_return" data-id="805">{{ data[805].temp_return if data and data[805] else '65' }}</td>
-  <td class="editable" data-field="temp_graph_supply" data-id="805">{{ data[805].temp_graph_supply if data and data[805] else '90' }}</td>
-  <td class="editable" data-field="temp_graph_return" data-id="805">{{ data[805].temp_graph_return if data and data[805] else '70' }}</td>
-  <td class="editable" data-field="pressure_supply" data-id="805">{{ data[805].pressure_supply if data and data[805] else '6,2' }}</td>
-  <td class="editable" data-field="pressure_return" data-id="805">{{ data[805].pressure_return if data and data[805] else '5,8' }}</td>
+<td class="editablel" data-field="time_interval" data-id="816">15:00</td>
+<td class="editable" data-field="boilers_working" data-id="805">{{ data[805].boilers_working if data and data[805] else '1' }}</td>
+<td class="editable" data-field="boilers_reserve" data-id="805">{{ data[805].boilers_reserve if data and data[805] else '3' }}</td>
+<td class="editable" data-field="pumps_working" data-id="805">{{ data[805].pumps_working if data and data[805] else '1' }}</td>
+<td class="editable" data-field="pumps_reserve" data-id="805">{{ data[805].pumps_reserve if data and data[805] else '2' }}</td>
+<td class="editable" data-field="feed_pumps_working" data-id="805">{{ data[805].feed_pumps_working if data and data[805] else '1' }}</td>
+<td class="editable" data-field="feed_pumps_reserve" data-id="805">{{ data[805].feed_pumps_reserve if data and data[805] else '2' }}</td>
+<td class="editable" data-field="feed_pumps_repair" data-id="805">{{ data[805].feed_pumps_repair if data and data[805] else '-' }}</td>
+<td class="editable" data-field="temp_outdoor" data-id="805">{{ data[805].temp_outdoor if data and data[805] else '-36' }}</td>
+<td class="editable" data-field="temp_supply" data-id="805">{{ data[805].temp_supply if data and data[805] else '88' }}</td>
+<td class="editable" data-field="temp_return" data-id="805">{{ data[805].temp_return if data and data[805] else '65' }}</td>
+<td class="editable" data-field="temp_graph_supply" data-id="805">{{ data[805].temp_graph_supply if data and data[805] else '90' }}</td>
+<td class="editable" data-field="temp_graph_return" data-id="805">{{ data[805].temp_graph_return if data and data[805] else '70' }}</td>
+<td class="editable" data-field="pressure_supply" data-id="805">{{ data[805].pressure_supply if data and data[805] else '6,2' }}</td>
+<td class="editable" data-field="pressure_return" data-id="805">{{ data[805].pressure_return if data and data[805] else '5,8' }}</td>
 </tr>
 <tr>
-  <td class="editablel" data-field="time_interval" data-id="816">18:00</td>
-  <td class="editable" data-field="boilers_working" data-id="806">{{ data[806].boilers_working if data and data[806] else '1' }}</td>
-  <td class="editable" data-field="boilers_reserve" data-id="806">{{ data[806].boilers_reserve if data and data[806] else '3' }}</td>
-  <td class="editable" data-field="boilers_repair" data-id="806">{{ data[806].boilers_repair if data and data[806] else '-' }}</td>
-  <td class="editable" data-field="pumps_working" data-id="806">{{ data[806].pumps_working if data and data[806] else '1' }}</td>
-  <td class="editable" data-field="pumps_reserve" data-id="806">{{ data[806].pumps_reserve if data and data[806] else '2' }}</td>
-  <!-- ДОБАВЛЕНО pumps_repair -->
-  <td class="editable" data-field="pumps_repair" data-id="806">{{ data[806].pumps_repair if data and data[806] else '-' }}</td>
-  <td class="editable" data-field="feed_pumps_working" data-id="806">{{ data[806].feed_pumps_working if data and data[806] else '1' }}</td>
-  <td class="editable" data-field="feed_pumps_reserve" data-id="806">{{ data[806].feed_pumps_reserve if data and data[806] else '2' }}</td>
-  <td class="editable" data-field="feed_pumps_repair" data-id="806">{{ data[806].feed_pumps_repair if data and data[806] else '-' }}</td>
-  <td class="editable" data-field="temp_outdoor" data-id="806">{{ data[806].temp_outdoor if data and data[806] else '-36' }}</td>
-  <td class="editable" data-field="temp_supply" data-id="806">{{ data[806].temp_supply if data and data[806] else '88' }}</td>
-  <td class="editable" data-field="temp_return" data-id="806">{{ data[806].temp_return if data and data[806] else '65' }}</td>
-  <td class="editable" data-field="temp_graph_supply" data-id="806">{{ data[806].temp_graph_supply if data and data[806] else '90' }}</td>
-  <td class="editable" data-field="temp_graph_return" data-id="806">{{ data[806].temp_graph_return if data and data[806] else '70' }}</td>
-  <td class="editable" data-field="pressure_supply" data-id="806">{{ data[806].pressure_supply if data and data[806] else '6,2' }}</td>
-  <td class="editable" data-field="pressure_return" data-id="806">{{ data[806].pressure_return if data and data[806] else '5,8' }}</td>
+<td class="editablel" data-field="time_interval" data-id="816">18:00</td>
+<td class="editable" data-field="boilers_working" data-id="806">{{ data[806].boilers_working if data and data[806] else '1' }}</td>
+<td class="editable" data-field="boilers_reserve" data-id="806">{{ data[806].boilers_reserve if data and data[806] else '3' }}</td>
+<td class="editable" data-field="pumps_working" data-id="806">{{ data[806].pumps_working if data and data[806] else '1' }}</td>
+<td class="editable" data-field="pumps_reserve" data-id="806">{{ data[806].pumps_reserve if data and data[806] else '2' }}</td>
+<td class="editable" data-field="feed_pumps_working" data-id="806">{{ data[804].feed_pumps_working if data and data[804] else '1' }}</td>
+<td class="editable" data-field="feed_pumps_reserve" data-id="806">{{ data[806].feed_pumps_reserve if data and data[806] else '2' }}</td>
+<td class="editable" data-field="feed_pumps_repair" data-id="806">{{ data[791].feed_pumps_repair if data and data[791] else '-' }}</td>
+<td class="editable" data-field="temp_outdoor" data-id="806">{{ data[806].temp_outdoor if data and data[806] else '-36' }}</td>
+<td class="editable" data-field="temp_supply" data-id="806">{{ data[806].temp_supply if data and data[806] else '88' }}</td>
+<td class="editable" data-field="temp_return" data-id="806">{{ data[806].temp_return if data and data[806] else '65' }}</td>
+<td class="editable" data-field="temp_graph_supply" data-id="806">{{ data[806].temp_graph_supply if data and data[806] else '90' }}</td>
+<td class="editable" data-field="temp_graph_return" data-id="806">{{ data[806].temp_graph_return if data and data[806] else '70' }}</td>
+<td class="editable" data-field="pressure_supply" data-id="806">{{ data[806].pressure_supply if data and data[806] else '6,2' }}</td>
+<td class="editable" data-field="pressure_return" data-id="806">{{ data[806].pressure_return if data and data[806] else '5,8' }}</td>
 </tr>
 <tr>
-  <td class="editablel" data-field="time_interval" data-id="816">21:00</td>
-  <td class="editable" data-field="boilers_working" data-id="807">{{ data[807].boilers_working if data and data[807] else '1' }}</td>
-  <td class="editable" data-field="boilers_reserve" data-id="807">{{ data[807].boilers_reserve if data and data[807] else '3' }}</td>
-  <td class="editable" data-field="boilers_repair" data-id="807">{{ data[807].boilers_repair if data and data[807] else '-' }}</td>
-  <td class="editable" data-field="pumps_working" data-id="807">{{ data[807].pumps_working if data and data[807] else '1' }}</td>
-  <td class="editable" data-field="pumps_reserve" data-id="807">{{ data[807].pumps_reserve if data and data[807] else '2' }}</td>
-  <!-- ДОБАВЛЕНО pumps_repair -->
-  <td class="editable" data-field="pumps_repair" data-id="807">{{ data[807].pumps_repair if data and data[807] else '-' }}</td>
-  <td class="editable" data-field="feed_pumps_working" data-id="807">{{ data[807].feed_pumps_working if data and data[807] else '1' }}</td>
-  <td class="editable" data-field="feed_pumps_reserve" data-id="807">{{ data[807].feed_pumps_reserve if data and data[807] else '2' }}</td>
-  <td class="editable" data-field="feed_pumps_repair" data-id="807">{{ data[807].feed_pumps_repair if data and data[807] else '-' }}</td>
-  <td class="editable" data-field="temp_outdoor" data-id="807">{{ data[807].temp_outdoor if data and data[807] else '-36' }}</td>
-  <td class="editable" data-field="temp_supply" data-id="807">{{ data[807].temp_supply if data and data[807] else '88' }}</td>
-  <td class="editable" data-field="temp_return" data-id="807">{{ data[807].temp_return if data and data[807] else '65' }}</td>
-  <td class="editable" data-field="temp_graph_supply" data-id="807">{{ data[807].temp_graph_supply if data and data[807] else '90' }}</td>
-  <td class="editable" data-field="temp_graph_return" data-id="807">{{ data[807].temp_graph_return if data and data[807] else '70' }}</td>
-  <td class="editable" data-field="pressure_supply" data-id="807">{{ data[807].pressure_supply if data and data[807] else '6,2' }}</td>
-  <td class="editable" data-field="pressure_return" data-id="807">{{ data[807].pressure_return if data and data[807] else '5,8' }}</td>
+<td class="editablel" data-field="time_interval" data-id="816">21:00</td>
+<td class="editable" data-field="boilers_working" data-id="807">{{ data[807].boilers_working if data and data[807] else '1' }}</td>
+<td class="editable" data-field="boilers_reserve" data-id="807">{{ data[807].boilers_reserve if data and data[807] else '3' }}</td>
+<td class="editable" data-field="pumps_working" data-id="807">{{ data[807].pumps_working if data and data[807] else '1' }}</td>
+<td class="editable" data-field="pumps_reserve" data-id="807">{{ data[807].pumps_reserve if data and data[807] else '2' }}</td>
+<td class="editable" data-field="feed_pumps_working" data-id="804">{{ data[807].feed_pumps_working if data and data[804] else '1' }}</td>
+<td class="editable" data-field="feed_pumps_reserve" data-id="807">{{ data[807].feed_pumps_reserve if data and data[807] else '2' }}</td>
+<td class="editable" data-field="feed_pumps_repair" data-id="807">{{ data[791].feed_pumps_repair if data and data[791] else '-' }}</td>
+<td class="editable" data-field="temp_outdoor" data-id="807">{{ data[807].temp_outdoor if data and data[807] else '-36' }}</td>
+<td class="editable" data-field="temp_supply" data-id="807">{{ data[807].temp_supply if data and data[807] else '88' }}</td>
+<td class="editable" data-field="temp_return" data-id="807">{{ data[807].temp_return if data and data[807] else '65' }}</td>
+<td class="editable" data-field="temp_graph_supply" data-id="807">{{ data[807].temp_graph_supply if data and data[807] else '90' }}</td>
+<td class="editable" data-field="temp_graph_return" data-id="807">{{ data[807].temp_graph_return if data and data[807] else '70' }}</td>
+<td class="editable" data-field="pressure_supply" data-id="807">{{ data[807].pressure_supply if data and data[807] else '6,2' }}</td>
+<td class="editable" data-field="pressure_return" data-id="807">{{ data[807].pressure_return if data and data[807] else '5,8' }}</td>
 </tr>
 <!-- ============ КОТЕЛЬНАЯ №2 (8 строк) ============ -->
 <tr class="section">
