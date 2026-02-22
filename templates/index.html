@@ -138,103 +138,116 @@ thead th {
 
 <tr>
   <td rowspan="2">1</td>
-  <td rowspan="2">{{ data[791].boiler_model if data and data[791] else 'КСВ-3,0/PG93 "UNIGAS" №0805505' }}</td>
-  <td rowspan="2">{{ data[791].equipment_year if data and data[791] else '2007' }}</td>
+  <td rowspan="2">{{ data[002].boiler_model if data and data[002] else 'КСВ-3,0/PG93 "UNIGAS" №0805505' }}</td>
+  <td rowspan="2">{{ data[002].equipment_year if data and data[002] else '2007' }}</td>
 
-<td class="editable" data-field="time_interval" data-id="791">00:00</td> <!-- Время замера -->
+<td class="editable" data-field="time_interval" data-id="1">00:00</td> <!-- Время замера -->
 
-<td class="editable" data-field="boilers_working" data-id="791">1</td> <!-- Котлы: в работе -->
-<td class="editable" data-field="boilers_reserve" data-id="791">3</td> <!-- Котлы: в резерве -->
-<td rowspan="2" class="editable" data-field="boilers_repair" data-id="791"></td> <!-- Котлы: в ремонте -->
+<td class="editable" data-field="boilers_working" data-id="001">1</td> <!-- Котлы: в работе -->
+<td class="editable" data-field="boilers_reserve" data-id="001">3</td> <!-- Котлы: в резерве -->
+<td rowspan="2" class="editable" data-field="boilers_repair" data-id="001"></td> <!-- Котлы: в ремонте -->
 
-<td class="editable" data-field="pumps_working" data-id="791">1</td> <!-- Сетевые насосы: в работе -->
-<td class="editable" data-field="pumps_reserve" data-id="791">2</td> <!-- Сетевые насосы: в резерве -->
-<td rowspan="2" class="editable" data-field="pumps_repair" data-id="791"></td> <!-- Сетевые насосы: в ремонте -->
+<td class="editable" data-field="pumps_working" data-id="001">1</td> <!-- Сетевые насосы: в работе -->
+<td class="editable" data-field="pumps_reserve" data-id="001">2</td> <!-- Сетевые насосы: в резерве -->
+<td rowspan="2" class="editable" data-field="pumps_repair" data-id="001"></td> <!-- Сетевые насосы: в ремонте -->
 
-<td class="editable" data-field="feed_pumps_working" data-id="791">1</td> <!-- Подпиточные насосы: в работе -->
-<td class="editable" data-field="feed_pumps_reserve" data-id="791">2</td> <!-- Подпиточные насосы: в резерве -->
-<td rowspan="2" class="editable" data-field="feed_pumps_repair" data-id="791">-</td> <!-- Подпиточные насосы: в ремонте -->
+<td class="editable" data-field="feed_pumps_working" data-id="001">1</td> <!-- Подпиточные насосы: в работе -->
+<td class="editable" data-field="feed_pumps_reserve" data-id="001">2</td> <!-- Подпиточные насосы: в резерве -->
+<td rowspan="2" class="editable" data-field="feed_pumps_repair" data-id="001">-</td> <!-- Подпиточные насосы: в ремонте -->
 
-<td rowspan="2" class="editable" data-field="Fuel_tanks_all" data-id="791">-</td> <!-- Топливные ёмкости: всего -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_volume" data-id="791">-</td> <!-- Топливные ёмкости: объём, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_working" data-id="791">-</td> <!-- Топливные ёмкости: в работе -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_reserve" data-id="791">-</td> <!-- Топливные ёмкости: в резерве -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_rest_morning" data-id="791">-</td> <!-- Остаток топлива на утро, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_rest_day" data-id="791">-</td> <!-- Расход топлива за сутки, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_repair" data-id="791">-</td> <!-- Топливные ёмкости: в ремонте -->
+<td rowspan="2" class="editable" data-field="Fuel_tanks_all" data-id="001">-</td> <!-- Топливные ёмкости: всего -->
+<td rowspan="2" class="editable" data-field="Fuel_tanks_volume" data-id="001">-</td> <!-- Топливные ёмкости: объём, м³ -->
+<td rowspan="2" class="editable" data-field="Fuel_tanks_working" data-id="001">-</td> <!-- Топливные ёмкости: в работе -->
+<td rowspan="2" class="editable" data-field="Fuel_tanks_reserve" data-id="001">-</td> <!-- Топливные ёмкости: в резерве -->
+<td rowspan="2" class="editable" data-field="Fuel_tanks_rest_morning" data-id="001">-</td> <!-- Остаток топлива на утро, м³ -->
+<td rowspan="2" class="editable" data-field="Fuel_tanks_rest_day" data-id="001">-</td> <!-- Расход топлива за сутки, м³ -->
+<td rowspan="2" class="editable" data-field="Fuel_tanks_repair" data-id="001">-</td> <!-- Топливные ёмкости: в ремонте -->
 
-<td rowspan="2" class="editable" data-field="Water_capacity_all" data-id="791">-</td> <!-- Ёмкости воды: всего -->
-<td rowspan="2" class="editable" data-field="Water_capacity_volume" data-id="791">-</td> <!-- Ёмкости воды: объём, м³ -->
-<td rowspan="2" class="editable" data-field="Water_capacity_working" data-id="791">-</td> <!-- Ёмкости воды: в работе -->
-<td rowspan="2" class="editable" data-field="Water_capacity_reserve" data-id="791">-</td> <!-- Ёмкости воды: в резерве -->
-<td rowspan="2" class="editable" data-field="Water_capacity_repair" data-id="791">-</td> <!-- Ёмкости воды: в ремонте -->
+<td rowspan="2" class="editable" data-field="Water_capacity_all" data-id="001">-</td> <!-- Ёмкости воды: всего -->
+<td rowspan="2" class="editable" data-field="Water_capacity_volume" data-id="001">-</td> <!-- Ёмкости воды: объём, м³ -->
+<td rowspan="2" class="editable" data-field="Water_capacity_working" data-id="001">-</td> <!-- Ёмкости воды: в работе -->
+<td rowspan="2" class="editable" data-field="Water_capacity_reserve" data-id="001">-</td> <!-- Ёмкости воды: в резерве -->
+<td rowspan="2" class="editable" data-field="Water_capacity_repair" data-id="001">-</td> <!-- Ёмкости воды: в ремонте -->
 
-<td class="editable" data-field="temp_outdoor" data-id="791">-36</td> <!-- t°C воды: наружная -->
-<td class="editable" data-field="temp_supply" data-id="791">86</td> <!-- t°C воды: подача -->
-<td class="editable" data-field="temp_return" data-id="791">64</td> <!-- t°C воды: обратка -->
+<td class="editable" data-field="temp_outdoor" data-id="001">-36</td> <!-- t°C воды: наружная -->
+<td class="editable" data-field="temp_supply" data-id="001">86</td> <!-- t°C воды: подача -->
+<td class="editable" data-field="temp_return" data-id="001">64</td> <!-- t°C воды: обратка -->
 
-<td class="editable" data-field="temp_graph_supply" data-id="791">90</td> <!-- t°C воды по ТГ: подача -->
-<td class="editable" data-field="temp_graph_return" data-id="791">70</td> <!-- t°C воды по ТГ: обратка -->
+<td class="editable" data-field="temp_graph_supply" data-id="001">90</td> <!-- t°C воды по ТГ: подача -->
+<td class="editable" data-field="temp_graph_return" data-id="001">70</td> <!-- t°C воды по ТГ: обратка -->
 
-<td class="editable" data-field="pressure_supply" data-id="791">6,2</td> <!-- Давление на подаче, кгс/см² -->
-<td class="editable" data-field="pressure_return" data-id="791">5,8</td> <!-- Давление на обратке, кгс/см² -->
+<td class="editable" data-field="pressure_supply" data-id="001">6,2</td> <!-- Давление на подаче, кгс/см² -->
+<td class="editable" data-field="pressure_return" data-id="001">5,8</td> <!-- Давление на обратке, кгс/см² -->
 
-<td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="791">6316</td> <!-- Расход подпиточной воды за сутки, м³ -->
+<td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="001">6316</td> <!-- Расход подпиточной воды за сутки, м³ -->
 
-<td rowspan="2" class="editable" data-field="staff_night" data-id="791">Виноградов</td> <!-- Дежурный котельной: ночь -->
-<td rowspan="2" class="editable" data-field="staff_day" data-id="791">Набокин</td> <!-- Дежурный котельной: день -->
+<td rowspan="2" class="editable" data-field="staff_night" data-id="001">Виноградов</td> <!-- Дежурный котельной: ночь -->
+<td rowspan="2" class="editable" data-field="staff_day" data-id="001">Набокин</td> <!-- Дежурный котельной: день -->
 
-<td rowspan="2" class="editable" data-field="downtime_today" data-id="791"></td> <!-- Простой за сегодня, ч -->
-<td rowspan="2" class="editable" data-field="downtime_total" data-id="791"></td> <!-- Простой итоговый, ч -->
-<td rowspan="2" class="editable" data-field="notes" data-id="791"></td> <!-- Примечание -->
+<td rowspan="2" class="editable" data-field="downtime_today" data-id="001"></td> <!-- Простой за сегодня, ч -->
+<td rowspan="2" class="editable" data-field="downtime_total" data-id="001"></td> <!-- Простой итоговый, ч -->
+<td rowspan="2" class="editable" data-field="notes" data-id="001"></td> <!-- Примечание -->
 </tr>
+
+
+<!-- 2 БЛОК -->
+  
 
 <tr>
-  <td class="editable" data-field="time_interval" data-id="791">03:00</td> <!-- Время замера -->
+  <td rowspan="2">1</td>
+  <td rowspan="2">{{ data[002].boiler_model if data and data[002] else 'KBA-3,0/PG510"UNIGAS"' }}</td>
+  <td rowspan="2">{{ data[002].equipment_year if data and data[002] else '2007' }}</td>
 
-  <td class="editable" data-field="boilers_working" data-id="791"></td> <!-- Котлы: в работе -->
-  <td class="editable" data-field="boilers_reserve" data-id="791"></td> <!-- Котлы: в резерве -->
+<td class="editable" data-field="time_interval" data-id="1">00:30</td> <!-- Время замера -->
 
-  <td class="editable" data-field="pumps_working" data-id="791"></td> <!-- Сетевые насосы: в работе -->
-  <td class="editable" data-field="pumps_reserve" data-id="791"></td> <!-- Сетевые насосы: в резерве -->
+<td class="editable" data-field="boilers_working" data-id="002">1</td> <!-- Котлы: в работе -->
+<td class="editable" data-field="boilers_reserve" data-id="002">3</td> <!-- Котлы: в резерве -->
+<td rowspan="2" class="editable" data-field="boilers_repair" data-id="02"></td> <!-- Котлы: в ремонте -->
 
-  <td class="editable" data-field="feed_pumps_working" data-id="791"></td> <!-- Подпиточные насосы: в работе -->
-  <td class="editable" data-field="feed_pumps_reserve" data-id="791"></td> <!-- Подпиточные насосы: в резерве -->
+<td class="editable" data-field="pumps_working" data-id="002">1</td> <!-- Сетевые насосы: в работе -->
+<td class="editable" data-field="pumps_reserve" data-id="002">2</td> <!-- Сетевые насосы: в резерве -->
+<td rowspan="2" class="editable" data-field="pumps_repair" data-id="002"></td> <!-- Сетевые насосы: в ремонте -->
 
-  <td class="editable" data-field="temp_outdoor" data-id="791"></td> <!-- t°C воды: наружная -->
-  <td class="editable" data-field="temp_supply" data-id="791"></td> <!-- t°C воды: подача -->
-  <td class="editable" data-field="temp_return" data-id="791"></td> <!-- t°C воды: обратка -->
+<td class="editable" data-field="feed_pumps_working" data-id="002">1</td> <!-- Подпиточные насосы: в работе -->
+<td class="editable" data-field="feed_pumps_reserve" data-id="002">2</td> <!-- Подпиточные насосы: в резерве -->
+<td rowspan="2" class="editable" data-field="feed_pumps_repair" data-id="002">-</td> <!-- Подпиточные насосы: в ремонте -->
 
-  <td class="editable" data-field="temp_graph_supply" data-id="791"></td> <!-- t°C воды по ТГ: подача -->
-  <td class="editable" data-field="temp_graph_return" data-id="791"></td> <!-- t°C воды по ТГ: обратка -->
+<td rowspan="2" class="editable" data-field="Fuel_tanks_all" data-id="002">-</td> <!-- Топливные ёмкости: всего -->
+<td rowspan="2" class="editable" data-field="Fuel_tanks_volume" data-id="002">-</td> <!-- Топливные ёмкости: объём, м³ -->
+<td rowspan="2" class="editable" data-field="Fuel_tanks_working" data-id="002">-</td> <!-- Топливные ёмкости: в работе -->
+<td rowspan="2" class="editable" data-field="Fuel_tanks_reserve" data-id="002">-</td> <!-- Топливные ёмкости: в резерве -->
+<td rowspan="2" class="editable" data-field="Fuel_tanks_rest_morning" data-id="002">-</td> <!-- Остаток топлива на утро, м³ -->
+<td rowspan="2" class="editable" data-field="Fuel_tanks_rest_day" data-id="002">-</td> <!-- Расход топлива за сутки, м³ -->
+<td rowspan="2" class="editable" data-field="Fuel_tanks_repair" data-id="002">-</td> <!-- Топливные ёмкости: в ремонте -->
 
-  <td class="editable" data-field="pressure_supply" data-id="791"></td> <!-- Давление на подаче, кгс/см² -->
-  <td class="editable" data-field="pressure_return" data-id="791"></td> <!-- Давление на обратке, кгс/см² -->
+<td rowspan="2" class="editable" data-field="Water_capacity_all" data-id="002">-</td> <!-- Ёмкости воды: всего -->
+<td rowspan="2" class="editable" data-field="Water_capacity_volume" data-id="002">-</td> <!-- Ёмкости воды: объём, м³ -->
+<td rowspan="2" class="editable" data-field="Water_capacity_working" data-id="002">-</td> <!-- Ёмкости воды: в работе -->
+<td rowspan="2" class="editable" data-field="Water_capacity_reserve" data-id="002">-</td> <!-- Ёмкости воды: в резерве -->
+<td rowspan="2" class="editable" data-field="Water_capacity_repair" data-id="002">-</td> <!-- Ёмкости воды: в ремонте -->
+
+<td class="editable" data-field="temp_outdoor" data-id="002">-36</td> <!-- t°C воды: наружная -->
+<td class="editable" data-field="temp_supply" data-id="002">86</td> <!-- t°C воды: подача -->
+<td class="editable" data-field="temp_return" data-id="002">64</td> <!-- t°C воды: обратка -->
+
+<td class="editable" data-field="temp_graph_supply" data-id="002">90</td> <!-- t°C воды по ТГ: подача -->
+<td class="editable" data-field="temp_graph_return" data-id="002">70</td> <!-- t°C воды по ТГ: обратка -->
+
+<td class="editable" data-field="pressure_supply" data-id="002">6,2</td> <!-- Давление на подаче, кгс/см² -->
+<td class="editable" data-field="pressure_return" data-id="002">5,8</td> <!-- Давление на обратке, кгс/см² -->
+
+<td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="002">6316</td> <!-- Расход подпиточной воды за сутки, м³ -->
+
+<td rowspan="2" class="editable" data-field="staff_night" data-id="002">Виноградов</td> <!-- Дежурный котельной: ночь -->
+<td rowspan="2" class="editable" data-field="staff_day" data-id="002">Набокин</td> <!-- Дежурный котельной: день -->
+
+<td rowspan="2" class="editable" data-field="downtime_today" data-id="002"></td> <!-- Простой за сегодня, ч -->
+<td rowspan="2" class="editable" data-field="downtime_total" data-id="002"></td> <!-- Простой итоговый, ч -->
+<td rowspan="2" class="editable" data-field="notes" data-id="002"></td> <!-- Примечание -->
 </tr>
 
-<tr>
-  <td class="editable" data-field="time_interval" data-id="791">03:00</td>
 
-  <td class="editable" data-field="boilers_working" data-id="791"></td>
-  <td class="editable" data-field="boilers_reserve" data-id="791"></td>
-
-  <td class="editable" data-field="pumps_working" data-id="791"></td>
-  <td class="editable" data-field="pumps_reserve" data-id="791"></td>
-
-  <td class="editable" data-field="feed_pumps_working" data-id="791"></td>
-  <td class="editable" data-field="feed_pumps_reserve" data-id="791"></td>
-
-  <td class="editable" data-field="temp_outdoor" data-id="791"></td>
-  <td class="editable" data-field="temp_supply" data-id="791"></td>
-  <td class="editable" data-field="temp_return" data-id="791"></td>
-
-  <td class="editable" data-field="temp_graph_supply" data-id="791"></td>
-  <td class="editable" data-field="temp_graph_return" data-id="791"></td>
-
-  <td class="editable" data-field="pressure_supply" data-id="791"></td>
-  <td class="editable" data-field="pressure_return" data-id="791"></td>
-</tr>
-
+  
 </tbody>
 </table>
 </div>
