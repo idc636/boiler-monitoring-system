@@ -388,10 +388,15 @@ ALLOWED_FIELDS = {
 
 @app.route('/update', methods=['POST'])
 def update():
+    # === 🔧 ОТЛАДКА: добавьте это ===
+    d = request.get_json()
+    print(f"🔍 DEBUG: id={d.get('id')}, field='{d.get('field')}', value='{d.get('value')}'")
+    print(f"🔍 DEBUG: field in ALLOWED? {d.get('field') in ALLOWED_FIELDS}")
+    # =================================
+    
     if not auth():
         return jsonify({'status': 'error', 'message': 'Не авторизован'}), 401
 
-    d = request.get_json()
     record_id = d.get('id')
     field = d.get('field')
     value = d.get('value')
