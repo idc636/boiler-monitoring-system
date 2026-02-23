@@ -409,13 +409,14 @@ def update():
         cur.execute("SELECT * FROM records WHERE id = %s", (record_id,))
         row = cur.fetchone()
 
-      if not row:
+    if not row:
     # Создаём запись с минимальными данными для обязательных полей
     cur.execute("""
         INSERT INTO records (id, date, boiler_number, equipment_number) 
         VALUES (%s, CURRENT_DATE, 0, 0)
     """, (record_id,))
     conn.commit()
+
         # Обновляем поле
         cur.execute(f"UPDATE records SET {field} = %s WHERE id = %s", (value, record_id))
         conn.commit()
