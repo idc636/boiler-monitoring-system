@@ -413,8 +413,7 @@ def update():
         # Проверяем, есть ли запись
         cur.execute("SELECT * FROM records WHERE id = %s", (record_id,))
         row = cur.fetchone()
-
-        if not row:
+    if not row:
     # Создаём запись со ВСЕМИ полями из вашей схемы (44 колонки = 44 значения)
     cur.execute("""
         INSERT INTO records (
