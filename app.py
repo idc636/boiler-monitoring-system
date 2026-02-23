@@ -409,68 +409,23 @@ def update():
         cur.execute("SELECT * FROM records WHERE id = %s", (record_id,))
         row = cur.fetchone()
 
-    if not row:
-    # Создаём запись с минимальными данными для обязательных полей
-    cur.execute("""
-        INSERT INTO records (id, date, boiler_number, equipment_number) 
-        VALUES (%s, CURRENT_DATE, 0, 0)
-    """, (record_id,))
-    conn.commit()
+        if not row:
+            # Создаём запись с минимальными данными для обязательных полей
+            cur.execute("""
+                INSERT INTO records (id, date, boiler_number, equipment_number) 
+                VALUES (%s, CURRENT_DATE, 0, 0)
+            """, (record_id,))
+            conn.commit()
 
         # Обновляем поле
         cur.execute(f"UPDATE records SET {field} = %s WHERE id = %s", (value, record_id))
         conn.commit()
         return jsonify({'status': 'ok'})
+        
     except Exception as e:
         conn.rollback()
         print("Ошибка /update:", e)
         return jsonify({'status': 'error', 'message': str(e)}), 500
-    finally:
-        conn.close()
-    try:
-        cur = conn.cursor()
-
-        # Получаем boiler_number записи И данные пользователя за один запрос
-        cur.execute("""
-            SELECT r.boiler_number, u.username, u.role
-            FROM records r
-            JOIN users u ON u.id = %s
-            WHERE r.id = %s
-        """, (session['user_id'], record_id))
-
-        row = cur.fetchone()
-        if not row:
-            return jsonify({'status': 'error', 'message': 'Запись не найдена или доступ запрещён'}), 404
-
-        boiler_number = row['boiler_number']
-        username = row['username']
-        role = row['role']
-
-        # === Проверка прав (без нового запроса) ===
-        has_access = False
-        if role == 'admin':
-            has_access = True
-        elif role == 'operator' and username.startswith('user'):
-            try:
-                user_num = int(username[4:])
-                if 1 <= user_num <= 4 and user_num == boiler_number:
-                    has_access = True
-            except (ValueError, IndexError):
-                has_access = False
-
-        if not has_access:
-            return jsonify({'status': 'error', 'message': 'Нет прав на редактирование этой котельной'}), 403
-
-        # === Выполняем обновление ===
-        cur.execute(f"UPDATE records SET {field} = %s WHERE id = %s", (value, record_id))
-        conn.commit()
-
-        return jsonify({'status': 'ok'})
-
-    except Exception as e:
-        conn.rollback()
-        print("❌ Ошибка в /update:", e)
-        return jsonify({'status': 'error', 'message': 'Внутренняя ошибка сервера'}), 500
     finally:
         conn.close()
         
