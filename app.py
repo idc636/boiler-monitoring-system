@@ -402,8 +402,11 @@ def update():
     field = d.get('field')
     value = d.get('value')
 
-    if not all([record_id, field, value]):
+# СТАЛО (проверяем только на None, пустая строка — ОК):
+    if record_id is None or field is None or value is None:
         return jsonify({'status': 'error', 'message': 'Отсутствуют обязательные поля'}), 400
+
+    
     if field not in ALLOWED_FIELDS:
         return jsonify({'status': 'error', 'message': 'Недопустимое поле'}), 400
 
