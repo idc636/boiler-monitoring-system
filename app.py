@@ -402,10 +402,9 @@ def update():
     field = d.get('field')
     value = d.get('value')
 
-# СТАЛО (проверяем только на None, пустая строка — ОК):
+    # Проверка: все ли поля переданы (пустая строка "" — это ОК)
     if record_id is None or field is None or value is None:
         return jsonify({'status': 'error', 'message': 'Отсутствуют обязательные поля'}), 400
-
     
     if field not in ALLOWED_FIELDS:
         return jsonify({'status': 'error', 'message': 'Недопустимое поле'}), 400
@@ -415,13 +414,11 @@ def update():
         cur = conn.cursor()
 
         # Проверяем, есть ли запись
-        cur.execute("SELECT current_database(), inet_server_addr()")
-        info = cur.fetchone()
-        print(f"🔍 DB CHECK: {info}")  # Смотреть в логах Railway
+        cur.execute("SELECT * FROM records WHERE id = %s", (record_id,))
+        row = cur.fetchone()  # ← row создаётся ЗДЕСЬ
 
         if not row:
-            # Создаём запись со ВСЕМИ полями из вашей схемы
-            # NOT NULL поля: id, date(text), boiler_number(int), boiler_location(text), equipment_number(int)
+            # Создаём новую запись с пустыми значениями
             cur.execute("""
                 INSERT INTO records (
                     id, date, boiler_number, boiler_location, boiler_contact,
@@ -454,14 +451,14 @@ def update():
             """, (record_id,))
             conn.commit()
 
-        # Обновляем поле
+        # Обновляем нужное поле
         cur.execute(f"UPDATE records SET {field} = %s WHERE id = %s", (value, record_id))
         conn.commit()
         return jsonify({'status': 'ok'})
         
     except Exception as e:
         conn.rollback()
-        print("Ошибка /update:", e)
+        print("❌ Ошибка /update:", e)
         return jsonify({'status': 'error', 'message': str(e)}), 500
     finally:
         conn.close()
