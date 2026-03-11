@@ -14,7 +14,8 @@ DATABASE_URL = os.environ.get('DATABASE_URL') or \
 def init_db():
     conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
     cur = conn.cursor()
-
+    cur.execute("DROP TABLE IF EXISTS records_archive;")
+    cur.execute("DROP TABLE IF EXISTS records;")
     cur.execute("""
     CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
@@ -695,15 +696,16 @@ def archive_data(date):
     return render_template('archive_table.html', data=data, selected_date=date)
 # ===================== AUTO-INIT =====================
 # Инициализируем БД при загрузке модуля (работает и с Gunicorn)
+# ===================== AUTO-INIT =====================
+# Инициализируем БД при импорте модуля (работает и с Gunicorn)
 try:
     init_db()
+    print("✅ База данных инициализирована")
 except Exception as e:
-    print(f"⚠️ Не удалось инициализировать БД: {e}")
+    print(f"⚠️ Ошибка инициализации БД: {e}")
 # =====================================================
 
 # ===================== START =====================
 if __name__ == '__main__':
-    init_db()
-
-
+    # init_db() уже вызвана выше, здесь только запуск сервера
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
