@@ -301,23 +301,26 @@ def index():
     if not auth():
         return redirect(url_for('login'))
     
-    c = get_conn().cursor()
-    c.execute("""
-        SELECT * FROM records
-        ORDER BY date, boiler_number, equipment_number, time_interval
-    """)
-    records = c.fetchall()
+    try:
+        c = get_conn().cursor()
+        c.execute("SELECT * FROM records ORDER BY date, boiler_number, equipment_number, time_interval")
+        records = c.fetchall()
+        c.execute("SELECT username, role FROM users WHERE id=%s", (session['user_id'],))
+        user = c.fetchone()
+        c.connection.close()
+    except psycopg2.errors.UndefinedTable:
+        # Таблицы нет — возвращаем страницу с сообщением
+        return render_template('index.html', data={}, user=None, db_error="База данных не готова. Таблицы не созданы.")
+    except Exception as e:
+        # Любая другая ошибка БД
+        print(f"❌ DB Error in /index: {e}")
+        return render_template('index.html', data={}, user=None, db_error=f"Ошибка БД: {e}")
 
-    c.execute("SELECT username, role FROM users WHERE id=%s", (session['user_id'],))
-    user = c.fetchone()
-    c.connection.close()
-
-    # Преобразуем данные в структуру, подходящую для index.html
+    # ... дальше твой код с преобразованием data ...
     data = {}
     for r in records:
-        key = r['id']  # Используем id записи как ключ для data-id
+        key = r['id']
         data[key] = r
-    print("Data keys:", list(data.keys()))
     return render_template('index.html', data=data, user=user)
 
 
@@ -686,7 +689,13 @@ def archive_data(date):
         data[key] = r
     
     return render_template('archive_table.html', data=data, selected_date=date)
-
+# ===================== AUTO-INIT =====================
+# Инициализируем БД при загрузке модуля (работает и с Gunicorn)
+try:
+    init_db()
+except Exception as e:
+    print(f"⚠️ Не удалось инициализировать БД: {e}")
+# =====================================================
 
 # ===================== START =====================
 if __name__ == '__main__':
