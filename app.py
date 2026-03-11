@@ -415,9 +415,9 @@ def update():
         cur = conn.cursor()
 
         # Проверяем, есть ли запись
-    cur.execute("SELECT current_database(), current_user")
-    db_info = cur.fetchone()
-    print(f"🔍 Сайт подключен к базе: {db_info}")  # Смотри в логах Railway
+        cur.execute("SELECT current_database(), current_user")
+        db_info = cur.fetchone()
+        print(f"🔍 Сайт подключен к базе: {db_info}")  # Смотри в логах Railway
 
         if not row:
             # Создаём запись со ВСЕМИ полями из вашей схемы
