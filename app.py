@@ -14,8 +14,12 @@ DATABASE_URL = os.environ.get('DATABASE_URL') or \
 def init_db():
     conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
     cur = conn.cursor()
+    
+    # Удаляем старые таблицы, чтобы создать их заново с правильной структурой
     cur.execute("DROP TABLE IF EXISTS records_archive;")
     cur.execute("DROP TABLE IF EXISTS records;")
+    
+    # Таблица users
     cur.execute("""
     CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
@@ -23,32 +27,30 @@ def init_db():
         password VARCHAR(128) NOT NULL,
         role VARCHAR(20) DEFAULT 'operator'
     );
-
+    """)
+    
+    # Таблица records (ПОЛНАЯ СТРУКТУРА)
+    cur.execute("""
     CREATE TABLE IF NOT EXISTS records (
         id SERIAL PRIMARY KEY,
         date TEXT,
         boiler_number INTEGER,
         boiler_location TEXT,
         boiler_contact TEXT,
-
-        equipment_number INTEGER,
-        boiler_model TEXT,
-        burner_model TEXT,        # ← ← ← ВСТАВИТЬ СЮДА
+        equipment_number,
+        boiler_model,
+        burner_model TEXT,
         equipment_year TEXT,
         time_interval TEXT,
-
         boilers_working TEXT,
         boilers_reserve TEXT,
         boilers_repair TEXT,
-
         pumps_working TEXT,
         pumps_reserve TEXT,
         pumps_repair TEXT,
-
         feed_pumps_working TEXT,
         feed_pumps_reserve TEXT,
         feed_pumps_repair TEXT,
-
         fuel_tanks_total TEXT,
         fuel_tank_volume TEXT,
         fuel_tanks_working TEXT,
@@ -56,56 +58,51 @@ def init_db():
         fuel_morning_balance TEXT,
         fuel_daily_consumption TEXT,
         fuel_tanks_repair TEXT,
-
         water_tanks_total TEXT,
         water_tank_volume TEXT,
         water_tanks_working TEXT,
         water_tanks_reserve TEXT,
         water_tanks_repair TEXT,
-
         temp_outdoor TEXT,
         temp_supply TEXT,
         temp_return TEXT,
         temp_graph_supply TEXT,
         temp_graph_return TEXT,
-
         pressure_supply TEXT,
         pressure_return TEXT,
-
         water_consumption_daily TEXT,
         staff_night TEXT,
         staff_day TEXT,
-        notes TEXT
+        notes TEXT,
+        downtime_today INTEGER DEFAULT 0,
+        downtime_total INTEGER DEFAULT 0
     );
-
+    """)
+    
+    # Таблица records_archive (ПОЛНАЯ СТРУКТУРА)
+    cur.execute("""
     CREATE TABLE IF NOT EXISTS records_archive (
         id SERIAL PRIMARY KEY,
         archive_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         original_id INTEGER,
-        
         date TEXT,
         boiler_number INTEGER,
         boiler_location TEXT,
         boiler_contact TEXT,
-
         equipment_number INTEGER,
         boiler_model TEXT,
-        burner_model TEXT,        # ← ← ← ВСТАВИТЬ СЮДА
+        burner_model TEXT,
         equipment_year TEXT,
         time_interval TEXT,
-
         boilers_working TEXT,
         boilers_reserve TEXT,
         boilers_repair TEXT,
-
         pumps_working TEXT,
         pumps_reserve TEXT,
         pumps_repair TEXT,
-
         feed_pumps_working TEXT,
         feed_pumps_reserve TEXT,
         feed_pumps_repair TEXT,
-
         fuel_tanks_total TEXT,
         fuel_tank_volume TEXT,
         fuel_tanks_working TEXT,
@@ -113,57 +110,49 @@ def init_db():
         fuel_morning_balance TEXT,
         fuel_daily_consumption TEXT,
         fuel_tanks_repair TEXT,
-
         water_tanks_total TEXT,
         water_tank_volume TEXT,
         water_tanks_working TEXT,
         water_tanks_reserve TEXT,
         water_tanks_repair TEXT,
-
         temp_outdoor TEXT,
         temp_supply TEXT,
         temp_return TEXT,
         temp_graph_supply TEXT,
         temp_graph_return TEXT,
-
         pressure_supply TEXT,
         pressure_return TEXT,
-
         water_consumption_daily TEXT,
         staff_night TEXT,
         staff_day TEXT,
-        notes TEXT
-        downtime_today INTEGER DEFAULT 0,    # ← ← ← ВСТАВИТЬ СЮДА
-        downtime_total INTEGER DEFAULT 0     # ← ← ← ВСТАВИТЬ СЮДА
+        notes TEXT,
+        downtime_today INTEGER DEFAULT 0,
+        downtime_total INTEGER DEFAULT 0
     );
     """)
-
-    # Создаём админов и операторов
-    admin_password = '1313'
-    user_password = '1313'
     
-    cur.execute("""
-    INSERT INTO users (username, password, role)
-    SELECT 'admin', %s, 'admin'
-    WHERE NOT EXISTS (SELECT 1 FROM users WHERE username='admin')
-    """, (admin_password,))
-    
-    cur.execute("""
-    INSERT INTO users (username, password, role)
-    SELECT 'admin2', %s, 'admin'
-    WHERE NOT EXISTS (SELECT 1 FROM users WHERE username='admin2')
-    """, (admin_password,))
-
-    for i in range(1, 9):
+    # Создаём пользователей, если их нет
+    cur.execute("SELECT COUNT(*) FROM users")
+    if cur.fetchone()[0] == 0:
         cur.execute("""
-        INSERT INTO users (username, password, role)
-        SELECT %s, %s, 'operator'
-        WHERE NOT EXISTS (SELECT 1 FROM users WHERE username=%s)
-        """, (f'user{i}', user_password, f'user{i}'))
-
+        INSERT INTO users (username, password, role) VALUES 
+        ('admin', '1313', 'admin'),
+        ('admin2', '1313', 'admin'),
+        ('user1', '1313', 'operator'),
+        ('user2', '1313', 'operator'),
+        ('user3', '1313', 'operator'),
+        ('user4', '1313', 'operator'),
+        ('user5', '1313', 'operator'),
+        ('user6', '1313', 'operator'),
+        ('user7', '1313', 'operator'),
+        ('user8', '1313', 'operator')
+        """)
+    
     conn.commit()
     conn.close()
+    print("✅ Таблицы базы данных созданы/обновлены")
 
+    
 
 def get_conn():
     return psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
