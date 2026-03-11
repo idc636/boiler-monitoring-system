@@ -671,7 +671,18 @@ def trigger_archive():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
-
+@app.route('/update', methods=['POST'])
+def update():
+    # ... твой код ...
+    
+    conn = get_conn()
+    cur = conn.cursor()
+    
+    # Добавь эту строку для диагностики
+    cur.execute("SELECT current_database(), current_user")
+    db_info = cur.fetchone()
+    print(f"🔍 Сайт подключен к базе: {db_info}")  # Смотри в логах Railway
+    
 @app.route('/archive/data/<date>')
 def archive_data(date):
     if not admin():
@@ -706,17 +717,7 @@ except Exception as e:
 # ===================== START =====================
 
 
-@app.route('/update', methods=['POST'])
-def update():
-    # ... твой код ...
-    
-    conn = get_conn()
-    cur = conn.cursor()
-    
-    # Добавь эту строку для диагностики
-    cur.execute("SELECT current_database(), current_user")
-    db_info = cur.fetchone()
-    print(f"🔍 Сайт подключен к базе: {db_info}")  # Смотри в логах Railway
+
     
 if __name__ == '__main__':
     init_db()
