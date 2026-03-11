@@ -33,6 +33,7 @@ def init_db():
 
         equipment_number INTEGER,
         boiler_model TEXT,
+        burner_model TEXT,        # ← ← ← ВСТАВИТЬ СЮДА
         equipment_year TEXT,
         time_interval TEXT,
 
@@ -89,6 +90,7 @@ def init_db():
 
         equipment_number INTEGER,
         boiler_model TEXT,
+        burner_model TEXT,        # ← ← ← ВСТАВИТЬ СЮДА
         equipment_year TEXT,
         time_interval TEXT,
 
@@ -131,6 +133,8 @@ def init_db():
         staff_night TEXT,
         staff_day TEXT,
         notes TEXT
+        downtime_today INTEGER DEFAULT 0,    # ← ← ← ВСТАВИТЬ СЮДА
+        downtime_total INTEGER DEFAULT 0     # ← ← ← ВСТАВИТЬ СЮДА
     );
     """)
 
