@@ -704,6 +704,20 @@ except Exception as e:
 # =====================================================
 
 # ===================== START =====================
+
+
+@app.route('/update', methods=['POST'])
+def update():
+    # ... твой код ...
+    
+    conn = get_conn()
+    cur = conn.cursor()
+    
+    # Добавь эту строку для диагностики
+    cur.execute("SELECT current_database(), current_user")
+    db_info = cur.fetchone()
+    print(f"🔍 Сайт подключен к базе: {db_info}")  # Смотри в логах Railway
+    
 if __name__ == '__main__':
     init_db()
 
