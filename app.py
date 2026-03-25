@@ -469,12 +469,13 @@ def update():
     record_id = data.get("id")
     field = data.get("field")
     value = data.get("value")
-
     if record_id is None or field is None or value is None:
         return jsonify({"status": "error", "message": "Отсутствуют обязательные поля"}), 400
-
     if field not in ALLOWED_FIELDS:
         return jsonify({"status": "error", "message": "Недопустимое поле"}), 400
+
+    if field in ["downtime_today", "downtime_total"]:
+        value = int(value or 0)
 
     conn = get_conn()
     cur = conn.cursor()
