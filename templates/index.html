@@ -131,6 +131,8 @@ thead th {
 </thead>
 
 <tbody>
+
+  
 <!-- 1 БЛОК -->
 <tr class="section">
   <td colspan="38">Котельная №1 Белоярск №1 ул. Набережная 8</td>
@@ -138,356 +140,244 @@ thead th {
 
 <tr>
   <td rowspan="3">1</td>
-  <td rowspan="3">{{ data[2].boiler_model if data and data[2] else 'KBA-3,2/PG93"UNIGAS"№1009117' }}</td>
-  <td rowspan="3">{{ data[2].equipment_year if data and data[2] else '2007' }}</td>
+  <td rowspan="3">{{ data[1].boiler_model if data and data.get(1) and data[1].boiler_model else 'KBA-3,2/PG93"UNIGAS"№1009117' }}</td>
+  <td rowspan="3">{{ data[1].equipment_year if data and data.get(1) and data[1].equipment_year else '2007' }}</td>
 
-<td class="editable" data-field="time_interval" data-id="1">00:00</td> <!-- Время замера -->
+  <td class="editable" data-field="time_interval" data-id="1">{{ data[1].time_interval if data and data.get(1) and data[1].time_interval else '00:00' }}</td> <!-- Время замера -->
+  <td class="editable" data-field="boilers_working" data-id="1">{{ data[1].boilers_working if data and data.get(1) and data[1].boilers_working else '' }}</td> <!-- Котлы: в работе -->
+  <td class="editable" data-field="boilers_reserve" data-id="1">{{ data[1].boilers_reserve if data and data.get(1) and data[1].boilers_reserve else '' }}</td> <!-- Котлы: в резерве -->
+  <td rowspan="2" class="editable" data-field="boilers_repair" data-id="1">{{ data[1].boilers_repair if data and data.get(1) and data[1].boilers_repair else '' }}</td> <!-- Котлы: в ремонте -->
 
-<td class="editable" data-field="boilers_working" data-id="1">
-  {{ data[1].boilers_working if data and data.get(1) and data[1].boilers_working else '' }}
-</td>
-  <!-- Котлы: в работе -->
-<td class="editable" data-field="boilers_reserve" data-id="1"></td> <!-- Котлы: в резерве -->
-<td rowspan="2" class="editable" data-field="boilers_repair" data-id="1"></td> <!-- Котлы: в ремонте -->
+  <td class="editable" data-field="pumps_working" data-id="1">{{ data[1].pumps_working if data and data.get(1) and data[1].pumps_working else '' }}</td> <!-- Сетевые насосы: в работе -->
+  <td class="editable" data-field="pumps_reserve" data-id="1">{{ data[1].pumps_reserve if data and data.get(1) and data[1].pumps_reserve else '' }}</td> <!-- Сетевые насосы: в резерве -->
+  <td rowspan="2" class="editable" data-field="pumps_repair" data-id="1">{{ data[1].pumps_repair if data and data.get(1) and data[1].pumps_repair else '' }}</td> <!-- Сетевые насосы: в ремонте -->
 
-<td class="editable" data-field="pumps_working" data-id="1"></td> <!-- Сетевые насосы: в работе -->
-<td class="editable" data-field="pumps_reserve" data-id="1"></td> <!-- Сетевые насосы: в резерве -->
-<td rowspan="2" class="editable" data-field="pumps_repair" data-id="1"></td> <!-- Сетевые насосы: в ремонте -->
+  <td class="editable" data-field="feed_pumps_working" data-id="1">{{ data[1].feed_pumps_working if data and data.get(1) and data[1].feed_pumps_working else '' }}</td> <!-- Подпиточные насосы: в работе -->
+  <td class="editable" data-field="feed_pumps_reserve" data-id="1">{{ data[1].feed_pumps_reserve if data and data.get(1) and data[1].feed_pumps_reserve else '' }}</td> <!-- Подпиточные насосы: в резерве -->
+  <td rowspan="2" class="editable" data-field="feed_pumps_repair" data-id="1">{{ data[1].feed_pumps_repair if data and data.get(1) and data[1].feed_pumps_repair else '' }}</td> <!-- Подпиточные насосы: в ремонте -->
 
-<td class="editable" data-field="feed_pumps_working" data-id="1"></td> <!-- Подпиточные насосы: в работе -->
-<td class="editable" data-field="feed_pumps_reserve" data-id="1"></td> <!-- Подпиточные насосы: в резерве -->
-<td rowspan="2" class="editable" data-field="feed_pumps_repair" data-id="1"></td> <!-- Подпиточные насосы: в ремонте -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_total" data-id="1">{{ data[1].fuel_tanks_total if data and data.get(1) and data[1].fuel_tanks_total else '' }}</td> <!-- Топливные ёмкости: всего -->
+  <td rowspan="2" class="editable" data-field="fuel_tank_volume" data-id="1">{{ data[1].fuel_tank_volume if data and data.get(1) and data[1].fuel_tank_volume else '' }}</td> <!-- Топливные ёмкости: объём, м³ -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_working" data-id="1">{{ data[1].fuel_tanks_working if data and data.get(1) and data[1].fuel_tanks_working else '' }}</td> <!-- Топливные ёмкости: в работе -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_reserve" data-id="1">{{ data[1].fuel_tanks_reserve if data and data.get(1) and data[1].fuel_tanks_reserve else '' }}</td> <!-- Топливные ёмкости: в резерве -->
+  <td rowspan="2" class="editable" data-field="fuel_morning_balance" data-id="1">{{ data[1].fuel_morning_balance if data and data.get(1) and data[1].fuel_morning_balance else '' }}</td> <!-- Остаток топлива на утро, м³ -->
+  <td rowspan="2" class="editable" data-field="fuel_daily_consumption" data-id="1">{{ data[1].fuel_daily_consumption if data and data.get(1) and data[1].fuel_daily_consumption else '' }}</td> <!-- Расход топлива за сутки, м³ -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_repair" data-id="1">{{ data[1].fuel_tanks_repair if data and data.get(1) and data[1].fuel_tanks_repair else '' }}</td> <!-- Топливные ёмкости: в ремонте -->
 
-<td rowspan="2" class="editable" data-field="Fuel_tanks_all" data-id="1"></td> <!-- Топливные ёмкости: всего -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_volume" data-id="1"></td> <!-- Топливные ёмкости: объём, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_working" data-id="1"></td> <!-- Топливные ёмкости: в работе -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_reserve" data-id="1"></td> <!-- Топливные ёмкости: в резерве -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_rest_morning" data-id="1"></td> <!-- Остаток топлива на утро, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_rest_day" data-id="1"></td> <!-- Расход топлива за сутки, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_repair" data-id="1"></td> <!-- Топливные ёмкости: в ремонте -->
+  <td rowspan="2" class="editable" data-field="water_tanks_total" data-id="1">{{ data[1].water_tanks_total if data and data.get(1) and data[1].water_tanks_total else '' }}</td> <!-- Ёмкости воды: всего -->
+  <td rowspan="2" class="editable" data-field="water_tank_volume" data-id="1">{{ data[1].water_tank_volume if data and data.get(1) and data[1].water_tank_volume else '' }}</td> <!-- Ёмкости воды: объём, м³ -->
+  <td rowspan="2" class="editable" data-field="water_tanks_working" data-id="1">{{ data[1].water_tanks_working if data and data.get(1) and data[1].water_tanks_working else '' }}</td> <!-- Ёмкости воды: в работе -->
+  <td rowspan="2" class="editable" data-field="water_tanks_reserve" data-id="1">{{ data[1].water_tanks_reserve if data and data.get(1) and data[1].water_tanks_reserve else '' }}</td> <!-- Ёмкости воды: в резерве -->
+  <td rowspan="2" class="editable" data-field="water_tanks_repair" data-id="1">{{ data[1].water_tanks_repair if data and data.get(1) and data[1].water_tanks_repair else '' }}</td> <!-- Ёмкости воды: в ремонте -->
 
-<td rowspan="2" class="editable" data-field="Water_capacity_all" data-id="1"></td> <!-- Ёмкости воды: всего -->
-<td rowspan="2" class="editable" data-field="Water_capacity_volume" data-id="1"></td> <!-- Ёмкости воды: объём, м³ -->
-<td rowspan="2" class="editable" data-field="Water_capacity_working" data-id="1"></td> <!-- Ёмкости воды: в работе -->
-<td rowspan="2" class="editable" data-field="Water_capacity_reserve" data-id="1"></td> <!-- Ёмкости воды: в резерве -->
-<td rowspan="2" class="editable" data-field="Water_capacity_repair" data-id="1"></td> <!-- Ёмкости воды: в ремонте -->
+  <td class="editable" data-field="temp_outdoor" data-id="1">{{ data[1].temp_outdoor if data and data.get(1) and data[1].temp_outdoor else '' }}</td> <!-- t°C воды: наружная -->
+  <td class="editable" data-field="temp_supply" data-id="1">{{ data[1].temp_supply if data and data.get(1) and data[1].temp_supply else '' }}</td> <!-- t°C воды: подача -->
+  <td class="editable" data-field="temp_return" data-id="1">{{ data[1].temp_return if data and data.get(1) and data[1].temp_return else '' }}</td> <!-- t°C воды: обратка -->
+  <td class="editable" data-field="temp_graph_supply" data-id="1">{{ data[1].temp_graph_supply if data and data.get(1) and data[1].temp_graph_supply else '' }}</td> <!-- t°C воды по ТГ: подача -->
+  <td class="editable" data-field="temp_graph_return" data-id="1">{{ data[1].temp_graph_return if data and data.get(1) and data[1].temp_graph_return else '' }}</td> <!-- t°C воды по ТГ: обратка -->
+  <td class="editable" data-field="pressure_supply" data-id="1">{{ data[1].pressure_supply if data and data.get(1) and data[1].pressure_supply else '' }}</td> <!-- Давление на подаче, кгс/см² -->
+  <td class="editable" data-field="pressure_return" data-id="1">{{ data[1].pressure_return if data and data.get(1) and data[1].pressure_return else '' }}</td> <!-- Давление на обратке, кгс/см² -->
 
-<td class="editable" data-field="temp_outdoor" data-id="1"></td> <!-- t°C воды: наружная -->
-<td class="editable" data-field="temp_supply" data-id="1"></td> <!-- t°C воды: подача -->
-<td class="editable" data-field="temp_return" data-id="1"></td> <!-- t°C воды: обратка -->
-
-<td class="editable" data-field="temp_graph_supply" data-id="1"></td> <!-- t°C воды по ТГ: подача -->
-<td class="editable" data-field="temp_graph_return" data-id="1"></td> <!-- t°C воды по ТГ: обратка -->
-
-<td class="editable" data-field="pressure_supply" data-id="1"></td> <!-- Давление на подаче, кгс/см² -->
-<td class="editable" data-field="pressure_return" data-id="1"></td> <!-- Давление на обратке, кгс/см² -->
-
-<td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="1"></td> <!-- Расход подпиточной воды за сутки, м³ -->
-
-<td rowspan="2" class="editable" data-field="staff_night" data-id="1"></td> <!-- Дежурный котельной: ночь -->
-<td rowspan="2" class="editable" data-field="staff_day" data-id="1"></td> <!-- Дежурный котельной: день -->
-
-<td rowspan="2" class="editable" data-field="downtime_today" data-id="1"></td> <!-- Простой за сегодня, ч -->
-<td rowspan="2" class="editable" data-field="downtime_total" data-id="1"></td> <!-- Простой итоговый, ч -->
-<td rowspan="2" class="editable" data-field="notes" data-id="1"></td> <!-- Примечание -->
+  <td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="1">{{ data[1].water_consumption_daily if data and data.get(1) and data[1].water_consumption_daily else '' }}</td> <!-- Расход подпиточной воды за сутки, м³ -->
+  <td rowspan="2" class="editable" data-field="staff_night" data-id="1">{{ data[1].staff_night if data and data.get(1) and data[1].staff_night else '' }}</td> <!-- Дежурный котельной: ночь -->
+  <td rowspan="2" class="editable" data-field="staff_day" data-id="1">{{ data[1].staff_day if data and data.get(1) and data[1].staff_day else '' }}</td> <!-- Дежурный котельной: день -->
+  <td rowspan="2" class="editable" data-field="downtime_today" data-id="1">{{ data[1].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td> <!-- Простой за сегодня, ч -->
+  <td rowspan="2" class="editable" data-field="downtime_total" data-id="1">{{ data[1].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td> <!-- Простой итоговый, ч -->
+  <td rowspan="2" class="editable" data-field="notes" data-id="1">{{ data[1].notes if data and data.get(1) and data[1].notes else '' }}</td> <!-- Примечание -->
 </tr>
 
 <tr>
-
-
-<td class="editable" data-field="time_interval" data-id="2">03:00</td> <!-- Время замера -->
-
-<td class="editable" data-field="boilers_working" data-id="2"></td> <!-- Котлы: в работе -->
-<td class="editable" data-field="boilers_reserve" data-id="2"></td> <!-- Котлы: в резерве -->
-
-
-<td class="editable" data-field="pumps_working" data-id="2"></td> <!-- Сетевые насосы: в работе -->
-<td class="editable" data-field="pumps_reserve" data-id="2"></td> <!-- Сетевые насосы: в резерве -->
-
-
-<td class="editable" data-field="feed_pumps_working" data-id="2"></td> <!-- Подпиточные насосы: в работе -->
-<td class="editable" data-field="feed_pumps_reserve" data-id="2"></td> <!-- Подпиточные насосы: в резерве -->
-
-
-
-<td class="editable" data-field="temp_outdoor" data-id="2"></td> <!-- t°C воды: наружная -->
-<td class="editable" data-field="temp_supply" data-id="2"></td> <!-- t°C воды: подача -->
-<td class="editable" data-field="temp_return" data-id="2"></td> <!-- t°C воды: обратка -->
-
-<td class="editable" data-field="temp_graph_supply" data-id="2"></td> <!-- t°C воды по ТГ: подача -->
-<td class="editable" data-field="temp_graph_return" data-id="2"></td> <!-- t°C воды по ТГ: обратка -->
-
-<td class="editable" data-field="pressure_supply" data-id="2"></td> <!-- Давление на подаче, кгс/см² -->
-<td class="editable" data-field="pressure_return" data-id="2"></td> <!-- Давление на обратке, кгс/см² -->
-
+  <td class="editable" data-field="time_interval" data-id="2">{{ data[2].time_interval if data and data.get(2) and data[2].time_interval else '03:00' }}</td> <!-- Время замера -->
+  <td class="editable" data-field="boilers_working" data-id="2">{{ data[2].boilers_working if data and data.get(2) and data[2].boilers_working else '' }}</td> <!-- Котлы: в работе -->
+  <td class="editable" data-field="boilers_reserve" data-id="2">{{ data[2].boilers_reserve if data and data.get(2) and data[2].boilers_reserve else '' }}</td> <!-- Котлы: в резерве -->
+  <td class="editable" data-field="pumps_working" data-id="2">{{ data[2].pumps_working if data and data.get(2) and data[2].pumps_working else '' }}</td> <!-- Сетевые насосы: в работе -->
+  <td class="editable" data-field="pumps_reserve" data-id="2">{{ data[2].pumps_reserve if data and data.get(2) and data[2].pumps_reserve else '' }}</td> <!-- Сетевые насосы: в резерве -->
+  <td class="editable" data-field="feed_pumps_working" data-id="2">{{ data[2].feed_pumps_working if data and data.get(2) and data[2].feed_pumps_working else '' }}</td> <!-- Подпиточные насосы: в работе -->
+  <td class="editable" data-field="feed_pumps_reserve" data-id="2">{{ data[2].feed_pumps_reserve if data and data.get(2) and data[2].feed_pumps_reserve else '' }}</td> <!-- Подпиточные насосы: в резерве -->
+  <td class="editable" data-field="temp_outdoor" data-id="2">{{ data[2].temp_outdoor if data and data.get(2) and data[2].temp_outdoor else '' }}</td> <!-- t°C воды: наружная -->
+  <td class="editable" data-field="temp_supply" data-id="2">{{ data[2].temp_supply if data and data.get(2) and data[2].temp_supply else '' }}</td> <!-- t°C воды: подача -->
+  <td class="editable" data-field="temp_return" data-id="2">{{ data[2].temp_return if data and data.get(2) and data[2].temp_return else '' }}</td> <!-- t°C воды: обратка -->
+  <td class="editable" data-field="temp_graph_supply" data-id="2">{{ data[2].temp_graph_supply if data and data.get(2) and data[2].temp_graph_supply else '' }}</td> <!-- t°C воды по ТГ: подача -->
+  <td class="editable" data-field="temp_graph_return" data-id="2">{{ data[2].temp_graph_return if data and data.get(2) and data[2].temp_graph_return else '' }}</td> <!-- t°C воды по ТГ: обратка -->
+  <td class="editable" data-field="pressure_supply" data-id="2">{{ data[2].pressure_supply if data and data.get(2) and data[2].pressure_supply else '' }}</td> <!-- Давление на подаче, кгс/см² -->
+  <td class="editable" data-field="pressure_return" data-id="2">{{ data[2].pressure_return if data and data.get(2) and data[2].pressure_return else '' }}</td> <!-- Давление на обратке, кгс/см² -->
 </tr>
 
 <!-- 2 БЛОК -->
-
-</tr>
-
 <tr>
+  <td class="editable" data-field="time_interval" data-id="3">{{ data[3].time_interval if data and data.get(3) and data[3].time_interval else '06:00' }}</td> <!-- Время замера -->
+  <td class="editable" data-field="boilers_working" data-id="3">{{ data[3].boilers_working if data and data.get(3) and data[3].boilers_working else '' }}</td> <!-- Котлы: в работе -->
+  <td class="editable" data-field="boilers_reserve" data-id="3">{{ data[3].boilers_reserve if data and data.get(3) and data[3].boilers_reserve else '' }}</td> <!-- Котлы: в резерве -->
+  <td rowspan="2" class="editable" data-field="boilers_repair" data-id="3">{{ data[3].boilers_repair if data and data.get(3) and data[3].boilers_repair else '' }}</td> <!-- Котлы: в ремонте -->
+  <td class="editable" data-field="pumps_working" data-id="3">{{ data[3].pumps_working if data and data.get(3) and data[3].pumps_working else '' }}</td> <!-- Сетевые насосы: в работе -->
+  <td class="editable" data-field="pumps_reserve" data-id="3">{{ data[3].pumps_reserve if data and data.get(3) and data[3].pumps_reserve else '' }}</td> <!-- Сетевые насосы: в резерве -->
+  <td rowspan="2" class="editable" data-field="pumps_repair" data-id="3">{{ data[3].pumps_repair if data and data.get(3) and data[3].pumps_repair else '' }}</td> <!-- Сетевые насосы: в ремонте -->
+  <td class="editable" data-field="feed_pumps_working" data-id="3">{{ data[3].feed_pumps_working if data and data.get(3) and data[3].feed_pumps_working else '' }}</td> <!-- Подпиточные насосы: в работе -->
+  <td class="editable" data-field="feed_pumps_reserve" data-id="3">{{ data[3].feed_pumps_reserve if data and data.get(3) and data[3].feed_pumps_reserve else '' }}</td> <!-- Подпиточные насосы: в резерве -->
 
-
-<td class="editable" data-field="time_interval" data-id="3">06:00</td> <!-- Время замера -->
-
-<td class="editable" data-field="boilers_working" data-id="3"></td> <!-- Котлы: в работе -->
-<td class="editable" data-field="boilers_reserve" data-id="3"></td> <!-- Котлы: в резерве -->
-<td rowspan="2" class="editable" data-field="boilers_repair" data-id="3"></td> <!-- Котлы: в ремонте -->
-
-<td class="editable" data-field="pumps_working" data-id="3"></td> <!-- Сетевые насосы: в работе -->
-<td class="editable" data-field="pumps_reserve" data-id="3"></td> <!-- Сетевые насосы: в резерве -->
-<td rowspan="2" class="editable" data-field="pumps_repair" data-id="3"></td> <!-- Сетевые насосы: в ремонте -->
-
-<td class="editable" data-field="feed_pumps_working" data-id="3"></td> <!-- Подпиточные насосы: в работе -->
-<td class="editable" data-field="feed_pumps_reserve" data-id="3"></td> <!-- Подпиточные насосы: в резерве -->
-<td rowspan="2" class="editable" data-field="feed_pumps_repair" data-id="3"></td> <!-- Подпиточные насосы: в ремонте -->
-
-<td rowspan="2" class="editable" data-field="Fuel_tanks_all" data-id="3"></td> <!-- Топливные ёмкости: всего -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_volume" data-id="3"></td> <!-- Топливные ёмкости: объём, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_working" data-id="3"></td> <!-- Топливные ёмкости: в работе -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_reserve" data-id="3"></td> <!-- Топливные ёмкости: в резерве -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_rest_morning" data-id="3"></td> <!-- Остаток топлива на утро, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_rest_day" data-id="3"></td> <!-- Расход топлива за сутки, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_repair" data-id="3"></td> <!-- Топливные ёмкости: в ремонте -->
-
-<td rowspan="2" class="editable" data-field="Water_capacity_all" data-id="3"></td> <!-- Ёмкости воды: всего -->
-<td rowspan="2" class="editable" data-field="Water_capacity_volume" data-id="3"></td> <!-- Ёмкости воды: объём, м³ -->
-<td rowspan="2" class="editable" data-field="Water_capacity_working" data-id="3"></td> <!-- Ёмкости воды: в работе -->
-<td rowspan="2" class="editable" data-field="Water_capacity_reserve" data-id="3"></td> <!-- Ёмкости воды: в резерве -->
-<td rowspan="2" class="editable" data-field="Water_capacity_repair" data-id="3"></td> <!-- Ёмкости воды: в ремонте -->
-
-<td class="editable" data-field="temp_outdoor" data-id="3"></td> <!-- t°C воды: наружная -->
-<td class="editable" data-field="temp_supply" data-id="3"></td> <!-- t°C воды: подача -->
-<td class="editable" data-field="temp_return" data-id="3"></td> <!-- t°C воды: обратка -->
-
-<td class="editable" data-field="temp_graph_supply" data-id="3"></td> <!-- t°C воды по ТГ: подача -->
-<td class="editable" data-field="temp_graph_return" data-id="3"></td> <!-- t°C воды по ТГ: обратка -->
-
-<td class="editable" data-field="pressure_supply" data-id="3"></td> <!-- Давление на подаче, кгс/см² -->
-<td class="editable" data-field="pressure_return" data-id="3"></td> <!-- Давление на обратке, кгс/см² -->
-
-<td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="3"></td> <!-- Расход подпиточной воды за сутки, м³ -->
-
-<td rowspan="2" class="editable" data-field="staff_night" data-id="3"></td> <!-- Дежурный котельной: ночь -->
-<td rowspan="2" class="editable" data-field="staff_day" data-id="3"></td> <!-- Дежурный котельной: день -->
-
-<td rowspan="2" class="editable" data-field="downtime_today" data-id="3"></td> <!-- Простой за сегодня, ч -->
-<td rowspan="2" class="editable" data-field="downtime_total" data-id="3"></td> <!-- Простой итоговый, ч -->
-<td rowspan="2" class="editable" data-field="notes" data-id="3"></td> <!-- Примечание -->
+  <td rowspan="2" class="editable" data-field="feed_pumps_repair" data-id="3">{{ data[3].feed_pumps_repair if data and data.get(3) and data[3].feed_pumps_repair else '' }}</td> <!-- Подпиточные насосы: в ремонте -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_total" data-id="3">{{ data[3].fuel_tanks_total if data and data.get(3) and data[3].fuel_tanks_total else '' }}</td> <!-- Топливные ёмкости: всего -->
+  <td rowspan="2" class="editable" data-field="fuel_tank_volume" data-id="3">{{ data[3].fuel_tank_volume if data and data.get(3) and data[3].fuel_tank_volume else '' }}</td> <!-- Топливные ёмкости: объём, м³ -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_working" data-id="3">{{ data[3].fuel_tanks_working if data and data.get(3) and data[3].fuel_tanks_working else '' }}</td> <!-- Топливные ёмкости: в работе -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_reserve" data-id="3">{{ data[3].fuel_tanks_reserve if data and data.get(3) and data[3].fuel_tanks_reserve else '' }}</td> <!-- Топливные ёмкости: в резерве -->
+  <td rowspan="2" class="editable" data-field="fuel_morning_balance" data-id="3">{{ data[3].fuel_morning_balance if data and data.get(3) and data[3].fuel_morning_balance else '' }}</td> <!-- Остаток топлива на утро, м³ -->
+  <td rowspan="2" class="editable" data-field="fuel_daily_consumption" data-id="3">{{ data[3].fuel_daily_consumption if data and data.get(3) and data[3].fuel_daily_consumption else '' }}</td> <!-- Расход топлива за сутки, м³ -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_repair" data-id="3">{{ data[3].fuel_tanks_repair if data and data.get(3) and data[3].fuel_tanks_repair else '' }}</td> <!-- Топливные ёмкости: в ремонте -->
+  <td rowspan="2" class="editable" data-field="water_tanks_total" data-id="3">{{ data[3].water_tanks_total if data and data.get(3) and data[3].water_tanks_total else '' }}</td> <!-- Ёмкости воды: всего -->
+  <td rowspan="2" class="editable" data-field="water_tank_volume" data-id="3">{{ data[3].water_tank_volume if data and data.get(3) and data[3].water_tank_volume else '' }}</td> <!-- Ёмкости воды: объём, м³ -->
+  <td rowspan="2" class="editable" data-field="water_tanks_working" data-id="3">{{ data[3].water_tanks_working if data and data.get(3) and data[3].water_tanks_working else '' }}</td> <!-- Ёмкости воды: в работе -->
+  <td rowspan="2" class="editable" data-field="water_tanks_reserve" data-id="3">{{ data[3].water_tanks_reserve if data and data.get(3) and data[3].water_tanks_reserve else '' }}</td> <!-- Ёмкости воды: в резерве -->
+  <td rowspan="2" class="editable" data-field="water_tanks_repair" data-id="3">{{ data[3].water_tanks_repair if data and data.get(3) and data[3].water_tanks_repair else '' }}</td> <!-- Ёмкости воды: в ремонте -->
+  <td class="editable" data-field="temp_outdoor" data-id="3">{{ data[3].temp_outdoor if data and data.get(3) and data[3].temp_outdoor else '' }}</td> <!-- t°C воды: наружная -->
+  <td class="editable" data-field="temp_supply" data-id="3">{{ data[3].temp_supply if data and data.get(3) and data[3].temp_supply else '' }}</td> <!-- t°C воды: подача -->
+  <td class="editable" data-field="temp_return" data-id="3">{{ data[3].temp_return if data and data.get(3) and data[3].temp_return else '' }}</td> <!-- t°C воды: обратка -->
+  <td class="editable" data-field="temp_graph_supply" data-id="3">{{ data[3].temp_graph_supply if data and data.get(3) and data[3].temp_graph_supply else '' }}</td> <!-- t°C воды по ТГ: подача -->
+  <td class="editable" data-field="temp_graph_return" data-id="3">{{ data[3].temp_graph_return if data and data.get(3) and data[3].temp_graph_return else '' }}</td> <!-- t°C воды по ТГ: обратка -->
+  <td class="editable" data-field="pressure_supply" data-id="3">{{ data[3].pressure_supply if data and data.get(3) and data[3].pressure_supply else '' }}</td> <!-- Давление на подаче, кгс/см² -->
+  <td class="editable" data-field="pressure_return" data-id="3">{{ data[3].pressure_return if data and data.get(3) and data[3].pressure_return else '' }}</td> <!-- Давление на обратке, кгс/см² -->
+  <td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="3">{{ data[3].water_consumption_daily if data and data.get(3) and data[3].water_consumption_daily else '' }}</td> <!-- Расход подпиточной воды за сутки, м³ -->
+  <td rowspan="2" class="editable" data-field="staff_night" data-id="3">{{ data[3].staff_night if data and data.get(3) and data[3].staff_night else '' }}</td> <!-- Дежурный котельной: ночь -->
+  <td rowspan="2" class="editable" data-field="staff_day" data-id="3">{{ data[3].staff_day if data and data.get(3) and data[3].staff_day else '' }}</td> <!-- Дежурный котельной: день -->
+  <td rowspan="2" class="editable" data-field="downtime_today" data-id="3">{{ data[3].downtime_today if data and data.get(3) and data[3].downtime_today is not none else '' }}</td> <!-- Простой за сегодня, ч -->
+  <td rowspan="2" class="editable" data-field="downtime_total" data-id="3">{{ data[3].downtime_total if data and data.get(3) and data[3].downtime_total is not none else '' }}</td> <!-- Простой итоговый, ч -->
+  <td rowspan="2" class="editable" data-field="notes" data-id="3">{{ data[3].notes if data and data.get(3) and data[3].notes else '' }}</td> <!-- Примечание -->
 </tr>
-
 
 <tr>
   <td rowspan="2">2</td>
-  <td rowspan="2">{{ data[2].boiler_model if data and data[2] else '"КИМАП-ИПАК" -3,5/"WEUSHAUPT"' }}</td>
-  <td rowspan="2">{{ data[2].equipment_year if data and data[2] else '2016' }}</td>
-<td class="editable" data-field="time_interval" data-id="4">09:00</td> <!-- Время замера -->
+  <td rowspan="2">{{ data[4].boiler_model if data and data.get(4) and data[4].boiler_model else '"КИМАП-ИПАК" -3,5/"WEUSHAUPT"' }}</td>
+  <td rowspan="2">{{ data[4].equipment_year if data and data.get(4) and data[4].equipment_year else '2016' }}</td>
 
-<td class="editable" data-field="boilers_working" data-id="4"></td> <!-- Котлы: в работе -->
-<td class="editable" data-field="boilers_reserve" data-id="4"></td> <!-- Котлы: в резерве -->
-
-
-<td class="editable" data-field="pumps_working" data-id="4"></td> <!-- Сетевые насосы: в работе -->
-<td class="editable" data-field="pumps_reserve" data-id="4"></td> <!-- Сетевые насосы: в резерве -->
-
-
-<td class="editable" data-field="feed_pumps_working" data-id="4"></td> <!-- Подпиточные насосы: в работе -->
-<td class="editable" data-field="feed_pumps_reserve" data-id="4"></td> <!-- Подпиточные насосы: в резерве -->
-
-
-
-<td class="editable" data-field="temp_outdoor" data-id="4"></td> <!-- t°C воды: наружная -->
-<td class="editable" data-field="temp_supply" data-id="4"></td> <!-- t°C воды: подача -->
-<td class="editable" data-field="temp_return" data-id="4"></td> <!-- t°C воды: обратка -->
-
-<td class="editable" data-field="temp_graph_supply" data-id="4"></td> <!-- t°C воды по ТГ: подача -->
-<td class="editable" data-field="temp_graph_return" data-id="4"></td> <!-- t°C воды по ТГ: обратка -->
-
-<td class="editable" data-field="pressure_supply" data-id="4"></td> <!-- Давление на подаче, кгс/см² -->
-<td class="editable" data-field="pressure_return" data-id="4"></td> <!-- Давление на обратке, кгс/см² -->
-
-
+  <td class="editable" data-field="time_interval" data-id="4">{{ data[4].time_interval if data and data.get(4) and data[4].time_interval else '09:00' }}</td> <!-- Время замера -->
+  <td class="editable" data-field="boilers_working" data-id="4">{{ data[4].boilers_working if data and data.get(4) and data[4].boilers_working else '' }}</td> <!-- Котлы: в работе -->
+  <td class="editable" data-field="boilers_reserve" data-id="4">{{ data[4].boilers_reserve if data and data.get(4) and data[4].boilers_reserve else '' }}</td> <!-- Котлы: в резерве -->
+  <td class="editable" data-field="pumps_working" data-id="4">{{ data[4].pumps_working if data and data.get(4) and data[4].pumps_working else '' }}</td> <!-- Сетевые насосы: в работе -->
+  <td class="editable" data-field="pumps_reserve" data-id="4">{{ data[4].pumps_reserve if data and data.get(4) and data[4].pumps_reserve else '' }}</td> <!-- Сетевые насосы: в резерве -->
+  <td class="editable" data-field="feed_pumps_working" data-id="4">{{ data[4].feed_pumps_working if data and data.get(4) and data[4].feed_pumps_working else '' }}</td> <!-- Подпиточные насосы: в работе -->
+  <td class="editable" data-field="feed_pumps_reserve" data-id="4">{{ data[4].feed_pumps_reserve if data and data.get(4) and data[4].feed_pumps_reserve else '' }}</td> <!-- Подпиточные насосы: в резерве -->
+  <td class="editable" data-field="temp_outdoor" data-id="4">{{ data[4].temp_outdoor if data and data.get(4) and data[4].temp_outdoor else '' }}</td> <!-- t°C воды: наружная -->
+  <td class="editable" data-field="temp_supply" data-id="4">{{ data[4].temp_supply if data and data.get(4) and data[4].temp_supply else '' }}</td> <!-- t°C воды: подача -->
+  <td class="editable" data-field="temp_return" data-id="4">{{ data[4].temp_return if data and data.get(4) and data[4].temp_return else '' }}</td> <!-- t°C воды: обратка -->
+  <td class="editable" data-field="temp_graph_supply" data-id="4">{{ data[4].temp_graph_supply if data and data.get(4) and data[4].temp_graph_supply else '' }}</td> <!-- t°C воды по ТГ: подача -->
+  <td class="editable" data-field="temp_graph_return" data-id="4">{{ data[4].temp_graph_return if data and data.get(4) and data[4].temp_graph_return else '' }}</td> <!-- t°C воды по ТГ: обратка -->
+  <td class="editable" data-field="pressure_supply" data-id="4">{{ data[4].pressure_supply if data and data.get(4) and data[4].pressure_supply else '' }}</td> <!-- Давление на подаче, кгс/см² -->
+  <td class="editable" data-field="pressure_return" data-id="4">{{ data[4].pressure_return if data and data.get(4) and data[4].pressure_return else '' }}</td> <!-- Давление на обратке, кгс/см² -->
 </tr>
 
 <!-- 3 БЛОК -->
-
+<tr>
+  <td class="editable" data-field="time_interval" data-id="5">{{ data[5].time_interval if data and data.get(5) and data[5].time_interval else '12:00' }}</td> <!-- Время замера -->
+  <td class="editable" data-field="boilers_working" data-id="5">{{ data[5].boilers_working if data and data.get(5) and data[5].boilers_working else '' }}</td> <!-- Котлы: в работе -->
+  <td class="editable" data-field="boilers_reserve" data-id="5">{{ data[5].boilers_reserve if data and data.get(5) and data[5].boilers_reserve else '' }}</td> <!-- Котлы: в резерве -->
+  <td rowspan="2" class="editable" data-field="boilers_repair" data-id="5">{{ data[5].boilers_repair if data and data.get(5) and data[5].boilers_repair else '' }}</td> <!-- Котлы: в ремонте -->
+  <td class="editable" data-field="pumps_working" data-id="5">{{ data[5].pumps_working if data and data.get(5) and data[5].pumps_working else '' }}</td> <!-- Сетевые насосы: в работе -->
+  <td class="editable" data-field="pumps_reserve" data-id="5">{{ data[5].pumps_reserve if data and data.get(5) and data[5].pumps_reserve else '' }}</td> <!-- Сетевые насосы: в резерве -->
+  <td rowspan="2" class="editable" data-field="pumps_repair" data-id="5">{{ data[5].pumps_repair if data and data.get(5) and data[5].pumps_repair else '' }}</td> <!-- Сетевые насосы: в ремонте -->
+  <td class="editable" data-field="feed_pumps_working" data-id="5">{{ data[5].feed_pumps_working if data and data.get(5) and data[5].feed_pumps_working else '' }}</td> <!-- Подпиточные насосы: в работе -->
+  <td class="editable" data-field="feed_pumps_reserve" data-id="5">{{ data[5].feed_pumps_reserve if data and data.get(5) and data[5].feed_pumps_reserve else '' }}</td> <!-- Подпиточные насосы: в резерве -->
+  <td rowspan="2" class="editable" data-field="feed_pumps_repair" data-id="5">{{ data[5].feed_pumps_repair if data and data.get(5) and data[5].feed_pumps_repair else '' }}</td> <!-- Подпиточные насосы: в ремонте -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_total" data-id="5">{{ data[5].fuel_tanks_total if data and data.get(5) and data[5].fuel_tanks_total else '' }}</td> <!-- Топливные ёмкости: всего -->
+  <td rowspan="2" class="editable" data-field="fuel_tank_volume" data-id="5">{{ data[5].fuel_tank_volume if data and data.get(5) and data[5].fuel_tank_volume else '' }}</td> <!-- Топливные ёмкости: объём, м³ -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_working" data-id="5">{{ data[5].fuel_tanks_working if data and data.get(5) and data[5].fuel_tanks_working else '' }}</td> <!-- Топливные ёмкости: в работе -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_reserve" data-id="5">{{ data[5].fuel_tanks_reserve if data and data.get(5) and data[5].fuel_tanks_reserve else '' }}</td> <!-- Топливные ёмкости: в резерве -->
+  <td rowspan="2" class="editable" data-field="fuel_morning_balance" data-id="5">{{ data[5].fuel_morning_balance if data and data.get(5) and data[5].fuel_morning_balance else '' }}</td> <!-- Остаток топлива на утро, м³ -->
+  <td rowspan="2" class="editable" data-field="fuel_daily_consumption" data-id="5">{{ data[5].fuel_daily_consumption if data and data.get(5) and data[5].fuel_daily_consumption else '' }}</td> <!-- Расход топлива за сутки, м³ -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_repair" data-id="5">{{ data[5].fuel_tanks_repair if data and data.get(5) and data[5].fuel_tanks_repair else '' }}</td> <!-- Топливные ёмкости: в ремонте -->
+  <td rowspan="2" class="editable" data-field="water_tanks_total" data-id="5">{{ data[5].water_tanks_total if data and data.get(5) and data[5].water_tanks_total else '' }}</td> <!-- Ёмкости воды: всего -->
+  <td rowspan="2" class="editable" data-field="water_tank_volume" data-id="5">{{ data[5].water_tank_volume if data and data.get(5) and data[5].water_tank_volume else '' }}</td> <!-- Ёмкости воды: объём, м³ -->
+  <td rowspan="2" class="editable" data-field="water_tanks_working" data-id="5">{{ data[5].water_tanks_working if data and data.get(5) and data[5].water_tanks_working else '' }}</td> <!-- Ёмкости воды: в работе -->
+  <td rowspan="2" class="editable" data-field="water_tanks_reserve" data-id="5">{{ data[5].water_tanks_reserve if data and data.get(5) and data[5].water_tanks_reserve else '' }}</td> <!-- Ёмкости воды: в резерве -->
+  <td rowspan="2" class="editable" data-field="water_tanks_repair" data-id="5">{{ data[5].water_tanks_repair if data and data.get(5) and data[5].water_tanks_repair else '' }}</td> <!-- Ёмкости воды: в ремонте -->
+  <td class="editable" data-field="temp_outdoor" data-id="5">{{ data[5].temp_outdoor if data and data.get(5) and data[5].temp_outdoor else '' }}</td> <!-- t°C воды: наружная -->
+  <td class="editable" data-field="temp_supply" data-id="5">{{ data[5].temp_supply if data and data.get(5) and data[5].temp_supply else '' }}</td> <!-- t°C воды: подача -->
+  <td class="editable" data-field="temp_return" data-id="5">{{ data[5].temp_return if data and data.get(5) and data[5].temp_return else '' }}</td> <!-- t°C воды: обратка -->
+  <td class="editable" data-field="temp_graph_supply" data-id="5">{{ data[5].temp_graph_supply if data and data.get(5) and data[5].temp_graph_supply else '' }}</td> <!-- t°C воды по ТГ: подача -->
+  <td class="editable" data-field="temp_graph_return" data-id="5">{{ data[5].temp_graph_return if data and data.get(5) and data[5].temp_graph_return else '' }}</td> <!-- t°C воды по ТГ: обратка -->
+  <td class="editable" data-field="pressure_supply" data-id="5">{{ data[5].pressure_supply if data and data.get(5) and data[5].pressure_supply else '' }}</td> <!-- Давление на подаче, кгс/см² -->
+  <td class="editable" data-field="pressure_return" data-id="5">{{ data[5].pressure_return if data and data.get(5) and data[5].pressure_return else '' }}</td> <!-- Давление на обратке, кгс/см² -->
+  <td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="5">{{ data[5].water_consumption_daily if data and data.get(5) and data[5].water_consumption_daily else '' }}</td> <!-- Расход подпиточной воды за сутки, м³ -->
+  <td rowspan="2" class="editable" data-field="staff_night" data-id="5">{{ data[5].staff_night if data and data.get(5) and data[5].staff_night else '' }}</td> <!-- Дежурный котельной: ночь -->
+  <td rowspan="2" class="editable" data-field="staff_day" data-id="5">{{ data[5].staff_day if data and data.get(5) and data[5].staff_day else '' }}</td> <!-- Дежурный котельной: день -->
+  <td rowspan="2" class="editable" data-field="downtime_today" data-id="5">{{ data[5].downtime_today if data and data.get(5) and data[5].downtime_today is not none else '' }}</td> <!-- Простой за сегодня, ч -->
+  <td rowspan="2" class="editable" data-field="downtime_total" data-id="5">{{ data[5].downtime_total if data and data.get(5) and data[5].downtime_total is not none else '' }}</td> <!-- Простой итоговый, ч -->
+  <td rowspan="2" class="editable" data-field="notes" data-id="5">{{ data[5].notes if data and data.get(5) and data[5].notes else '' }}</td> <!-- Примечание -->
 </tr>
 
 <tr>
-
-
-<td class="editable" data-field="time_interval" data-id="5">12:00</td> <!-- Время замера -->
-
-<td class="editable" data-field="boilers_working" data-id="5"></td> <!-- Котлы: в работе -->
-<td class="editable" data-field="boilers_reserve" data-id="5"></td> <!-- Котлы: в резерве -->
-<td rowspan="2" class="editable" data-field="boilers_repair" data-id="5"></td> <!-- Котлы: в ремонте -->
-
-<td class="editable" data-field="pumps_working" data-id="5"></td> <!-- Сетевые насосы: в работе -->
-<td class="editable" data-field="pumps_reserve" data-id="5"></td> <!-- Сетевые насосы: в резерве -->
-<td rowspan="2" class="editable" data-field="pumps_repair" data-id="5"></td> <!-- Сетевые насосы: в ремонте -->
-
-<td class="editable" data-field="feed_pumps_working" data-id="5"></td> <!-- Подпиточные насосы: в работе -->
-<td class="editable" data-field="feed_pumps_reserve" data-id="5"></td> <!-- Подпиточные насосы: в резерве -->
-<td rowspan="2" class="editable" data-field="feed_pumps_repair" data-id="5"></td> <!-- Подпиточные насосы: в ремонте -->
-
-<td rowspan="2" class="editable" data-field="Fuel_tanks_all" data-id="5"></td> <!-- Топливные ёмкости: всего -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_volume" data-id="5"></td> <!-- Топливные ёмкости: объём, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_working" data-id="5"></td> <!-- Топливные ёмкости: в работе -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_reserve" data-id="5"></td> <!-- Топливные ёмкости: в резерве -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_rest_morning" data-id="5"></td> <!-- Остаток топлива на утро, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_rest_day" data-id="5"></td> <!-- Расход топлива за сутки, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_repair" data-id="5"></td> <!-- Топливные ёмкости: в ремонте -->
-
-<td rowspan="2" class="editable" data-field="Water_capacity_all" data-id="5"></td> <!-- Ёмкости воды: всего -->
-<td rowspan="2" class="editable" data-field="Water_capacity_volume" data-id="5"></td> <!-- Ёмкости воды: объём, м³ -->
-<td rowspan="2" class="editable" data-field="Water_capacity_working" data-id="5"></td> <!-- Ёмкости воды: в работе -->
-<td rowspan="2" class="editable" data-field="Water_capacity_reserve" data-id="5"></td> <!-- Ёмкости воды: в резерве -->
-<td rowspan="2" class="editable" data-field="Water_capacity_repair" data-id="5"></td> <!-- Ёмкости воды: в ремонте -->
-
-<td class="editable" data-field="temp_outdoor" data-id="5"></td> <!-- t°C воды: наружная -->
-<td class="editable" data-field="temp_supply" data-id="5"></td> <!-- t°C воды: подача -->
-<td class="editable" data-field="temp_return" data-id="5"></td> <!-- t°C воды: обратка -->
-
-<td class="editable" data-field="temp_graph_supply" data-id="5"></td> <!-- t°C воды по ТГ: подача -->
-<td class="editable" data-field="temp_graph_return" data-id="5"></td> <!-- t°C воды по ТГ: обратка -->
-
-<td class="editable" data-field="pressure_supply" data-id="5"></td> <!-- Давление на подаче, кгс/см² -->
-<td class="editable" data-field="pressure_return" data-id="5"></td> <!-- Давление на обратке, кгс/см² -->
-
-<td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="5"></td> <!-- Расход подпиточной воды за сутки, м³ -->
-
-<td rowspan="2" class="editable" data-field="staff_night" data-id="5"></td> <!-- Дежурный котельной: ночь -->
-<td rowspan="2" class="editable" data-field="staff_day" data-id="5"></td> <!-- Дежурный котельной: день -->
-
-<td rowspan="2" class="editable" data-field="downtime_today" data-id="5"></td> <!-- Простой за сегодня, ч -->
-<td rowspan="2" class="editable" data-field="downtime_total" data-id="5"></td> <!-- Простой итоговый, ч -->
-<td rowspan="2" class="editable" data-field="notes" data-id="5"></td> <!-- Примечание -->
-</tr>
-
-
-<tr>
-
   <td rowspan="3">3</td>
-  <td rowspan="3">{{ data[2].boiler_model if data and data[2] else 'КВА 3,2/PG93"UNIGAS"№06140440' }}</td>
-  <td rowspan="3">{{ data[2].equipment_year if data and data[2] else '2010' }}</td>
-  
-<td class="editable" data-field="time_interval" data-id="6">15:00</td> <!-- Время замера -->
+  <td rowspan="3">{{ data[6].boiler_model if data and data.get(6) and data[6].boiler_model else 'КВА 3,2/PG93"UNIGAS"№06140440' }}</td>
+  <td rowspan="3">{{ data[6].equipment_year if data and data.get(6) and data[6].equipment_year else '2010' }}</td>
 
-<td class="editable" data-field="boilers_working" data-id="6"></td> <!-- Котлы: в работе -->
-<td class="editable" data-field="boilers_reserve" data-id="6"></td> <!-- Котлы: в резерве -->
-
-
-<td class="editable" data-field="pumps_working" data-id="6"></td> <!-- Сетевые насосы: в работе -->
-<td class="editable" data-field="pumps_reserve" data-id="6"></td> <!-- Сетевые насосы: в резерве -->
-
-
-<td class="editable" data-field="feed_pumps_working" data-id="6"></td> <!-- Подпиточные насосы: в работе -->
-<td class="editable" data-field="feed_pumps_reserve" data-id="2"></td> <!-- Подпиточные насосы: в резерве -->
-
-
-
-<td class="editable" data-field="temp_outdoor" data-id="6"></td> <!-- t°C воды: наружная -->
-<td class="editable" data-field="temp_supply" data-id="6"></td> <!-- t°C воды: подача -->
-<td class="editable" data-field="temp_return" data-id="6"></td> <!-- t°C воды: обратка -->
-
-<td class="editable" data-field="temp_graph_supply" data-id="6"></td> <!-- t°C воды по ТГ: подача -->
-<td class="editable" data-field="temp_graph_return" data-id="6"></td> <!-- t°C воды по ТГ: обратка -->
-
-<td class="editable" data-field="pressure_supply" data-id="6"></td> <!-- Давление на подаче, кгс/см² -->
-<td class="editable" data-field="pressure_return" data-id="6"></td> <!-- Давление на обратке, кгс/см² -->
-
-
+  <td class="editable" data-field="time_interval" data-id="6">{{ data[6].time_interval if data and data.get(6) and data[6].time_interval else '15:00' }}</td> <!-- Время замера -->
+  <td class="editable" data-field="boilers_working" data-id="6">{{ data[6].boilers_working if data and data.get(6) and data[6].boilers_working else '' }}</td> <!-- Котлы: в работе -->
+  <td class="editable" data-field="boilers_reserve" data-id="6">{{ data[6].boilers_reserve if data and data.get(6) and data[6].boilers_reserve else '' }}</td> <!-- Котлы: в резерве -->
+  <td class="editable" data-field="pumps_working" data-id="6">{{ data[6].pumps_working if data and data.get(6) and data[6].pumps_working else '' }}</td> <!-- Сетевые насосы: в работе -->
+  <td class="editable" data-field="pumps_reserve" data-id="6">{{ data[6].pumps_reserve if data and data.get(6) and data[6].pumps_reserve else '' }}</td> <!-- Сетевые насосы: в резерве -->
+  <td class="editable" data-field="feed_pumps_working" data-id="6">{{ data[6].feed_pumps_working if data and data.get(6) and data[6].feed_pumps_working else '' }}</td> <!-- Подпиточные насосы: в работе -->
+  <td class="editable" data-field="feed_pumps_reserve" data-id="6">{{ data[6].feed_pumps_reserve if data and data.get(6) and data[6].feed_pumps_reserve else '' }}</td> <!-- Подпиточные насосы: в резерве -->
+  <td class="editable" data-field="temp_outdoor" data-id="6">{{ data[6].temp_outdoor if data and data.get(6) and data[6].temp_outdoor else '' }}</td> <!-- t°C воды: наружная -->
+  <td class="editable" data-field="temp_supply" data-id="6">{{ data[6].temp_supply if data and data.get(6) and data[6].temp_supply else '' }}</td> <!-- t°C воды: подача -->
+  <td class="editable" data-field="temp_return" data-id="6">{{ data[6].temp_return if data and data.get(6) and data[6].temp_return else '' }}</td> <!-- t°C воды: обратка -->
+  <td class="editable" data-field="temp_graph_supply" data-id="6">{{ data[6].temp_graph_supply if data and data.get(6) and data[6].temp_graph_supply else '' }}</td> <!-- t°C воды по ТГ: подача -->
+  <td class="editable" data-field="temp_graph_return" data-id="6">{{ data[6].temp_graph_return if data and data.get(6) and data[6].temp_graph_return else '' }}</td> <!-- t°C воды по ТГ: обратка -->
+  <td class="editable" data-field="pressure_supply" data-id="6">{{ data[6].pressure_supply if data and data.get(6) and data[6].pressure_supply else '' }}</td> <!-- Давление на подаче, кгс/см² -->
+  <td class="editable" data-field="pressure_return" data-id="6">{{ data[6].pressure_return if data and data.get(6) and data[6].pressure_return else '' }}</td> <!-- Давление на обратке, кгс/см² -->
 </tr>
 
-
-
-
-  <!-- 4 БЛОК -->
-
+<!-- 4 БЛОК -->
+<tr>
+  <td class="editable" data-field="time_interval" data-id="7">{{ data[7].time_interval if data and data.get(7) and data[7].time_interval else '18:00' }}</td> <!-- Время замера -->
+  <td class="editable" data-field="boilers_working" data-id="7">{{ data[7].boilers_working if data and data.get(7) and data[7].boilers_working else '' }}</td> <!-- Котлы: в работе -->
+  <td class="editable" data-field="boilers_reserve" data-id="7">{{ data[7].boilers_reserve if data and data.get(7) and data[7].boilers_reserve else '' }}</td> <!-- Котлы: в резерве -->
+  <td rowspan="2" class="editable" data-field="boilers_repair" data-id="7">{{ data[7].boilers_repair if data and data.get(7) and data[7].boilers_repair else '' }}</td> <!-- Котлы: в ремонте -->
+  <td class="editable" data-field="pumps_working" data-id="7">{{ data[7].pumps_working if data and data.get(7) and data[7].pumps_working else '' }}</td> <!-- Сетевые насосы: в работе -->
+  <td class="editable" data-field="pumps_reserve" data-id="7">{{ data[7].pumps_reserve if data and data.get(7) and data[7].pumps_reserve else '' }}</td> <!-- Сетевые насосы: в резерве -->
+  <td rowspan="2" class="editable" data-field="pumps_repair" data-id="7">{{ data[7].pumps_repair if data and data.get(7) and data[7].pumps_repair else '' }}</td> <!-- Сетевые насосы: в ремонте -->
+  <td class="editable" data-field="feed_pumps_working" data-id="7">{{ data[7].feed_pumps_working if data and data.get(7) and data[7].feed_pumps_working else '' }}</td> <!-- Подпиточные насосы: в работе -->
+  <td class="editable" data-field="feed_pumps_reserve" data-id="7">{{ data[7].feed_pumps_reserve if data and data.get(7) and data[7].feed_pumps_reserve else '' }}</td> <!-- Подпиточные насосы: в резерве -->
+  <td rowspan="2" class="editable" data-field="feed_pumps_repair" data-id="7">{{ data[7].feed_pumps_repair if data and data.get(7) and data[7].feed_pumps_repair else '' }}</td> <!-- Подпиточные насосы: в ремонте -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_total" data-id="7">{{ data[7].fuel_tanks_total if data and data.get(7) and data[7].fuel_tanks_total else '' }}</td> <!-- Топливные ёмкости: всего -->
+  <td rowspan="2" class="editable" data-field="fuel_tank_volume" data-id="7">{{ data[7].fuel_tank_volume if data and data.get(7) and data[7].fuel_tank_volume else '' }}</td> <!-- Топливные ёмкости: объём, м³ -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_working" data-id="7">{{ data[7].fuel_tanks_working if data and data.get(7) and data[7].fuel_tanks_working else '' }}</td> <!-- Топливные ёмкости: в работе -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_reserve" data-id="7">{{ data[7].fuel_tanks_reserve if data and data.get(7) and data[7].fuel_tanks_reserve else '' }}</td> <!-- Топливные ёмкости: в резерве -->
+  <td rowspan="2" class="editable" data-field="fuel_morning_balance" data-id="7">{{ data[7].fuel_morning_balance if data and data.get(7) and data[7].fuel_morning_balance else '' }}</td> <!-- Остаток топлива на утро, м³ -->
+  <td rowspan="2" class="editable" data-field="fuel_daily_consumption" data-id="7">{{ data[7].fuel_daily_consumption if data and data.get(7) and data[7].fuel_daily_consumption else '' }}</td> <!-- Расход топлива за сутки, м³ -->
+  <td rowspan="2" class="editable" data-field="fuel_tanks_repair" data-id="7">{{ data[7].fuel_tanks_repair if data and data.get(7) and data[7].fuel_tanks_repair else '' }}</td> <!-- Топливные ёмкости: в ремонте -->
+  <td rowspan="2" class="editable" data-field="water_tanks_total" data-id="7">{{ data[7].water_tanks_total if data and data.get(7) and data[7].water_tanks_total else '' }}</td> <!-- Ёмкости воды: всего -->
+  <td rowspan="2" class="editable" data-field="water_tank_volume" data-id="7">{{ data[7].water_tank_volume if data and data.get(7) and data[7].water_tank_volume else '' }}</td> <!-- Ёмкости воды: объём, м³ -->
+  <td rowspan="2" class="editable" data-field="water_tanks_working" data-id="7">{{ data[7].water_tanks_working if data and data.get(7) and data[7].water_tanks_working else '' }}</td> <!-- Ёмкости воды: в работе -->
+  <td rowspan="2" class="editable" data-field="water_tanks_reserve" data-id="7">{{ data[7].water_tanks_reserve if data and data.get(7) and data[7].water_tanks_reserve else '' }}</td> <!-- Ёмкости воды: в резерве -->
+  <td rowspan="2" class="editable" data-field="water_tanks_repair" data-id="7">{{ data[7].water_tanks_repair if data and data.get(7) and data[7].water_tanks_repair else '' }}</td> <!-- Ёмкости воды: в ремонте -->
+  <td class="editable" data-field="temp_outdoor" data-id="7">{{ data[7].temp_outdoor if data and data.get(7) and data[7].temp_outdoor else '' }}</td> <!-- t°C воды: наружная -->
+  <td class="editable" data-field="temp_supply" data-id="7">{{ data[7].temp_supply if data and data.get(7) and data[7].temp_supply else '' }}</td> <!-- t°C воды: подача -->
+  <td class="editable" data-field="temp_return" data-id="7">{{ data[7].temp_return if data and data.get(7) and data[7].temp_return else '' }}</td> <!-- t°C воды: обратка -->
+  <td class="editable" data-field="temp_graph_supply" data-id="7">{{ data[7].temp_graph_supply if data and data.get(7) and data[7].temp_graph_supply else '' }}</td> <!-- t°C воды по ТГ: подача -->
+  <td class="editable" data-field="temp_graph_return" data-id="7">{{ data[7].temp_graph_return if data and data.get(7) and data[7].temp_graph_return else '' }}</td> <!-- t°C воды по ТГ: обратка -->
+  <td class="editable" data-field="pressure_supply" data-id="7">{{ data[7].pressure_supply if data and data.get(7) and data[7].pressure_supply else '' }}</td> <!-- Давление на подаче, кгс/см² -->
+  <td class="editable" data-field="pressure_return" data-id="7">{{ data[7].pressure_return if data and data.get(7) and data[7].pressure_return else '' }}</td> <!-- Давление на обратке, кгс/см² -->
+  <td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="7">{{ data[7].water_consumption_daily if data and data.get(7) and data[7].water_consumption_daily else '' }}</td> <!-- Расход подпиточной воды за сутки, м³ -->
+  <td rowspan="2" class="editable" data-field="staff_night" data-id="7">{{ data[7].staff_night if data and data.get(7) and data[7].staff_night else '' }}</td> <!-- Дежурный котельной: ночь -->
+  <td rowspan="2" class="editable" data-field="staff_day" data-id="7">{{ data[7].staff_day if data and data.get(7) and data[7].staff_day else '' }}</td> <!-- Дежурный котельной: день -->
+  <td rowspan="2" class="editable" data-field="downtime_today" data-id="7">{{ data[7].downtime_today if data and data.get(7) and data[7].downtime_today is not none else '' }}</td> <!-- Простой за сегодня, ч -->
+  <td rowspan="2" class="editable" data-field="downtime_total" data-id="7">{{ data[7].downtime_total if data and data.get(7) and data[7].downtime_total is not none else '' }}</td> <!-- Простой итоговый, ч -->
+  <td rowspan="2" class="editable" data-field="notes" data-id="7">{{ data[7].notes if data and data.get(7) and data[7].notes else '' }}</td> <!-- Примечание -->
 </tr>
 
 <tr>
-
-
-<td class="editable" data-field="time_interval" data-id="7">18:00</td> <!-- Время замера -->
-
-<td class="editable" data-field="boilers_working" data-id="7"></td> <!-- Котлы: в работе -->
-<td class="editable" data-field="boilers_reserve" data-id="7"></td> <!-- Котлы: в резерве -->
-<td rowspan="2" class="editable" data-field="boilers_repair" data-id="7"></td> <!-- Котлы: в ремонте -->
-
-<td class="editable" data-field="pumps_working" data-id="7"></td> <!-- Сетевые насосы: в работе -->
-<td class="editable" data-field="pumps_reserve" data-id="7"></td> <!-- Сетевые насосы: в резерве -->
-<td rowspan="2" class="editable" data-field="pumps_repair" data-id="7"></td> <!-- Сетевые насосы: в ремонте -->
-
-<td class="editable" data-field="feed_pumps_working" data-id="7"></td> <!-- Подпиточные насосы: в работе -->
-<td class="editable" data-field="feed_pumps_reserve" data-id="7"></td> <!-- Подпиточные насосы: в резерве -->
-<td rowspan="2" class="editable" data-field="feed_pumps_repair" data-id="7"></td> <!-- Подпиточные насосы: в ремонте -->
-
-<td rowspan="2" class="editable" data-field="Fuel_tanks_all" data-id="7"></td> <!-- Топливные ёмкости: всего -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_volume" data-id="7"></td> <!-- Топливные ёмкости: объём, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_working" data-id="7"></td> <!-- Топливные ёмкости: в работе -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_reserve" data-id="7"></td> <!-- Топливные ёмкости: в резерве -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_rest_morning" data-id="7"></td> <!-- Остаток топлива на утро, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_rest_day" data-id="7"></td> <!-- Расход топлива за сутки, м³ -->
-<td rowspan="2" class="editable" data-field="Fuel_tanks_repair" data-id="7"></td> <!-- Топливные ёмкости: в ремонте -->
-
-<td rowspan="2" class="editable" data-field="Water_capacity_all" data-id="7"></td> <!-- Ёмкости воды: всего -->
-<td rowspan="2" class="editable" data-field="Water_capacity_volume" data-id="7"></td> <!-- Ёмкости воды: объём, м³ -->
-<td rowspan="2" class="editable" data-field="Water_capacity_working" data-id="7"></td> <!-- Ёмкости воды: в работе -->
-<td rowspan="2" class="editable" data-field="Water_capacity_reserve" data-id="7"></td> <!-- Ёмкости воды: в резерве -->
-<td rowspan="2" class="editable" data-field="Water_capacity_repair" data-id="7"></td> <!-- Ёмкости воды: в ремонте -->
-
-<td class="editable" data-field="temp_outdoor" data-id="7"></td> <!-- t°C воды: наружная -->
-<td class="editable" data-field="temp_supply" data-id="7"></td> <!-- t°C воды: подача -->
-<td class="editable" data-field="temp_return" data-id="7"></td> <!-- t°C воды: обратка -->
-
-<td class="editable" data-field="temp_graph_supply" data-id="7"></td> <!-- t°C воды по ТГ: подача -->
-<td class="editable" data-field="temp_graph_return" data-id="7"></td> <!-- t°C воды по ТГ: обратка -->
-
-<td class="editable" data-field="pressure_supply" data-id="7"></td> <!-- Давление на подаче, кгс/см² -->
-<td class="editable" data-field="pressure_return" data-id="7"></td> <!-- Давление на обратке, кгс/см² -->
-
-<td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="7"></td> <!-- Расход подпиточной воды за сутки, м³ -->
-
-<td rowspan="2" class="editable" data-field="staff_night" data-id="7"></td> <!-- Дежурный котельной: ночь -->
-<td rowspan="2" class="editable" data-field="staff_day" data-id="7"></td> <!-- Дежурный котельной: день -->
-
-<td rowspan="2" class="editable" data-field="downtime_today" data-id="7"></td> <!-- Простой за сегодня, ч -->
-<td rowspan="2" class="editable" data-field="downtime_total" data-id="7"></td> <!-- Простой итоговый, ч -->
-<td rowspan="2" class="editable" data-field="notes" data-id="7"></td> <!-- Примечание -->
-</tr>
-
-
-<tr>
-
-
-<td class="editable" data-field="time_interval" data-id="8">21:00</td> <!-- Время замера -->
-
-<td class="editable" data-field="boilers_working" data-id="8"></td> <!-- Котлы: в работе -->
-<td class="editable" data-field="boilers_reserve" data-id="8"></td> <!-- Котлы: в резерве -->
-
-
-<td class="editable" data-field="pumps_working" data-id="8"></td> <!-- Сетевые насосы: в работе -->
-<td class="editable" data-field="pumps_reserve" data-id="8"></td> <!-- Сетевые насосы: в резерве -->
-
-
-<td class="editable" data-field="feed_pumps_working" data-id="8"></td> <!-- Подпиточные насосы: в работе -->
-<td class="editable" data-field="feed_pumps_reserve" data-id="8"></td> <!-- Подпиточные насосы: в резерве -->
-
-
-
-<td class="editable" data-field="temp_outdoor" data-id="8"></td> <!-- t°C воды: наружная -->
-<td class="editable" data-field="temp_supply" data-id="8"></td> <!-- t°C воды: подача -->
-<td class="editable" data-field="temp_return" data-id="8"></td> <!-- t°C воды: обратка -->
-
-<td class="editable" data-field="temp_graph_supply" data-id="8"></td> <!-- t°C воды по ТГ: подача -->
-<td class="editable" data-field="temp_graph_return" data-id="8"></td> <!-- t°C воды по ТГ: обратка -->
-
-<td class="editable" data-field="pressure_supply" data-id="8"></td> <!-- Давление на подаче, кгс/см² -->
-<td class="editable" data-field="pressure_return" data-id="8"></td> <!-- Давление на обратке, кгс/см² -->
-
-
+  <td class="editable" data-field="time_interval" data-id="8">{{ data[8].time_interval if data and data.get(8) and data[8].time_interval else '21:00' }}</td> <!-- Время замера -->
+  <td class="editable" data-field="boilers_working" data-id="8">{{ data[8].boilers_working if data and data.get(8) and data[8].boilers_working else '' }}</td> <!-- Котлы: в работе -->
+  <td class="editable" data-field="boilers_reserve" data-id="8">{{ data[8].boilers_reserve if data and data.get(8) and data[8].boilers_reserve else '' }}</td> <!-- Котлы: в резерве -->
+  <td class="editable" data-field="pumps_working" data-id="8">{{ data[8].pumps_working if data and data.get(8) and data[8].pumps_working else '' }}</td> <!-- Сетевые насосы: в работе -->
+  <td class="editable" data-field="pumps_reserve" data-id="8">{{ data[8].pumps_reserve if data and data.get(8) and data[8].pumps_reserve else '' }}</td> <!-- Сетевые насосы: в резерве -->
+  <td class="editable" data-field="feed_pumps_working" data-id="8">{{ data[8].feed_pumps_working if data and data.get(8) and data[8].feed_pumps_working else '' }}</td> <!-- Подпиточные насосы: в работе -->
+  <td class="editable" data-field="feed_pumps_reserve" data-id="8">{{ data[8].feed_pumps_reserve if data and data.get(8) and data[8].feed_pumps_reserve else '' }}</td> <!-- Подпиточные насосы: в резерве -->
+  <td class="editable" data-field="temp_outdoor" data-id="8">{{ data[8].temp_outdoor if data and data.get(8) and data[8].temp_outdoor else '' }}</td> <!-- t°C воды: наружная -->
+  <td class="editable" data-field="temp_supply" data-id="8">{{ data[8].temp_supply if data and data.get(8) and data[8].temp_supply else '' }}</td> <!-- t°C воды: подача -->
+  <td class="editable" data-field="temp_return" data-id="8">{{ data[8].temp_return if data and data.get(8) and data[8].temp_return else '' }}</td> <!-- t°C воды: обратка -->
+  <td class="editable" data-field="temp_graph_supply" data-id="8">{{ data[8].temp_graph_supply if data and data.get(8) and data[8].temp_graph_supply else '' }}</td> <!-- t°C воды по ТГ: подача -->
+  <td class="editable" data-field="temp_graph_return" data-id="8">{{ data[8].temp_graph_return if data and data.get(8) and data[8].temp_graph_return else '' }}</td> <!-- t°C воды по ТГ: обратка -->
+  <td class="editable" data-field="pressure_supply" data-id="8">{{ data[8].pressure_supply if data and data.get(8) and data[8].pressure_supply else '' }}</td> <!-- Давление на подаче, кгс/см² -->
+  <td class="editable" data-field="pressure_return" data-id="8">{{ data[8].pressure_return if data and data.get(8) and data[8].pressure_return else '' }}</td> <!-- Давление на обратке, кгс/см² -->
 </tr>
 
 
