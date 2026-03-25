@@ -14,12 +14,8 @@ DATABASE_URL = os.environ.get('DATABASE_URL') or \
 def init_db():
     conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
     cur = conn.cursor()
-    
-    # Удаляем старые таблицы, чтобы создать их заново с правильной структурой
-    cur.execute("DROP TABLE IF EXISTS records_archive;")
-    cur.execute("DROP TABLE IF EXISTS records;")
-    
-    # Таблица users
+
+    # users
     cur.execute("""
     CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
@@ -28,8 +24,8 @@ def init_db():
         role VARCHAR(20) DEFAULT 'operator'
     );
     """)
-    
-    # Таблица records (ПОЛНАЯ СТРУКТУРА)
+
+    # records
     cur.execute("""
     CREATE TABLE IF NOT EXISTS records (
         id SERIAL PRIMARY KEY,
@@ -37,8 +33,8 @@ def init_db():
         boiler_number INTEGER,
         boiler_location TEXT,
         boiler_contact TEXT,
-        equipment_number,
-        boiler_model,
+        equipment_number INTEGER,
+        boiler_model TEXT,
         burner_model TEXT,
         equipment_year TEXT,
         time_interval TEXT,
@@ -78,8 +74,8 @@ def init_db():
         downtime_total INTEGER DEFAULT 0
     );
     """)
-    
-    # Таблица records_archive (ПОЛНАЯ СТРУКТУРА)
+
+    # records_archive
     cur.execute("""
     CREATE TABLE IF NOT EXISTS records_archive (
         id SERIAL PRIMARY KEY,
@@ -130,12 +126,28 @@ def init_db():
         downtime_total INTEGER DEFAULT 0
     );
     """)
-    
-    # Создаём пользователей, если их нет
-    cur.execute("SELECT COUNT(*) FROM users")
-    if cur.fetchone()[0] == 0:
+
+    # миграции для старых БД
+    cur.execute("""
+    ALTER TABLE records
+    ADD COLUMN IF NOT EXISTS burner_model TEXT,
+    ADD COLUMN IF NOT EXISTS downtime_today INTEGER DEFAULT 0,
+    ADD COLUMN IF NOT EXISTS downtime_total INTEGER DEFAULT 0;
+    """)
+
+    cur.execute("""
+    ALTER TABLE records_archive
+    ADD COLUMN IF NOT EXISTS burner_model TEXT,
+    ADD COLUMN IF NOT EXISTS downtime_today INTEGER DEFAULT 0,
+    ADD COLUMN IF NOT EXISTS downtime_total INTEGER DEFAULT 0;
+    """)
+
+    # пользователи
+    cur.execute("SELECT COUNT(*) AS cnt FROM users")
+    row = cur.fetchone()
+    if row['cnt'] == 0:
         cur.execute("""
-        INSERT INTO users (username, password, role) VALUES 
+        INSERT INTO users (username, password, role) VALUES
         ('admin', '1313', 'admin'),
         ('admin2', '1313', 'admin'),
         ('user1', '1313', 'operator'),
@@ -147,10 +159,10 @@ def init_db():
         ('user7', '1313', 'operator'),
         ('user8', '1313', 'operator')
         """)
-    
+
     conn.commit()
     conn.close()
-    print("✅ Таблицы базы данных созданы/обновлены")
+    print("✅ База данных инициализирована")
 
     
 
@@ -462,20 +474,51 @@ def add():
     if not admin():
         return jsonify({'status': 'error', 'message': 'Нет прав'})
 
-    c = get_conn().cursor()
-    c.execute("SELECT MAX(id) AS m FROM records")
-    new_id = (c.fetchone()['m'] or 0) + 1
+    conn = get_conn()
+    c = conn.cursor()
 
-    c.execute("""
-    INSERT INTO records_archive
-    SELECT *, NOW()
-    FROM records
-""")
+    try:
+        c.execute("SELECT COALESCE(MAX(id), 0) + 1 AS new_id FROM records")
+        new_id = c.fetchone()['new_id']
 
-    c.connection.commit()
-    c.connection.close()
-    return jsonify({'status': 'ok'})
+        c.execute("""
+            INSERT INTO records (
+                id, date, boiler_number, boiler_location, boiler_contact,
+                equipment_number, boiler_model, burner_model, equipment_year, time_interval,
+                boilers_working, boilers_reserve, boilers_repair,
+                pumps_working, pumps_reserve, pumps_repair,
+                feed_pumps_working, feed_pumps_reserve, feed_pumps_repair,
+                fuel_tanks_total, fuel_tank_volume, fuel_tanks_working,
+                fuel_tanks_reserve, fuel_morning_balance, fuel_daily_consumption,
+                fuel_tanks_repair, water_tanks_total, water_tank_volume,
+                water_tanks_working, water_tanks_reserve, water_tanks_repair,
+                temp_outdoor, temp_supply, temp_return,
+                temp_graph_supply, temp_graph_return,
+                pressure_supply, pressure_return,
+                water_consumption_daily, staff_night, staff_day, notes,
+                downtime_today, downtime_total
+            ) VALUES (
+                %s, CURRENT_DATE::text, 0, '', '',
+                0, '', '', '', '',
+                '', '', '',
+                '', '', '',
+                '', '', '',
+                '', '', '', '', '', '',
+                '', '', '', '', '', '',
+                '', '', '', '', '',
+                '', '', '',
+                '', '', '', '',
+                0, 0
+            )
+        """, (new_id,))
 
+        conn.commit()
+        return jsonify({'status': 'ok', 'id': new_id})
+    except Exception as e:
+        conn.rollback()
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+    finally:
+        conn.close()
 
 @app.route('/archive', methods=['POST'])
 def archive():
