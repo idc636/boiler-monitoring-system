@@ -355,6 +355,7 @@ def archive_records():
                 staff_night = '',
                 staff_day = '',
                 notes = '',
+                downtime_total = COALESCE(downtime_total, 0) + COALESCE(downtime_today, 0),
                 downtime_today = 0
         """)
 
