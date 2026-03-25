@@ -656,14 +656,16 @@ def archive_data(date):
 
 # ===================== AUTO INIT =====================
 
-try:
-    init_db()
-    print("✅ База данных инициализирована")
-except Exception as e:
-    print(f"⚠️ Ошибка инициализации БД: {e}")
+# ===================== AUTO-INIT =====================
+# try:
+#     init_db()
+#     print("✅ База данных инициализирована")
+# except Exception as e:
+#     print(f"⚠️ Ошибка инициализации БД: {e}")
 
 
 # ===================== START =====================
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+if __name__ == '__main__':
+    init_db()
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
