@@ -143,7 +143,10 @@ thead th {
 
 <td class="editable" data-field="time_interval" data-id="1">00:00</td> <!-- Время замера -->
 
-<td class="editable" data-field="boilers_working" data-id="1"></td> <!-- Котлы: в работе -->
+<td class="editable" data-field="boilers_working" data-id="1">
+  {{ data[1].boilers_working if data and data.get(1) and data[1].boilers_working else '' }}
+</td>
+  <!-- Котлы: в работе -->
 <td class="editable" data-field="boilers_reserve" data-id="1"></td> <!-- Котлы: в резерве -->
 <td rowspan="2" class="editable" data-field="boilers_repair" data-id="1"></td> <!-- Котлы: в ремонте -->
 
