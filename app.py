@@ -375,21 +375,34 @@ def can_edit_record(user_id, record_boiler_number):
     cur.close()
     conn.close()
 
+    # 1. Проверка: это админ?
     if not u or u["role"] != "admin":
         return False  # Операторы не редактируют
 
     assigned = u.get("assigned_boiler")
-    if assigned is None:
-        return True  # Глобальный админ (без привязки) может всё
-
-    # Безопасное приведение к числу
-    try:
-        rec_boiler = int(record_boiler_number)
-    except (ValueError, TypeError):
-        return False  # Если номер не число → доступ закрыт
     
-    # Строгое сравнение: админ меняет только свою котельную
-    return int(assigned) == rec_boiler
+    # 2. Если у админа нет привязки (NULL) — доступ полный
+    if assigned is None:
+        return True
+
+    # 3. Безопасная обработка чисел (чтобы "1" из текста считалось как 1)
+    try:
+        user_boiler = int(assigned)
+        rec_boiler = int(record_boiler_number) if record_boiler_number is not None else 0
+    except (ValueError, TypeError):
+        rec_boiler = 0
+
+    # 4. ГЛАВНАЯ ЛОГИКА:
+    # Разрешаем, ЕСЛИ:
+    # - Запись "пустая" (0), чтобы админ мог её заполнить и назначить котельную
+    # - ИЛИ номер записи совпадает с номером котельной админа
+    if rec_boiler == 0 or rec_boiler == user_boiler:
+        return True
+    
+    # Во всех остальных случаях (например, админ 1 лезет в запись 2) — блок
+    return False
+
+
     
 
 # ===================== ROUTES =====================
