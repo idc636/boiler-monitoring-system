@@ -376,18 +376,20 @@ def can_edit_record(user_id, record_boiler_number):
     conn.close()
 
     if not u or u["role"] != "admin":
-        return False
+        return False  # Операторы не редактируют
 
     assigned = u.get("assigned_boiler")
     if assigned is None:
-        return True  # Глобальный админ
-    
-    # Если у записи нет номера котельной — разрешаем (черновик)
-    if record_boiler_number is None or record_boiler_number == "" or record_boiler_number == 0:
-        return True
+        return True  # Глобальный админ (без привязки) может всё
+
+    # Безопасное приведение к числу
+    try:
+        rec_boiler = int(record_boiler_number)
+    except (ValueError, TypeError):
+        return False  # Если номер не число → доступ закрыт
     
     # Строгое сравнение: админ меняет только свою котельную
-    return int(assigned) == int(record_boiler_number)
+    return int(assigned) == rec_boiler
     
 
 # ===================== ROUTES =====================
