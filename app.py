@@ -374,13 +374,25 @@ def can_edit_record(user_id, record_boiler_number):
     cur.close()
     conn.close()
 
+    # 🔍 ОТЛАДКА: раскомментируй эту строку, чтобы видеть в логах Railway, что происходит
+    # print(f"🔍 DEBUG: user_id={user_id}, role={u['role'] if u else None}, assigned={u['assigned_boiler'] if u else None}, record_boiler={record_boiler_number}")
+
     if not u or u["role"] != "admin":
-        return False  # Операторы не редактируют
-    
-    # Если assigned_boiler = NULL, админ редактирует всё (глобальный доступ)
-    if u["assigned_boiler"] is None:
+        return False
+
+    assigned = u.get("assigned_boiler")
+    if assigned is None:
         return True
-    return u["assigned_boiler"] == record_boiler_number
+    
+    try:
+        if record_boiler_number is None or record_boiler_number == "" or record_boiler_number == 0:
+            return True
+        rec_boiler = int(record_boiler_number)
+    except (ValueError, TypeError):
+        return True
+    
+    return int(assigned) == rec_boiler
+    
 
 # ===================== ROUTES =====================
 
