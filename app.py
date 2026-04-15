@@ -192,29 +192,20 @@ def admin():
     return bool(row and row["role"] == "admin")
 
 
-def can_edit_record(user_id, boiler_number):
+def can_edit_record(user_id, record_boiler_number):
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("SELECT username, role FROM users WHERE id = %s", (user_id,))
-    user = cur.fetchone()
+    cur.execute("SELECT role, assigned_boiler FROM users WHERE id = %s", (user_id,))
+    u = cur.fetchone()
     cur.close()
     conn.close()
 
-    if not user:
+    if not u or u["role"] != "admin":
         return False
 
-    if user["role"] == "admin":
-        return True
-
-    if user["role"] == "operator" and user["username"].startswith("user"):
-        try:
-            user_num = int(user["username"][4:])
-            return 1 <= user_num <= 4 and user_num == boiler_number
-        except (ValueError, IndexError):
-            return False
-
-    return False
-
+    assigned = u.get("assigned_boiler")
+    # Доступ только если котельная назначена И строго совпадает с записью
+    return assigned is not None and assigned == record_boiler_number
 
 # ===================== ARCHIVE =====================
 
