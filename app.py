@@ -369,7 +369,21 @@ def archive_records():
     finally:
         cur.close()
         conn.close()
+def can_edit_record(user_id, record_boiler_number):
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT role, assigned_boiler FROM users WHERE id = %s", (user_id,))
+    u = cur.fetchone()
+    cur.close()
+    conn.close()
 
+    if not u or u["role"] != "admin":
+        return False  # Операторы не редактируют
+    
+    # Если assigned_boiler = NULL, админ редактирует всё (глобальный доступ)
+    if u["assigned_boiler"] is None:
+        return True
+    return u["assigned_boiler"] == record_boiler_number
 
 # ===================== ROUTES =====================
 
