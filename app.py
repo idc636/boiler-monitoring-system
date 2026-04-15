@@ -375,27 +375,32 @@ def can_edit_record(user_id, record_boiler_number):
     cur.close()
     conn.close()
 
-    # 1. Операторы не редактируют
+    # 1. Базовая проверка роли
     if not u or u["role"] != "admin":
         return False
 
     assigned = u.get("assigned_boiler")
-    # Если привязка не задана вообще → полный доступ
+    
+    # 2. Если у админа нет привязки — полный доступ
     if assigned is None:
         return True
 
-    # 2. Безопасное приведение к числам
-    try:
-        rec = int(record_boiler_number) if record_boiler_number not in (None, "", "0", 0) else 0
-        assigned_val = int(assigned)
-    except (ValueError, TypeError):
-        return False
+    # 3. Универсальное приведение к числу (работает с "1", 1, "0", None, "")
+    def to_int(val):
+        if val in (None, "", "0", 0):
+            return 0
+        try:
+            return int(float(val))  # float сначала, чтобы "1.0" тоже сработало
+        except (ValueError, TypeError):
+            return 0
 
-    # 3. Логика разграничения
-    if rec == 0:
-        return True  # Черновик/новая запись → разрешаем заполнить
-    return assigned_val == rec  # Строгое совпадение номеров котельных
+    user_boiler = to_int(assigned)
+    rec_boiler = to_int(record_boiler_number)
 
+    # 4. Логика: черновик (0) можно править, остальное — строго по совпадению
+    if rec_boiler == 0:
+        return True
+    return user_boiler == rec_boiler
 
 
     
