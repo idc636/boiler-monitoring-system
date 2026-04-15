@@ -375,37 +375,26 @@ def can_edit_record(user_id, record_boiler_number):
     cur.close()
     conn.close()
 
-    print(f"🔍 DEBUG START | user_id: {user_id} | incoming_boiler: '{record_boiler_number}' (type: {type(record_boiler_number).__name__})")
-
+    # 1. Операторы не редактируют
     if not u or u["role"] != "admin":
-        print("❌ BLOCKED: Not an admin")
         return False
 
     assigned = u.get("assigned_boiler")
-    print(f"🔍 DB VALUE | assigned_boiler from DB: {assigned}")
-
+    # Если привязка не задана вообще → полный доступ
     if assigned is None:
-        print("⚠️ ALLOWED: Admin has NULL assignment (global access)")
         return True
 
+    # 2. Безопасное приведение к числам
     try:
-        # Если приходит пустота или ноль → считаем черновиком
-        if record_boiler_number in (None, "", "0", 0):
-            rec_val = 0
-        else:
-            rec_val = int(record_boiler_number)
+        rec = int(record_boiler_number) if record_boiler_number not in (None, "", "0", 0) else 0
         assigned_val = int(assigned)
     except (ValueError, TypeError):
-        print("❌ BLOCKED: Type conversion failed")
         return False
 
-    if rec_val != 0 and assigned_val != rec_val:
-        print(f"🚫 BLOCKED: Admin({assigned_val}) != Record({rec_val})")
-        return False
-
-    print(f"✅ ALLOWED: Match or draft (Admin: {assigned_val}, Record: {rec_val})")
-    return True
-
+    # 3. Логика разграничения
+    if rec == 0:
+        return True  # Черновик/новая запись → разрешаем заполнить
+    return assigned_val == rec  # Строгое совпадение номеров котельных
 
 
 
