@@ -14,17 +14,17 @@
 </head>
 <body>
     <h3>АО «Ямалкомунэнерго» — Архив суточного журнала</h3>
-    
+
     <div class="date-list">
         {% for date in dates %}
-        <div class="date-item" onclick="showArchive('{{ date.archive_date.strftime('%Y-%m-%d %H:%M:%S') }}')">
-            {{ date.archive_date.strftime('%d.%m.%Y %H:%M') }}
+        <div class="date-item" onclick="showArchive('{{ date.archive_key }}')">
+            {{ date.archive_label }}
         </div>
         {% endfor %}
     </div>
-    
+
     <a href="/">← Назад к журналу</a>
-    
+
     <script>
         function showArchive(date) {
             window.location.href = '/archive/data/' + encodeURIComponent(date);
