@@ -375,32 +375,38 @@ def can_edit_record(user_id, record_boiler_number):
     cur.close()
     conn.close()
 
-    # 1. Проверка: это админ?
+    print(f"🔍 DEBUG START | user_id: {user_id} | incoming_boiler: '{record_boiler_number}' (type: {type(record_boiler_number).__name__})")
+
     if not u or u["role"] != "admin":
-        return False  # Операторы не редактируют
+        print("❌ BLOCKED: Not an admin")
+        return False
 
     assigned = u.get("assigned_boiler")
-    
-    # 2. Если у админа нет привязки (NULL) — доступ полный
+    print(f"🔍 DB VALUE | assigned_boiler from DB: {assigned}")
+
     if assigned is None:
+        print("⚠️ ALLOWED: Admin has NULL assignment (global access)")
         return True
 
-    # 3. Безопасная обработка чисел (чтобы "1" из текста считалось как 1)
     try:
-        user_boiler = int(assigned)
-        rec_boiler = int(record_boiler_number) if record_boiler_number is not None else 0
+        # Если приходит пустота или ноль → считаем черновиком
+        if record_boiler_number in (None, "", "0", 0):
+            rec_val = 0
+        else:
+            rec_val = int(record_boiler_number)
+        assigned_val = int(assigned)
     except (ValueError, TypeError):
-        rec_boiler = 0
+        print("❌ BLOCKED: Type conversion failed")
+        return False
 
-    # 4. ГЛАВНАЯ ЛОГИКА:
-    # Разрешаем, ЕСЛИ:
-    # - Запись "пустая" (0), чтобы админ мог её заполнить и назначить котельную
-    # - ИЛИ номер записи совпадает с номером котельной админа
-    if rec_boiler == 0 or rec_boiler == user_boiler:
-        return True
-    
-    # Во всех остальных случаях (например, админ 1 лезет в запись 2) — блок
-    return False
+    if rec_val != 0 and assigned_val != rec_val:
+        print(f"🚫 BLOCKED: Admin({assigned_val}) != Record({rec_val})")
+        return False
+
+    print(f"✅ ALLOWED: Match or draft (Admin: {assigned_val}, Record: {rec_val})")
+    return True
+
+
 
 
     
