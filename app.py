@@ -426,8 +426,11 @@ def login():
         cur.close()
         conn.close()
 
-        if user and request.form["password"] == user["password"]:
+        from werkzeug.security import check_password_hash
+
+        if user and check_password_hash(user["password"], request.form["password"]):
             session["user_id"] = user["id"]
+            session["role"] = user["role"]  # сохраняем роль сразу, упростит проверки прав
             return redirect(url_for("index"))
         else:
             error = "Неверный логин или пароль"
