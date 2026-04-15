@@ -368,6 +368,9 @@ def archive_records():
         conn.close()
         
 def can_edit_record(user_id, record_boiler_number):
+    # 🔍 ОТЛАДКА: пишем в консоль Railway всё, что приходит
+    print(f"🔍 [can_edit_record] user_id={user_id}, record_boiler_number='{record_boiler_number}' (type={type(record_boiler_number).__name__})")
+
     conn = get_conn()
     cur = conn.cursor()
     cur.execute("SELECT role, assigned_boiler FROM users WHERE id = %s", (user_id,))
@@ -375,33 +378,44 @@ def can_edit_record(user_id, record_boiler_number):
     cur.close()
     conn.close()
 
-    # 1. Базовая проверка роли
+    print(f"🔍 [DB] user_data={u}")
+
     if not u or u["role"] != "admin":
+        print("❌ BLOCKED: not admin")
         return False
 
     assigned = u.get("assigned_boiler")
-    
-    # 2. Если у админа нет привязки — полный доступ
+    print(f"🔍 [ASSIGNED] value={assigned}, type={type(assigned).__name__}")
+
     if assigned is None:
+        print("⚠️ ALLOWED: assigned_boiler is NULL (global admin)")
         return True
 
-    # 3. Универсальное приведение к числу (работает с "1", 1, "0", None, "")
+    # Универсальное приведение к числу
     def to_int(val):
         if val in (None, "", "0", 0):
             return 0
         try:
-            return int(float(val))  # float сначала, чтобы "1.0" тоже сработало
+            return int(float(val))
         except (ValueError, TypeError):
             return 0
 
     user_boiler = to_int(assigned)
     rec_boiler = to_int(record_boiler_number)
 
-    # 4. Логика: черновик (0) можно править, остальное — строго по совпадению
-    if rec_boiler == 0:
-        return True
-    return user_boiler == rec_boiler
+    print(f"🔍 [COMPARE] user_boiler={user_boiler}, rec_boiler={rec_boiler}")
 
+    if rec_boiler == 0:
+        print("✅ ALLOWED: draft record (boiler_number=0)")
+        return True
+
+    if user_boiler == rec_boiler:
+        print("✅ ALLOWED: boiler numbers match")
+        return True
+    else:
+        print(f"❌ BLOCKED: {user_boiler} != {rec_boiler}")
+        return False
+        
 
     
 
