@@ -201,11 +201,17 @@ def can_edit_record(user_id, record_boiler_number):
     conn.close()
 
     if not u or u["role"] != "admin":
-        return False
+        return False  # Операторы не могут редактировать
 
     assigned = u.get("assigned_boiler")
-    # Доступ только если котельная назначена И строго совпадает с записью
-    return assigned is not None and assigned == record_boiler_number
+    
+    # 1. Если у записи номер котельной 0 или пустой — разрешаем редактировать 
+    # (это новая запись или черновик)
+    if record_boiler_number is None or int(record_boiler_number) == 0:
+        return True
+        
+    # 2. Если котельная назначена, проверяем совпадение
+    return int(assigned) == int(record_boiler_number)
 
 # ===================== ARCHIVE =====================
 
