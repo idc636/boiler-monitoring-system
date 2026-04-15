@@ -369,7 +369,7 @@ def archive_records():
         
 def can_edit_record(user_id, record_boiler_number):
     # 🔍 ОТЛАДКА: пишем в консоль Railway всё, что приходит
-    print(f"🔍 [can_edit_record] user_id={user_id}, record_boiler_number='{record_boiler_number}'
+
     print(f"🔍 [can_edit_record] user_id={user_id}, record_boiler_number='{record_boiler_number}' (type={type(record_boiler_number).__name__})")
 
     conn = get_conn()
