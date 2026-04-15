@@ -632,28 +632,30 @@ def trigger_archive():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-@app.route("/archive/data/<date>")
-def archive_data(date):
+@app.route('/archive/data/<path:archive_dt>')
+def archive_data(archive_dt):
     if not admin():
-        return redirect(url_for("login"))
+        return redirect(url_for('login'))
 
     conn = get_conn()
-    cur = conn.cursor()
-    cur.execute("""
+    c = conn.cursor()
+
+    c.execute("""
         SELECT *
         FROM records_archive
-        WHERE archive_date::date = %s
-        ORDER BY date, boiler_number, equipment_number, time_interval
-    """, (date,))
-    records = cur.fetchall()
-    cur.close()
+        WHERE archive_date = %s
+        ORDER BY original_id
+    """, (archive_dt,))
+
+    records = c.fetchall()
     conn.close()
 
     data = {}
     for r in records:
-        data[r["original_id"]] = r
+        key = r['original_id']   # важно: в архиве привязываемся к original_id
+        data[key] = r
 
-    return render_template("archive_table.html", data=data, selected_date=date)
+    return render_template('archive_table.html', data=data, selected_date=archive_dt)
 
 
 # ===================== AUTO INIT =====================
