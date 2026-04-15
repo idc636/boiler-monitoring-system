@@ -595,27 +595,27 @@ def archive():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-@app.route("/archive/view")
+@app.route('/archive/view')
 def view_archive():
     if not admin():
-        return redirect(url_for("login"))
+        return redirect(url_for('login'))
 
     conn = get_conn()
     cur = conn.cursor()
+
     cur.execute("""
         SELECT DISTINCT
-            archive_date,
-            TO_CHAR(archive_date, 'YYYY-MM-DD HH24:MI:SS') AS formatted
+            TO_CHAR(archive_date, 'YYYY-MM-DD HH24:MI:SS') AS archive_key,
+            TO_CHAR(archive_date, 'DD.MM.YYYY HH24:MI:SS') AS archive_label
         FROM records_archive
-        WHERE archive_date IS NOT NULL
-        ORDER BY archive_date DESC
+        ORDER BY archive_key DESC
     """)
+
     dates = cur.fetchall()
     cur.close()
     conn.close()
 
-    return render_template("archive_dates.html", dates=dates)
-
+    return render_template('archive_dates.html', dates=dates)
 
 @app.route("/cron/archive", methods=["GET"])
 def trigger_archive():
@@ -632,10 +632,10 @@ def trigger_archive():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-@app.route("/archive/data/<path:archive_dt>")
+@app.route('/archive/data/<path:archive_dt>')
 def archive_data(archive_dt):
     if not admin():
-        return redirect(url_for("login"))
+        return redirect(url_for('login'))
 
     conn = get_conn()
     cur = conn.cursor()
@@ -643,7 +643,7 @@ def archive_data(archive_dt):
     cur.execute("""
         SELECT *
         FROM records_archive
-        WHERE archive_date = %s
+        WHERE TO_CHAR(archive_date, 'YYYY-MM-DD HH24:MI:SS') = %s
         ORDER BY original_id
     """, (archive_dt,))
 
@@ -653,9 +653,9 @@ def archive_data(archive_dt):
 
     data = {}
     for r in records:
-        data[r["original_id"]] = r
+        data[r['original_id']] = r
 
-    return render_template("archive_table.html", data=data, selected_date=archive_dt)
+    return render_template('archive_table.html', data=data, selected_date=archive_dt)
 
 # ===================== AUTO INIT =====================
 
