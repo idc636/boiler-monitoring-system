@@ -632,31 +632,30 @@ def trigger_archive():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-@app.route('/archive/data/<path:archive_dt>')
+@app.route("/archive/data/<path:archive_dt>")
 def archive_data(archive_dt):
     if not admin():
-        return redirect(url_for('login'))
+        return redirect(url_for("login"))
 
     conn = get_conn()
-    c = conn.cursor()
+    cur = conn.cursor()
 
-    c.execute("""
+    cur.execute("""
         SELECT *
         FROM records_archive
         WHERE archive_date = %s
         ORDER BY original_id
     """, (archive_dt,))
 
-    records = c.fetchall()
+    records = cur.fetchall()
+    cur.close()
     conn.close()
 
     data = {}
     for r in records:
-        key = r['original_id']
-        data[key] = r
+        data[r["original_id"]] = r
 
-    return render_template('archive_table.html', data=data, selected_date=archive_dt)
-
+    return render_template("archive_table.html", data=data, selected_date=archive_dt)
 
 # ===================== AUTO INIT =====================
 
