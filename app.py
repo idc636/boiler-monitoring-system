@@ -201,17 +201,33 @@ def can_edit_record(user_id, record_boiler_number):
     conn.close()
 
     if not u or u["role"] != "admin":
-        return False  # Операторы не могут редактировать
+        # ⚠️ Лог только если НЕ админ
+        print(f"⚠️ ACCESS DENIED: user {user_id} is not admin")
+        return False
 
     assigned = u.get("assigned_boiler")
+    if assigned is None:
+        return True  # Глобальный админ
+
+    try:
+        user_boiler = int(assigned)
+        if record_boiler_number in (None, "", 0, "0"):
+            return True  # Черновик
+        rec_boiler = int(record_boiler_number)
+    except (ValueError, TypeError) as e:
+        # ⚠️ Лог только при ошибке типов
+        print(f"⚠️ TYPE ERROR: {e}")
+        return False
+
+    # ⚠️ Лог только если котельные НЕ совпали (блокировка)
+    if user_boiler != rec_boiler:
+        print(f"🚫 BLOCKED: admin_boiler={user_boiler} != record_boiler={rec_boiler}")
+        return False
     
-    # 1. Если у записи номер котельной 0 или пустой — разрешаем редактировать 
-    # (это новая запись или черновик)
-    if record_boiler_number is None or int(record_boiler_number) == 0:
-        return True
-        
-    # 2. Если котельная назначена, проверяем совпадение
-    return int(assigned) == int(record_boiler_number)
+    # Если всё ок — просто возвращаем True (без лишнего спама в логах)
+    return True
+    
+
 
 # ===================== ARCHIVE =====================
 
