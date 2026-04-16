@@ -382,82 +382,30 @@ def archive_records():
     finally:
         cur.close()
         conn.close()
-        
+
+
 def can_edit_record(user_id, record_boiler_number):
-    # 🔥 ЯДЕРНАЯ ОТЛАДКА - эти строки ДОЛЖНЫ появиться в логах Railway
-    print(f"🔥🔥🔥 CAN_EDIT_RECORD START 🔥🔥🔥")
-    print(f"🔥 INPUT: user_id={user_id}, record_boiler_number={record_boiler_number} (type={type(record_boiler_number).__name__})")
+    # 🔍 ОТЛАДКА: видим, кто и что пытается редактировать
+    print(f"🔍 [can_edit_record] user_id={user_id}, record_boiler_number={record_boiler_number}")
 
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("SELECT role, assigned_boiler FROM users WHERE id = %s", (user_id,))
+    cur.execute("SELECT role FROM users WHERE id = %s", (user_id,))
     u = cur.fetchone()
     cur.close()
     conn.close()
 
-    print(f"🔥 DB QUERY RESULT: {u}")
+    print(f"🔍 [DB] user_data={u}")
 
-    # 1. Проверка: пользователь существует и он админ?
-    if not u:
-        print("❌ RESULT: False (user not found)")
-        return False
-    if u["role"] != "admin":
-        print(f"❌ RESULT: False (role={u['role']}, expected 'admin')")
-        return False
-
-    assigned = u.get("assigned_boiler")
-    print(f"🔥 assigned_boiler VALUE: {assigned} (type={type(assigned).__name__})")
-
-    # 2. 🔥 СТРОГО: если assigned_boiler NULL — ЗАПРЕЩАЕМ (никакого глобального доступа)
-    if assigned is None:
-        print("❌ RESULT: False (assigned_boiler is NULL - strict mode)")
-        return False
-
-    # 3. Приведение к числам
-    try:
-        user_boiler = int(assigned)
-        # 🔥 СТРОГО: если в записи 0/пусто — тоже запрещаем (пусть админ сначала создаст запись с правильным номером)
-        if record_boiler_number in (None, "", "0", 0):
-            print(f"❌ RESULT: False (record_boiler_number is empty/zero: '{record_boiler_number}')")
-            return False
-        rec_boiler = int(record_boiler_number)
-    except (ValueError, TypeError) as e:
-        print(f"❌ RESULT: False (conversion error: {e})")
-        return False
-
-    # 4. 🔥 ФИНАЛЬНОЕ СРАВНЕНИЕ: только точное совпадение
-    result = (user_boiler == rec_boiler)
-    print(f"🔥 COMPARISON: {user_boiler} == {rec_boiler} ? {result}")
-    print(f"🔥🔥🔥 FINAL RESULT: {result} 🔥🔥🔥")
-    return result
-    
-    
-
-    # Универсальное приведение к числу
-    def to_int(val):
-        if val in (None, "", "0", 0):
-            return 0
-        try:
-            return int(float(val))
-        except (ValueError, TypeError):
-            return 0
-
-    user_boiler = to_int(assigned)
-    rec_boiler = to_int(record_boiler_number)
-
-    print(f"🔍 [COMPARE] user_boiler={user_boiler}, rec_boiler={rec_boiler}")
-
-    if rec_boiler == 0:
-        print("✅ ALLOWED: draft record (boiler_number=0)")
+    # 🔓 МЯГКИЙ РЕЖИМ: любой админ может редактировать ВСЁ
+    # (строгая привязка по котельным может быть включена при необходимости)
+    if u and u["role"] == "admin":
+        print("✅ ALLOWED: user is admin (soft mode)")
         return True
-
-    if user_boiler == rec_boiler:
-        print("✅ ALLOWED: boiler numbers match")
-        return True
-    else:
-        print(f"❌ BLOCKED: {user_boiler} != {rec_boiler}")
-        return False
-        
+    
+    print("❌ BLOCKED: user is not admin")
+    return False
+    
 
     
 
