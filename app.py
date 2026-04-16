@@ -368,10 +368,6 @@ def archive_records():
         conn.close()
         
 def can_edit_record(user_id, record_boiler_number):
-    # 🔍 ОТЛАДКА: пишем в консоль Railway всё, что приходит
-
-    print(f"🔍 [can_edit_record] user_id={user_id}, record_boiler_number='{record_boiler_number}' (type={type(record_boiler_number).__name__})")
-
     conn = get_conn()
     cur = conn.cursor()
     cur.execute("SELECT role, assigned_boiler FROM users WHERE id = %s", (user_id,))
@@ -379,18 +375,26 @@ def can_edit_record(user_id, record_boiler_number):
     cur.close()
     conn.close()
 
-    print(f"🔍 [DB] user_data={u}")
-
     if not u or u["role"] != "admin":
-        print("❌ BLOCKED: not admin")
-        return False
+        return False  # Операторы не редактируют
 
     assigned = u.get("assigned_boiler")
-    print(f"🔍 [ASSIGNED] value={assigned}, type={type(assigned).__name__}")
-
     if assigned is None:
-        print("⚠️ ALLOWED: assigned_boiler is NULL (global admin)")
-        return True
+        return True  # Глобальный админ (без привязки) может всё
+
+    try:
+        user_boiler = int(assigned)
+        # Если номер котельной в записи пустой или 0 — разрешаем (новая запись/черновик)
+        if record_boiler_number in (None, "", 0, "0"):
+            return True
+        rec_boiler = int(record_boiler_number)
+    except (ValueError, TypeError):
+        return False
+
+    # Строгое сравнение: админ правит только свою котельную
+    return user_boiler == rec_boiler
+
+    
 
     # Универсальное приведение к числу
     def to_int(val):
@@ -711,25 +715,7 @@ def archive_data(archive_dt):
 
 
 
-# ⚠️ ВРЕМЕННЫЙ МАРШРУТ ДЛЯ ИСПРАВЛЕНИЯ БД (удали после использования!)
-@app.route("/fix-db")
-def fix_db():
-    conn = get_conn()
-    cur = conn.cursor()
-    try:
-        # Присваиваем котельную №1 записям 1-10
-        cur.execute("UPDATE records SET boiler_number = 1 WHERE id BETWEEN 1 AND 10;")
-        conn.commit()
-        
-        # Проверяем результат
-        cur.execute("SELECT id, boiler_number FROM records ORDER BY id ASC LIMIT 10;")
-        rows = cur.fetchall()
-        return f"✅ Обновлено! Вот первые 10 записей:<br>{rows}"
-    except Exception as e:
-        return f"❌ Ошибка: {e}"
-    finally:
-        cur.close()
-        conn.close()
+
 
 
 
