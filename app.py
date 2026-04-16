@@ -503,6 +503,7 @@ ALLOWED_FIELDS = {
 
 @app.route("/update", methods=["POST"])
 def update():
+print(f"📦 EDIT: id={data.get('id')}, field={data.get('field')}, value={data.get('value')}, user={session.get('user_id')}")
     if not auth():
         return jsonify({"status": "error", "message": "Не авторизован"}), 401
 
