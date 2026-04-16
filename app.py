@@ -569,6 +569,10 @@ def update():
             if not admin():
                 return jsonify({"status": "error", "message": "Нет прав на создание записи"}), 403
 
+            # 🔥 ПОЛУЧАЕМ КОТЕЛЬНУЮ ТЕКУЩЕГО АДМИНА
+            cur.execute("SELECT assigned_boiler FROM users WHERE id = %s", (session["user_id"],))
+            admin_boiler = cur.fetchone().get("assigned_boiler") or 1
+
             cur.execute("""
                 INSERT INTO records (
                     id,
@@ -582,14 +586,14 @@ def update():
                 ) VALUES (
                     %s,
                     CURRENT_DATE::text,
-                    0,
+                    %s,
                     '',
                     '',
                     0,
                     0,
                     0
                 )
-            """, (record_id,))
+            """, (record_id, admin_boiler))
 
         cur.execute(f"UPDATE records SET {field} = %s WHERE id = %s", (value, record_id))
         conn.commit()
@@ -603,7 +607,7 @@ def update():
     finally:
         cur.close()
         conn.close()
-
+        
 
 @app.route("/add", methods=["POST"])
 def add():
