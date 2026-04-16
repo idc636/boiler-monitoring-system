@@ -385,26 +385,40 @@ def archive_records():
 
 
 def can_edit_record(user_id, record_boiler_number):
-    # 🔍 ОТЛАДКА: видим, кто и что пытается редактировать
-    print(f"🔍 [can_edit_record] user_id={user_id}, record_boiler_number={record_boiler_number}")
-
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("SELECT role FROM users WHERE id = %s", (user_id,))
+    cur.execute("SELECT role, assigned_boiler FROM users WHERE id = %s", (user_id,))
     u = cur.fetchone()
     cur.close()
     conn.close()
 
-    print(f"🔍 [DB] user_data={u}")
+    # 1. Проверка: только админы могут редактировать
+    if not u or u["role"] != "admin":
+        print(f"⚠️ ACCESS DENIED: user {user_id} is not admin")
+        return False
 
-    # 🔓 МЯГКИЙ РЕЖИМ: любой админ может редактировать ВСЁ
-    # (строгая привязка по котельным может быть включена при необходимости)
-    if u and u["role"] == "admin":
-        print("✅ ALLOWED: user is admin (soft mode)")
-        return True
+    assigned = u.get("assigned_boiler")
     
-    print("❌ BLOCKED: user is not admin")
-    return False
+    # 2. Если assigned_boiler NULL — глобальный админ (доступ ко всем)
+    if assigned is None:
+        return True
+
+    try:
+        user_boiler = int(assigned)
+        # Черновики (0) можно править всем админам
+        if record_boiler_number in (None, "", 0, "0"):
+            return True
+        rec_boiler = int(record_boiler_number)
+    except (ValueError, TypeError) as e:
+        print(f"⚠️ TYPE ERROR: {e}")
+        return False
+
+    # 3. 🔥 СТРОГОЕ СРАВНЕНИЕ: только своя котельная
+    if user_boiler != rec_boiler:
+        print(f"🚫 BLOCKED: admin_boiler={user_boiler} != record_boiler={rec_boiler}")
+        return False
+    
+    return True  # ✅ Разрешено
     
 
     
