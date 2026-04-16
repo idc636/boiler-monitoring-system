@@ -709,6 +709,26 @@ def archive_data(archive_dt):
 
     return render_template('archive_table.html', data=data, selected_date=archive_dt)
 
+# ⚠️ ВРЕМЕННЫЙ МАРШРУТ ДЛЯ ИСПРАВЛЕНИЯ БД (удали после использования!)
+@app.route("/fix-db")
+def fix_db():
+    conn = get_conn()
+    cur = conn.cursor()
+    try:
+        # Присваиваем котельную №1 записям 1-10
+        cur.execute("UPDATE records SET boiler_number = 1 WHERE id BETWEEN 1 AND 10;")
+        conn.commit()
+        
+        # Проверяем результат
+        cur.execute("SELECT id, boiler_number FROM records ORDER BY id ASC LIMIT 10;")
+        rows = cur.fetchall()
+        return f"✅ Обновлено! Вот первые 10 записей:<br>{rows}"
+    except Exception as e:
+        return f"❌ Ошибка: {e}"
+    finally:
+        cur.close()
+        conn.close()
+
 # ===================== AUTO INIT =====================
 
 # ===================== AUTO-INIT =====================
