@@ -658,7 +658,8 @@ def archive():
 
 @app.route('/archive/view')
 def view_archive():
-    if not admin():
+    # ✅ Разрешаем вход ВСЕМ авторизованным пользователям
+    if not auth():
         return redirect(url_for('login'))
 
     conn = get_conn()
@@ -692,10 +693,10 @@ def trigger_archive():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-
 @app.route('/archive/data/<path:archive_dt>')
 def archive_data(archive_dt):
-    if not admin():
+    # ✅ Разрешаем просмотр данных архива ВСЕМ авторизованным
+    if not auth():
         return redirect(url_for('login'))
 
     conn = get_conn()
@@ -717,7 +718,6 @@ def archive_data(archive_dt):
         data[r['original_id']] = r
 
     return render_template('archive_table.html', data=data, selected_date=archive_dt)
-
 
 
 
