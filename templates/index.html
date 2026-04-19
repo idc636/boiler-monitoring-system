@@ -107,8 +107,7 @@ color:blue;text-decoration:none;font-weight:bold;">
 <tbody>
 <!-- КОТЕЛЬНАЯ №1 -->
 <tr class="section"><td colspan="38">Котельная №1 Белоярск №1 ул. Набережная 8</td></tr>
-
-<!-- ==================== КОТЁЛ 1 (3 строки контроля) ==================== -->
+<!-- Котёл 1 (Начало котельной - здесь общие данные на 8 строк) -->
 <tr>
     <td rowspan="3">1</td>
     <td rowspan="3">{{ data[1].boiler_model if data and data.get(1) and data[1].boiler_model else 'KBA-3,2/PG93"UNIGAS"№1009117' }}</td>
@@ -116,27 +115,28 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="time_interval" data-id="1">{{ data[1].time_interval if data and data.get(1) and data[1].time_interval else '00:00' }}</td>
     <td class="editable" data-field="boilers_working" data-id="1">{{ data[1].boilers_working if data and data.get(1) and data[1].boilers_working else '' }}</td>
     <td class="editable" data-field="boilers_reserve" data-id="1">{{ data[1].boilers_reserve if data and data.get(1) and data[1].boilers_reserve else '' }}</td>
-    <td rowspan="3" class="editable" data-field="boilers_repair" data-id="1">{{ data[1].boilers_repair if data and data.get(1) and data[1].boilers_repair else '' }}</td>
+    <!-- ОБЩИЕ ПОЛЯ (ROWSPAN=8) -->
+    <td rowspan="8" class="editable" data-field="boilers_repair" data-id="1">{{ data[1].boilers_repair if data and data.get(1) and data[1].boilers_repair else '' }}</td>
     <td class="editable" data-field="pumps_working" data-id="1">{{ data[1].pumps_working if data and data.get(1) and data[1].pumps_working else '' }}</td>
     <td class="editable" data-field="pumps_reserve" data-id="1">{{ data[1].pumps_reserve if data and data.get(1) and data[1].pumps_reserve else '' }}</td>
-    <td rowspan="3" class="editable" data-field="pumps_repair" data-id="1">{{ data[1].pumps_repair if data and data.get(1) and data[1].pumps_repair else '' }}</td>
+    <td rowspan="8" class="editable" data-field="pumps_repair" data-id="1">{{ data[1].pumps_repair if data and data.get(1) and data[1].pumps_repair else '' }}</td>
     <td class="editable" data-field="feed_pumps_working" data-id="1">{{ data[1].feed_pumps_working if data and data.get(1) and data[1].feed_pumps_working else '' }}</td>
     <td class="editable" data-field="feed_pumps_reserve" data-id="1">{{ data[1].feed_pumps_reserve if data and data.get(1) and data[1].feed_pumps_reserve else '' }}</td>
-    <td rowspan="3" class="editable" data-field="feed_pumps_repair" data-id="1">{{ data[1].feed_pumps_repair if data and data.get(1) and data[1].feed_pumps_repair else '' }}</td>
+    <td rowspan="8" class="editable" data-field="feed_pumps_repair" data-id="1">{{ data[1].feed_pumps_repair if data and data.get(1) and data[1].feed_pumps_repair else '' }}</td>
     <!-- Топливные ёмкости -->
-    <td rowspan="3" class="editable" data-field="fuel_tanks_total" data-id="1">{{ data[1].fuel_tanks_total if data and data.get(1) and data[1].fuel_tanks_total else '' }}</td>
-    <td rowspan="3" class="editable" data-field="fuel_tank_volume" data-id="1">{{ data[1].fuel_tank_volume if data and data.get(1) and data[1].fuel_tank_volume else '' }}</td>
-    <td rowspan="3" class="editable" data-field="fuel_tanks_working" data-id="1">{{ data[1].fuel_tanks_working if data and data.get(1) and data[1].fuel_tanks_working else '' }}</td>
-    <td rowspan="3" class="editable" data-field="fuel_tanks_reserve" data-id="1">{{ data[1].fuel_tanks_reserve if data and data.get(1) and data[1].fuel_tanks_reserve else '' }}</td>
-    <td rowspan="3" class="editable" data-field="fuel_morning_balance" data-id="1">{{ data[1].fuel_morning_balance if data and data.get(1) and data[1].fuel_morning_balance else '' }}</td>
-    <td rowspan="3" class="editable" data-field="fuel_daily_consumption" data-id="1">{{ data[1].fuel_daily_consumption if data and data.get(1) and data[1].fuel_daily_consumption else '' }}</td>
-    <td rowspan="3" class="editable" data-field="fuel_tanks_repair" data-id="1">{{ data[1].fuel_tanks_repair if data and data.get(1) and data[1].fuel_tanks_repair else '' }}</td>
+    <td rowspan="8" class="editable" data-field="fuel_tanks_total" data-id="1">{{ data[1].fuel_tanks_total if data and data.get(1) and data[1].fuel_tanks_total else '' }}</td>
+    <td rowspan="8" class="editable" data-field="fuel_tank_volume" data-id="1">{{ data[1].fuel_tank_volume if data and data.get(1) and data[1].fuel_tank_volume else '' }}</td>
+    <td rowspan="8" class="editable" data-field="fuel_tanks_working" data-id="1">{{ data[1].fuel_tanks_working if data and data.get(1) and data[1].fuel_tanks_working else '' }}</td>
+    <td rowspan="8" class="editable" data-field="fuel_tanks_reserve" data-id="1">{{ data[1].fuel_tanks_reserve if data and data.get(1) and data[1].fuel_tanks_reserve else '' }}</td>
+    <td rowspan="8" class="editable" data-field="fuel_morning_balance" data-id="1">{{ data[1].fuel_morning_balance if data and data.get(1) and data[1].fuel_morning_balance else '' }}</td>
+    <td rowspan="8" class="editable" data-field="fuel_daily_consumption" data-id="1">{{ data[1].fuel_daily_consumption if data and data.get(1) and data[1].fuel_daily_consumption else '' }}</td>
+    <td rowspan="8" class="editable" data-field="fuel_tanks_repair" data-id="1">{{ data[1].fuel_tanks_repair if data and data.get(1) and data[1].fuel_tanks_repair else '' }}</td>
     <!-- Ёмкости вода -->
-    <td rowspan="3" class="editable" data-field="water_tanks_total" data-id="1">{{ data[1].water_tanks_total if data and data.get(1) and data[1].water_tanks_total else '' }}</td>
-    <td rowspan="3" class="editable" data-field="water_tank_volume" data-id="1">{{ data[1].water_tank_volume if data and data.get(1) and data[1].water_tank_volume else '' }}</td>
-    <td rowspan="3" class="editable" data-field="water_tanks_working" data-id="1">{{ data[1].water_tanks_working if data and data.get(1) and data[1].water_tanks_working else '' }}</td>
-    <td rowspan="3" class="editable" data-field="water_tanks_reserve" data-id="1">{{ data[1].water_tanks_reserve if data and data.get(1) and data[1].water_tanks_reserve else '' }}</td>
-    <td rowspan="3" class="editable" data-field="water_tanks_repair" data-id="1">{{ data[1].water_tanks_repair if data and data.get(1) and data[1].water_tanks_repair else '' }}</td>
+    <td rowspan="8" class="editable" data-field="water_tanks_total" data-id="1">{{ data[1].water_tanks_total if data and data.get(1) and data[1].water_tanks_total else '' }}</td>
+    <td rowspan="8" class="editable" data-field="water_tank_volume" data-id="1">{{ data[1].water_tank_volume if data and data.get(1) and data[1].water_tank_volume else '' }}</td>
+    <td rowspan="8" class="editable" data-field="water_tanks_working" data-id="1">{{ data[1].water_tanks_working if data and data.get(1) and data[1].water_tanks_working else '' }}</td>
+    <td rowspan="8" class="editable" data-field="water_tanks_reserve" data-id="1">{{ data[1].water_tanks_reserve if data and data.get(1) and data[1].water_tanks_reserve else '' }}</td>
+    <td rowspan="8" class="editable" data-field="water_tanks_repair" data-id="1">{{ data[1].water_tanks_repair if data and data.get(1) and data[1].water_tanks_repair else '' }}</td>
     <!-- Температуры и Давление -->
     <td class="editable" data-field="temp_outdoor" data-id="1">{{ data[1].temp_outdoor if data and data.get(1) and data[1].temp_outdoor else '' }}</td>
     <td class="editable" data-field="temp_supply" data-id="1">{{ data[1].temp_supply if data and data.get(1) and data[1].temp_supply else '' }}</td>
@@ -145,14 +145,15 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="temp_graph_return" data-id="1">{{ data[1].temp_graph_return if data and data.get(1) and data[1].temp_graph_return else '' }}</td>
     <td class="editable" data-field="pressure_supply" data-id="1">{{ data[1].pressure_supply if data and data.get(1) and data[1].pressure_supply else '' }}</td>
     <td class="editable" data-field="pressure_return" data-id="1">{{ data[1].pressure_return if data and data.get(1) and data[1].pressure_return else '' }}</td>
-    <!-- Суточные, Персонал и Простой (по котлу) -->
-    <td rowspan="3" class="editable" data-field="water_consumption_daily" data-id="1">{{ data[1].water_consumption_daily if data and data.get(1) and data[1].water_consumption_daily else '' }}</td>
-    <td rowspan="3" class="editable" data-field="staff_night" data-id="1">{{ data[1].staff_night if data and data.get(1) and data[1].staff_night else '' }}</td>
-    <td rowspan="3" class="editable" data-field="staff_day" data-id="1">{{ data[1].staff_day if data and data.get(1) and data[1].staff_day else '' }}</td>
-    <td class="editable" data-field="downtime_today" data-id="1">{{ data[1].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
-    <td rowspan="3" class="editable" data-field="downtime_total" data-id="1">{{ data[1].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td>
-    <td rowspan="3" class="editable" data-field="notes" data-id="1">{{ data[1].notes if data and data.get(1) and data[1].notes else '' }}</td>
+    <!-- Суточные и Дежурные -->
+    <td rowspan="8" class="editable" data-field="water_consumption_daily" data-id="1">{{ data[1].water_consumption_daily if data and data.get(1) and data[1].water_consumption_daily else '' }}</td>
+    <td rowspan="8" class="editable" data-field="staff_night" data-id="1">{{ data[1].staff_night if data and data.get(1) and data[1].staff_night else '' }}</td>
+    <td rowspan="8" class="editable" data-field="staff_day" data-id="1">{{ data[1].staff_day if data and data.get(1) and data[1].staff_day else '' }}</td>
+    <td rowspan="8" class="editable" data-field="downtime_today" data-id="1">{{ data[1].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
+    <td rowspan="8" class="editable" data-field="downtime_total" data-id="1">{{ data[1].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td>
+    <td rowspan="8" class="editable" data-field="notes" data-id="1">{{ data[1].notes if data and data.get(1) and data[1].notes else '' }}</td>
 </tr>
+<!-- Котёл 1 (Строка 2 - только динамические данные) -->
 <tr>
     <td class="editable" data-field="time_interval" data-id="2">{{ data[2].time_interval if data and data.get(2) and data[2].time_interval else '03:00' }}</td>
     <td class="editable" data-field="boilers_working" data-id="2">{{ data[2].boilers_working if data and data.get(2) and data[2].boilers_working else '' }}</td>
@@ -169,6 +170,7 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="pressure_supply" data-id="2">{{ data[2].pressure_supply if data and data.get(2) and data[2].pressure_supply else '' }}</td>
     <td class="editable" data-field="pressure_return" data-id="2">{{ data[2].pressure_return if data and data.get(2) and data[2].pressure_return else '' }}</td>
 </tr>
+<!-- Котёл 1 (Строка 3 - только динамические данные) -->
 <tr>
     <td class="editable" data-field="time_interval" data-id="3">{{ data[3].time_interval if data and data.get(3) and data[3].time_interval else '06:00' }}</td>
     <td class="editable" data-field="boilers_working" data-id="3">{{ data[3].boilers_working if data and data.get(3) and data[3].boilers_working else '' }}</td>
@@ -186,7 +188,7 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="pressure_return" data-id="3">{{ data[3].pressure_return if data and data.get(3) and data[3].pressure_return else '' }}</td>
 </tr>
 
-<!-- ==================== КОТЁЛ 2 (2 строки контроля) ==================== -->
+<!-- Котёл 2 (Строка 1 - только котёл, общие данные уже заняты) -->
 <tr>
     <td rowspan="2">2</td>
     <td rowspan="2">{{ data[4].boiler_model if data and data.get(4) and data[4].boiler_model else '"КИМАП-ИПАК" -3,5/"WEUSHAUPT"' }}</td>
@@ -194,28 +196,10 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="time_interval" data-id="4">{{ data[4].time_interval if data and data.get(4) and data[4].time_interval else '09:00' }}</td>
     <td class="editable" data-field="boilers_working" data-id="4">{{ data[4].boilers_working if data and data.get(4) and data[4].boilers_working else '' }}</td>
     <td class="editable" data-field="boilers_reserve" data-id="4">{{ data[4].boilers_reserve if data and data.get(4) and data[4].boilers_reserve else '' }}</td>
-    <td rowspan="2" class="editable" data-field="boilers_repair" data-id="4">{{ data[4].boilers_repair if data and data.get(4) and data[4].boilers_repair else '' }}</td>
     <td class="editable" data-field="pumps_working" data-id="4">{{ data[4].pumps_working if data and data.get(4) and data[4].pumps_working else '' }}</td>
     <td class="editable" data-field="pumps_reserve" data-id="4">{{ data[4].pumps_reserve if data and data.get(4) and data[4].pumps_reserve else '' }}</td>
-    <td rowspan="2" class="editable" data-field="pumps_repair" data-id="4">{{ data[4].pumps_repair if data and data.get(4) and data[4].pumps_repair else '' }}</td>
     <td class="editable" data-field="feed_pumps_working" data-id="4">{{ data[4].feed_pumps_working if data and data.get(4) and data[4].feed_pumps_working else '' }}</td>
     <td class="editable" data-field="feed_pumps_reserve" data-id="4">{{ data[4].feed_pumps_reserve if data and data.get(4) and data[4].feed_pumps_reserve else '' }}</td>
-    <td rowspan="2" class="editable" data-field="feed_pumps_repair" data-id="4">{{ data[4].feed_pumps_repair if data and data.get(4) and data[4].feed_pumps_repair else '' }}</td>
-    <!-- Топливные ёмкости -->
-    <td rowspan="2" class="editable" data-field="fuel_tanks_total" data-id="4">{{ data[4].fuel_tanks_total if data and data.get(4) and data[4].fuel_tanks_total else '' }}</td>
-    <td rowspan="2" class="editable" data-field="fuel_tank_volume" data-id="4">{{ data[4].fuel_tank_volume if data and data.get(4) and data[4].fuel_tank_volume else '' }}</td>
-    <td rowspan="2" class="editable" data-field="fuel_tanks_working" data-id="4">{{ data[4].fuel_tanks_working if data and data.get(4) and data[4].fuel_tanks_working else '' }}</td>
-    <td rowspan="2" class="editable" data-field="fuel_tanks_reserve" data-id="4">{{ data[4].fuel_tanks_reserve if data and data.get(4) and data[4].fuel_tanks_reserve else '' }}</td>
-    <td rowspan="2" class="editable" data-field="fuel_morning_balance" data-id="4">{{ data[4].fuel_morning_balance if data and data.get(4) and data[4].fuel_morning_balance else '' }}</td>
-    <td rowspan="2" class="editable" data-field="fuel_daily_consumption" data-id="4">{{ data[4].fuel_daily_consumption if data and data.get(4) and data[4].fuel_daily_consumption else '' }}</td>
-    <td rowspan="2" class="editable" data-field="fuel_tanks_repair" data-id="4">{{ data[4].fuel_tanks_repair if data and data.get(4) and data[4].fuel_tanks_repair else '' }}</td>
-    <!-- Ёмкости вода -->
-    <td rowspan="2" class="editable" data-field="water_tanks_total" data-id="4">{{ data[4].water_tanks_total if data and data.get(4) and data[4].water_tanks_total else '' }}</td>
-    <td rowspan="2" class="editable" data-field="water_tank_volume" data-id="4">{{ data[4].water_tank_volume if data and data.get(4) and data[4].water_tank_volume else '' }}</td>
-    <td rowspan="2" class="editable" data-field="water_tanks_working" data-id="4">{{ data[4].water_tanks_working if data and data.get(4) and data[4].water_tanks_working else '' }}</td>
-    <td rowspan="2" class="editable" data-field="water_tanks_reserve" data-id="4">{{ data[4].water_tanks_reserve if data and data.get(4) and data[4].water_tanks_reserve else '' }}</td>
-    <td rowspan="2" class="editable" data-field="water_tanks_repair" data-id="4">{{ data[4].water_tanks_repair if data and data.get(4) and data[4].water_tanks_repair else '' }}</td>
-    <!-- Температуры и Давление -->
     <td class="editable" data-field="temp_outdoor" data-id="4">{{ data[4].temp_outdoor if data and data.get(4) and data[4].temp_outdoor else '' }}</td>
     <td class="editable" data-field="temp_supply" data-id="4">{{ data[4].temp_supply if data and data.get(4) and data[4].temp_supply else '' }}</td>
     <td class="editable" data-field="temp_return" data-id="4">{{ data[4].temp_return if data and data.get(4) and data[4].temp_return else '' }}</td>
@@ -223,14 +207,8 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="temp_graph_return" data-id="4">{{ data[4].temp_graph_return if data and data.get(4) and data[4].temp_graph_return else '' }}</td>
     <td class="editable" data-field="pressure_supply" data-id="4">{{ data[4].pressure_supply if data and data.get(4) and data[4].pressure_supply else '' }}</td>
     <td class="editable" data-field="pressure_return" data-id="4">{{ data[4].pressure_return if data and data.get(4) and data[4].pressure_return else '' }}</td>
-    <!-- Суточные, Персонал и Простой -->
-    <td rowspan="2" class="editable" data-field="water_consumption_daily" data-id="4">{{ data[4].water_consumption_daily if data and data.get(4) and data[4].water_consumption_daily else '' }}</td>
-    <td rowspan="2" class="editable" data-field="staff_night" data-id="4">{{ data[4].staff_night if data and data.get(4) and data[4].staff_night else '' }}</td>
-    <td rowspan="2" class="editable" data-field="staff_day" data-id="4">{{ data[4].staff_day if data and data.get(4) and data[4].staff_day else '' }}</td>
-    <td rowspan="2" class="editable" data-field="downtime_today" data-id="4">{{ data[4].downtime_today if data and data.get(4) and data[4].downtime_today is not none else '' }}</td>
-    <td rowspan="2" class="editable" data-field="downtime_total" data-id="4">{{ data[4].downtime_total if data and data.get(4) and data[4].downtime_total is not none else '' }}</td>
-    <td rowspan="2" class="editable" data-field="notes" data-id="4">{{ data[4].notes if data and data.get(4) and data[4].notes else '' }}</td>
 </tr>
+<!-- Котёл 2 (Строка 2) -->
 <tr>
     <td class="editable" data-field="time_interval" data-id="5">{{ data[5].time_interval if data and data.get(5) and data[5].time_interval else '12:00' }}</td>
     <td class="editable" data-field="boilers_working" data-id="5">{{ data[5].boilers_working if data and data.get(5) and data[5].boilers_working else '' }}</td>
@@ -248,7 +226,7 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="pressure_return" data-id="5">{{ data[5].pressure_return if data and data.get(5) and data[5].pressure_return else '' }}</td>
 </tr>
 
-<!-- ==================== КОТЁЛ 3 (3 строки контроля) ==================== -->
+<!-- Котёл 3 (Строка 1 - только котёл) -->
 <tr>
     <td rowspan="3">3</td>
     <td rowspan="3">{{ data[6].boiler_model if data and data.get(6) and data[6].boiler_model else 'КВА 3,2/PG93"UNIGAS"№06140440' }}</td>
@@ -256,28 +234,10 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="time_interval" data-id="6">{{ data[6].time_interval if data and data.get(6) and data[6].time_interval else '15:00' }}</td>
     <td class="editable" data-field="boilers_working" data-id="6">{{ data[6].boilers_working if data and data.get(6) and data[6].boilers_working else '' }}</td>
     <td class="editable" data-field="boilers_reserve" data-id="6">{{ data[6].boilers_reserve if data and data.get(6) and data[6].boilers_reserve else '' }}</td>
-    <td rowspan="3" class="editable" data-field="boilers_repair" data-id="6">{{ data[6].boilers_repair if data and data.get(6) and data[6].boilers_repair else '' }}</td>
     <td class="editable" data-field="pumps_working" data-id="6">{{ data[6].pumps_working if data and data.get(6) and data[6].pumps_working else '' }}</td>
     <td class="editable" data-field="pumps_reserve" data-id="6">{{ data[6].pumps_reserve if data and data.get(6) and data[6].pumps_reserve else '' }}</td>
-    <td rowspan="3" class="editable" data-field="pumps_repair" data-id="6">{{ data[6].pumps_repair if data and data.get(6) and data[6].pumps_repair else '' }}</td>
     <td class="editable" data-field="feed_pumps_working" data-id="6">{{ data[6].feed_pumps_working if data and data.get(6) and data[6].feed_pumps_working else '' }}</td>
     <td class="editable" data-field="feed_pumps_reserve" data-id="6">{{ data[6].feed_pumps_reserve if data and data.get(6) and data[6].feed_pumps_reserve else '' }}</td>
-    <td rowspan="3" class="editable" data-field="feed_pumps_repair" data-id="6">{{ data[6].feed_pumps_repair if data and data.get(6) and data[6].feed_pumps_repair else '' }}</td>
-    <!-- Топливные ёмкости -->
-    <td rowspan="3" class="editable" data-field="fuel_tanks_total" data-id="6">{{ data[6].fuel_tanks_total if data and data.get(6) and data[6].fuel_tanks_total else '' }}</td>
-    <td rowspan="3" class="editable" data-field="fuel_tank_volume" data-id="6">{{ data[6].fuel_tank_volume if data and data.get(6) and data[6].fuel_tank_volume else '' }}</td>
-    <td rowspan="3" class="editable" data-field="fuel_tanks_working" data-id="6">{{ data[6].fuel_tanks_working if data and data.get(6) and data[6].fuel_tanks_working else '' }}</td>
-    <td rowspan="3" class="editable" data-field="fuel_tanks_reserve" data-id="6">{{ data[6].fuel_tanks_reserve if data and data.get(6) and data[6].fuel_tanks_reserve else '' }}</td>
-    <td rowspan="3" class="editable" data-field="fuel_morning_balance" data-id="6">{{ data[6].fuel_morning_balance if data and data.get(6) and data[6].fuel_morning_balance else '' }}</td>
-    <td rowspan="3" class="editable" data-field="fuel_daily_consumption" data-id="6">{{ data[6].fuel_daily_consumption if data and data.get(6) and data[6].fuel_daily_consumption else '' }}</td>
-    <td rowspan="3" class="editable" data-field="fuel_tanks_repair" data-id="6">{{ data[6].fuel_tanks_repair if data and data.get(6) and data[6].fuel_tanks_repair else '' }}</td>
-    <!-- Ёмкости вода -->
-    <td rowspan="3" class="editable" data-field="water_tanks_total" data-id="6">{{ data[6].water_tanks_total if data and data.get(6) and data[6].water_tanks_total else '' }}</td>
-    <td rowspan="3" class="editable" data-field="water_tank_volume" data-id="6">{{ data[6].water_tank_volume if data and data.get(6) and data[6].water_tank_volume else '' }}</td>
-    <td rowspan="3" class="editable" data-field="water_tanks_working" data-id="6">{{ data[6].water_tanks_working if data and data.get(6) and data[6].water_tanks_working else '' }}</td>
-    <td rowspan="3" class="editable" data-field="water_tanks_reserve" data-id="6">{{ data[6].water_tanks_reserve if data and data.get(6) and data[6].water_tanks_reserve else '' }}</td>
-    <td rowspan="3" class="editable" data-field="water_tanks_repair" data-id="6">{{ data[6].water_tanks_repair if data and data.get(6) and data[6].water_tanks_repair else '' }}</td>
-    <!-- Температуры и Давление -->
     <td class="editable" data-field="temp_outdoor" data-id="6">{{ data[6].temp_outdoor if data and data.get(6) and data[6].temp_outdoor else '' }}</td>
     <td class="editable" data-field="temp_supply" data-id="6">{{ data[6].temp_supply if data and data.get(6) and data[6].temp_supply else '' }}</td>
     <td class="editable" data-field="temp_return" data-id="6">{{ data[6].temp_return if data and data.get(6) and data[6].temp_return else '' }}</td>
@@ -285,14 +245,8 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="temp_graph_return" data-id="6">{{ data[6].temp_graph_return if data and data.get(6) and data[6].temp_graph_return else '' }}</td>
     <td class="editable" data-field="pressure_supply" data-id="6">{{ data[6].pressure_supply if data and data.get(6) and data[6].pressure_supply else '' }}</td>
     <td class="editable" data-field="pressure_return" data-id="6">{{ data[6].pressure_return if data and data.get(6) and data[6].pressure_return else '' }}</td>
-    <!-- Суточные, Персонал и Простой -->
-    <td rowspan="3" class="editable" data-field="water_consumption_daily" data-id="6">{{ data[6].water_consumption_daily if data and data.get(6) and data[6].water_consumption_daily else '' }}</td>
-    <td rowspan="3" class="editable" data-field="staff_night" data-id="6">{{ data[6].staff_night if data and data.get(6) and data[6].staff_night else '' }}</td>
-    <td rowspan="3" class="editable" data-field="staff_day" data-id="6">{{ data[6].staff_day if data and data.get(6) and data[6].staff_day else '' }}</td>
-    <td rowspan="3" class="editable" data-field="downtime_today" data-id="6">{{ data[6].downtime_today if data and data.get(6) and data[6].downtime_today is not none else '' }}</td>
-    <td rowspan="3" class="editable" data-field="downtime_total" data-id="6">{{ data[6].downtime_total if data and data.get(6) and data[6].downtime_total is not none else '' }}</td>
-    <td rowspan="3" class="editable" data-field="notes" data-id="6">{{ data[6].notes if data and data.get(6) and data[6].notes else '' }}</td>
 </tr>
+<!-- Котёл 3 (Строка 2) -->
 <tr>
     <td class="editable" data-field="time_interval" data-id="7">{{ data[7].time_interval if data and data.get(7) and data[7].time_interval else '18:00' }}</td>
     <td class="editable" data-field="boilers_working" data-id="7">{{ data[7].boilers_working if data and data.get(7) and data[7].boilers_working else '' }}</td>
@@ -309,6 +263,7 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="pressure_supply" data-id="7">{{ data[7].pressure_supply if data and data.get(7) and data[7].pressure_supply else '' }}</td>
     <td class="editable" data-field="pressure_return" data-id="7">{{ data[7].pressure_return if data and data.get(7) and data[7].pressure_return else '' }}</td>
 </tr>
+<!-- Котёл 3 (Строка 3) -->
 <tr>
     <td class="editable" data-field="time_interval" data-id="8">{{ data[8].time_interval if data and data.get(8) and data[8].time_interval else '21:00' }}</td>
     <td class="editable" data-field="boilers_working" data-id="8">{{ data[8].boilers_working if data and data.get(8) and data[8].boilers_working else '' }}</td>
@@ -325,9 +280,6 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="pressure_supply" data-id="8">{{ data[8].pressure_supply if data and data.get(8) and data[8].pressure_supply else '' }}</td>
     <td class="editable" data-field="pressure_return" data-id="8">{{ data[8].pressure_return if data and data.get(8) and data[8].pressure_return else '' }}</td>
 </tr>
-
-
-    
 
 <!-- КОТЕЛЬНАЯ №2 -->
 <tr class="section"><td colspan="38">Котельная №2 Белоярск №2 ул. Юбилейная 11</td></tr>
