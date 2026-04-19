@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+rowspan="8"<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -149,8 +149,8 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td rowspan="8" class="editable" data-field="water_consumption_daily" data-id="1">{{ data[1].water_consumption_daily if data and data.get(1) and data[1].water_consumption_daily else '' }}</td>
     <td rowspan="8" class="editable" data-field="staff_night" data-id="1">{{ data[1].staff_night if data and data.get(1) and data[1].staff_night else '' }}</td>
     <td rowspan="8" class="editable" data-field="staff_day" data-id="1">{{ data[1].staff_day if data and data.get(1) and data[1].staff_day else '' }}</td>
-    <td class="editable" data-field="downtime_today" data-id="1">{{ data[1].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
-    <td class="editable" data-field="downtime_total" data-id="1">{{ data[1].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td>
+    <td rowspan="3" class="editable" data-field="downtime_today" data-id="1">{{ data[1].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
+    <td rowspan="3" class="editable" data-field="downtime_total" data-id="1">{{ data[1].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td>
     <td rowspan="8" class="editable" data-field="notes" data-id="1">{{ data[1].notes if data and data.get(1) and data[1].notes else '' }}</td>
 </tr>
 <!-- Котёл 1 (Строка 2 - только динамические данные) -->
@@ -169,8 +169,7 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="temp_graph_return" data-id="2">{{ data[2].temp_graph_return if data and data.get(2) and data[2].temp_graph_return else '' }}</td>
     <td class="editable" data-field="pressure_supply" data-id="2">{{ data[2].pressure_supply if data and data.get(2) and data[2].pressure_supply else '' }}</td>
     <td class="editable" data-field="pressure_return" data-id="2">{{ data[2].pressure_return if data and data.get(2) and data[2].pressure_return else '' }}</td>
-    <td class="editable" data-field="downtime_today" data-id="1">{{ data[2].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
-    <td class="editable" data-field="downtime_total" data-id="1">{{ data[2].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td>
+
 </tr>
 <!-- Котёл 1 (Строка 3 - только динамические данные) -->
 <tr>
@@ -188,8 +187,7 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="temp_graph_return" data-id="3">{{ data[3].temp_graph_return if data and data.get(3) and data[3].temp_graph_return else '' }}</td>
     <td class="editable" data-field="pressure_supply" data-id="3">{{ data[3].pressure_supply if data and data.get(3) and data[3].pressure_supply else '' }}</td>
     <td class="editable" data-field="pressure_return" data-id="3">{{ data[3].pressure_return if data and data.get(3) and data[3].pressure_return else '' }}</td>
-    <td class="editable" data-field="downtime_today" data-id="3">{{ data[1].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
-    <td class="editable" data-field="downtime_total" data-id="3">{{ data[1].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td>
+
 </tr>
 
 <!-- Котёл 2 (Строка 1 - только котёл, общие данные уже заняты) -->
@@ -211,8 +209,8 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="temp_graph_return" data-id="4">{{ data[4].temp_graph_return if data and data.get(4) and data[4].temp_graph_return else '' }}</td>
     <td class="editable" data-field="pressure_supply" data-id="4">{{ data[4].pressure_supply if data and data.get(4) and data[4].pressure_supply else '' }}</td>
     <td class="editable" data-field="pressure_return" data-id="4">{{ data[4].pressure_return if data and data.get(4) and data[4].pressure_return else '' }}</td>
-    <td class="editable" data-field="downtime_today" data-id="4">{{ data[1].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
-    <td class="editable" data-field="downtime_total" data-id="4">{{ data[1].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td>
+    <td rowspan="3" class="editable" data-field="downtime_today" data-id="4">{{ data[4].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
+    <td rowspan="3" class="editable" data-field="downtime_total" data-id="4">{{ data[4].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td>
 </tr>
 <!-- Котёл 2 (Строка 2) -->
 <tr>
@@ -230,8 +228,7 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="temp_graph_return" data-id="5">{{ data[5].temp_graph_return if data and data.get(5) and data[5].temp_graph_return else '' }}</td>
     <td class="editable" data-field="pressure_supply" data-id="5">{{ data[5].pressure_supply if data and data.get(5) and data[5].pressure_supply else '' }}</td>
     <td class="editable" data-field="pressure_return" data-id="5">{{ data[5].pressure_return if data and data.get(5) and data[5].pressure_return else '' }}</td>
-    <td class="editable" data-field="downtime_today" data-id="5">{{ data[1].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
-    <td class="editable" data-field="downtime_total" data-id="5">{{ data[1].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td>
+
 </tr>
 
 <!-- Котёл 3 (Строка 1 - только котёл) -->
@@ -253,8 +250,8 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="temp_graph_return" data-id="6">{{ data[6].temp_graph_return if data and data.get(6) and data[6].temp_graph_return else '' }}</td>
     <td class="editable" data-field="pressure_supply" data-id="6">{{ data[6].pressure_supply if data and data.get(6) and data[6].pressure_supply else '' }}</td>
     <td class="editable" data-field="pressure_return" data-id="6">{{ data[6].pressure_return if data and data.get(6) and data[6].pressure_return else '' }}</td>
-    <td class="editable" data-field="downtime_today" data-id="6">{{ data[1].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
-    <td class="editable" data-field="downtime_total" data-id="6">{{ data[1].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td>
+    <td rowspan="3" class="editable" data-field="downtime_today" data-id="6">{{ data[6].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
+    <td rowspan="3" class="editable" data-field="downtime_total" data-id="6">{{ data[6].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td>
 </tr>
 <!-- Котёл 3 (Строка 2) -->
 <tr>
@@ -272,8 +269,7 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="temp_graph_return" data-id="7">{{ data[7].temp_graph_return if data and data.get(7) and data[7].temp_graph_return else '' }}</td>
     <td class="editable" data-field="pressure_supply" data-id="7">{{ data[7].pressure_supply if data and data.get(7) and data[7].pressure_supply else '' }}</td>
     <td class="editable" data-field="pressure_return" data-id="7">{{ data[7].pressure_return if data and data.get(7) and data[7].pressure_return else '' }}</td>
-    <td class="editable" data-field="downtime_today" data-id="7">{{ data[1].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
-    <td class="editable" data-field="downtime_total" data-id="7">{{ data[1].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td>
+
 </tr>
 <!-- Котёл 3 (Строка 3) -->
 <tr>
@@ -291,8 +287,7 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="temp_graph_return" data-id="8">{{ data[8].temp_graph_return if data and data.get(8) and data[8].temp_graph_return else '' }}</td>
     <td class="editable" data-field="pressure_supply" data-id="8">{{ data[8].pressure_supply if data and data.get(8) and data[8].pressure_supply else '' }}</td>
     <td class="editable" data-field="pressure_return" data-id="8">{{ data[8].pressure_return if data and data.get(8) and data[8].pressure_return else '' }}</td>
-    <td class="editable" data-field="downtime_today" data-id="8">{{ data[1].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
-    <td class="editable" data-field="downtime_total" data-id="8">{{ data[1].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td>
+
 </tr>
 
 <!-- КОТЕЛЬНАЯ №2 -->
