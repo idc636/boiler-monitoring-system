@@ -149,7 +149,7 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td rowspan="3" class="editable" data-field="water_consumption_daily" data-id="1">{{ data[1].water_consumption_daily if data and data.get(1) and data[1].water_consumption_daily else '' }}</td>
     <td rowspan="3" class="editable" data-field="staff_night" data-id="1">{{ data[1].staff_night if data and data.get(1) and data[1].staff_night else '' }}</td>
     <td rowspan="3" class="editable" data-field="staff_day" data-id="1">{{ data[1].staff_day if data and data.get(1) and data[1].staff_day else '' }}</td>
-    <td rowspan="3" class="editable" data-field="downtime_today" data-id="1">{{ data[1].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
+    <td class="editable" data-field="downtime_today" data-id="1">{{ data[1].downtime_today if data and data.get(1) and data[1].downtime_today is not none else '' }}</td>
     <td rowspan="3" class="editable" data-field="downtime_total" data-id="1">{{ data[1].downtime_total if data and data.get(1) and data[1].downtime_total is not none else '' }}</td>
     <td rowspan="3" class="editable" data-field="notes" data-id="1">{{ data[1].notes if data and data.get(1) and data[1].notes else '' }}</td>
 </tr>
