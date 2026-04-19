@@ -731,8 +731,8 @@ color:blue;text-decoration:none;font-weight:bold;">
     <td class="editable" data-field="temp_graph_return" data-id="28">{{ data[28].temp_graph_return if data and data.get(28) and data[28].temp_graph_return else '' }}</td>
     <td class="editable" data-field="pressure_supply" data-id="28">{{ data[28].pressure_supply if data and data.get(28) and data[28].pressure_supply else '' }}</td>
     <td class="editable" data-field="pressure_return" data-id="28">{{ data[28].pressure_return if data and data.get(28) and data[28].pressure_return else '' }}</td>
-    <td rowspan="3" class="editable" data-field="downtime_today" data-id="28">{{ data[25].downtime_today if data and data.get(25) and data[25].downtime_today is not none else '' }}</td>
-    <td rowspan="3" class="editable" data-field="downtime_total" data-id="28">{{ data[25].downtime_total if data and data.get(25) and data[25].downtime_total is not none else '' }}</td>
+    <td rowspan="2" class="editable" data-field="downtime_today" data-id="28">{{ data[28].downtime_today if data and data.get(25) and data[25].downtime_today is not none else '' }}</td>
+    <td rowspan="2" class="editable" data-field="downtime_total" data-id="28">{{ data[28].downtime_total if data and data.get(25) and data[25].downtime_total is not none else '' }}</td>
 </tr>
 <tr>
     <td class="editable" data-field="time_interval" data-id="29">{{ data[29].time_interval if data and data.get(29) and data[29].time_interval else '12:00' }}</td>
