@@ -517,7 +517,6 @@ ALLOWED_FIELDS = {
 
 @app.route("/update", methods=["POST"])
 def update():
-    
     if not auth():
         return jsonify({"status": "error", "message": "Не авторизован"}), 401
 
@@ -526,16 +525,28 @@ def update():
     record_id = data.get("id")
     field = data.get("field")
     value = data.get("value")
+    
     if record_id is None or field is None or value is None:
         return jsonify({"status": "error", "message": "Отсутствуют обязательные поля"}), 400
     if field not in ALLOWED_FIELDS:
         return jsonify({"status": "error", "message": "Недопустимое поле"}), 400
+
+    # 🔥 ПРОВЕРКА: 0 < значение < 24 только для downtime_today
+    if field == "downtime_today" and str(value).strip():
+        try:
+            num_val = float(value)
+            if not (0 < num_val < 24):
+                return jsonify({"status": "error", "message": "Простой за сегодня должен быть в диапазоне (0; 24)"}), 400
+        except ValueError:
+            return jsonify({"status": "error", "message": "Введите корректное число"}), 400
 
     if field in ["downtime_today", "downtime_total"]:
         value = int(value or 0)
 
     conn = get_conn()
     cur = conn.cursor()
+
+    
 
     try:
         cur.execute("SELECT * FROM records WHERE id = %s", (record_id,))
