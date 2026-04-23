@@ -526,24 +526,10 @@ def update():
     record_id = data.get("id")
     field = data.get("field")
     value = data.get("value")
-    
     if record_id is None or field is None or value is None:
         return jsonify({"status": "error", "message": "Отсутствуют обязательные поля"}), 400
     if field not in ALLOWED_FIELDS:
         return jsonify({"status": "error", "message": "Недопустимое поле"}), 400
-
-    # 🔥 ВАЛИДАЦИЯ ДИАПАЗОНА: строго 0 < значение < 24
-    # Применяется только если ячейка не пустая и введено число
-    if str(value).strip():
-        try:
-            num_val = float(value)
-            if not (0 < num_val < 24):
-                return jsonify({
-                    "status": "error", 
-                    "message": "Значение должно быть числом в диапазоне (0; 24)"
-                }), 400
-        except ValueError:
-            pass  # Если введён текст (например, в поле notes), проверка пропускается
 
     if field in ["downtime_today", "downtime_total"]:
         value = int(value or 0)
@@ -563,15 +549,29 @@ def update():
             if not admin():
                 return jsonify({"status": "error", "message": "Нет прав на создание записи"}), 403
 
+            # 🔥 ПОЛУЧАЕМ КОТЕЛЬНУЮ ТЕКУЩЕГО АДМИНА
             cur.execute("SELECT assigned_boiler FROM users WHERE id = %s", (session["user_id"],))
             admin_boiler = cur.fetchone().get("assigned_boiler") or 1
 
             cur.execute("""
                 INSERT INTO records (
-                    id, date, boiler_number, boiler_location, boiler_contact,
-                    equipment_number, downtime_today, downtime_total
+                    id,
+                    date,
+                    boiler_number,
+                    boiler_location,
+                    boiler_contact,
+                    equipment_number,
+                    downtime_today,
+                    downtime_total
                 ) VALUES (
-                    %s, CURRENT_DATE::text, %s, '', '', 0, 0, 0
+                    %s,
+                    CURRENT_DATE::text,
+                    %s,
+                    '',
+                    '',
+                    0,
+                    0,
+                    0
                 )
             """, (record_id, admin_boiler))
 
