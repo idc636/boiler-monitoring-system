@@ -810,60 +810,90 @@ color:blue;text-decoration:none;font-weight:bold;">
 </div>
 <script>
 document.querySelectorAll('.editable').forEach(cell => {
-cell.addEventListener('click', function() {
-const field = this.getAttribute('data-field');
-const id = this.getAttribute('data-id');
-const currentValue = this.textContent;
-const input = document.createElement('input');
-input.type = 'text';
-input.value = currentValue;
-input.addEventListener('blur', function() {
-const newValue = this.value;
-fetch('/update', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ field: field, value: newValue, id: id })
-})
-.then(response => response.json())
-.then(data => {
-if (data.status === 'ok') {
-cell.textContent = newValue;
-} else {
-alert('Ошибка сохранения');
-}
-})
-.catch(error => {
-console.error('Ошибка:', error);
-alert('Ошибка связи с сервером');
+    cell.addEventListener('click', function() {
+        // 1. ЗАПОМИНАЕМ старое значение ДО редактирования
+        const oldValue = cell.textContent.trim();
+        
+        // Если ячейка уже содержит input, ничего не делаем (защита от двойного клика)
+        if (cell.querySelector('input')) return;
+
+        const field = this.getAttribute('data-field');
+        const id = this.getAttribute('data-id');
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = oldValue; // Ставим старое значение
+        input.className = 'editable-input'; // Для удобства (опционально)
+
+        // Стиль инпута, чтобы он выглядел аккуратно
+        input.style.width = '100%';
+        input.style.boxSizing = 'border-box';
+
+        // 2. СОБЫТИЕ ПОТЕРИ ФОКУСА (когда кликнули в другое место или нажали Enter)
+        input.addEventListener('blur', function() {
+            const newValue = this.value.trim();
+
+            // Если значение не изменилось — просто убираем инпут и выходим
+            if (newValue === oldValue) {
+                cell.textContent = oldValue;
+                return;
+            }
+
+            // Отправка на сервер
+            fetch('/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ field: field, value: newValue, id: id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    // ✅ Всё хорошо: обновляем текст ячейки
+                    cell.textContent = newValue;
+                } else {
+                    // ❌ ОШИБКА: показываем причину и ВОЗВРАЩАЕМ старое значение
+                    alert(data.message || 'Ошибка сохранения данных');
+                    cell.textContent = oldValue; 
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка связи с сервером');
+                cell.textContent = oldValue; // При ошибке сети тоже возвращаем старое
+            });
+        });
+
+        // Обработка нажатия Enter
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') this.blur();
+        });
+
+        // Замена содержимого ячейки на инпут
+        cell.innerHTML = '';
+        cell.appendChild(input);
+        input.focus();
+    });
 });
-});
-input.addEventListener('keypress', function(e) {
-if (e.key === 'Enter') this.blur();
-});
-this.innerHTML = '';
-this.appendChild(input);
-input.focus();
-});
-});
+
 function archiveRecords() {
-if (!confirm('Архивировать все данные? После этого ячейки будут очищены.')) {
-return;
-}
-fetch('/archive', { method: 'POST' })
-.then(response => response.json())
-.then(data => {
-if (data.status === 'ok') {
-alert('Данные успешно архивированы! Ячейки очищены.');
-location.reload();
-} else {
-alert('Ошибка: ' + (data.message || 'неизвестная ошибка'));
-}
-})
-.catch(error => {
-console.error('Ошибка:', error);
-alert('Ошибка связи с сервером');
-});
+    if (!confirm('Архивировать все данные? После этого ячейки будут очищены.')) {
+        return;
+    }
+    fetch('/archive', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'ok') {
+            alert('Данные успешно архивированы! Ячейки очищены.');
+            location.reload();
+        } else {
+            alert('Ошибка: ' + (data.message || 'неизвестная ошибка'));
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert('Ошибка связи с сервером');
+    });
 }
 </script>
-</body>
-</html>
+
+    
