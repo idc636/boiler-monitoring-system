@@ -1,3 +1,4 @@
+   # Первый коммит через Git - практика
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for
 import os
 import psycopg2
